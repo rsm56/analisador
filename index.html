@@ -2,125 +2,51 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Analisador Mobile v5.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGINAL JB - SISTEMA ELITE v6.0</title>
     <style>
-        :root {
-            --bg: #121212;
-            --card: #1e1e1e;
-            --primary: #00FF00;
-            --accent: #2ecc71;
-            --text: #ffffff;
-        }
-
-        body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background: var(--bg); 
-            color: var(--text); 
-            margin: 0;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h2 { color: var(--primary); margin-bottom: 20px; font-size: 22px; text-shadow: 0 0 5px rgba(0,255,0,0.3); }
-
-        .container { width: 100%; max-width: 400px; }
-
-        .input-group { 
-            background: var(--card); 
-            padding: 20px; 
-            border-radius: 15px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            border: 1px solid #333;
-            margin-bottom: 20px;
-        }
-
-        label { 
-            display: block; 
-            font-size: 12px; 
-            font-weight: bold; 
-            color: var(--primary); 
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-
-        input { 
-            width: 100%; 
-            padding: 15px; 
-            margin-bottom: 15px; 
-            background: #2a2a2a; 
-            border: 1px solid #444; 
-            color: #fff; 
-            border-radius: 8px; 
-            box-sizing: border-box; 
-            font-size: 18px; 
-            text-align: center;
-            outline: none;
-        }
-
-        input:focus { border-color: var(--primary); }
-
-        button { 
-            width: 100%; 
-            padding: 16px; 
-            background: var(--accent); 
-            border: none; 
-            color: #000; 
-            font-weight: bold; 
-            font-size: 16px; 
-            border-radius: 8px; 
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        button:active { transform: scale(0.98); background: #27ae60; }
-
-        .btn-limpar {
-            background: transparent;
-            color: #ff4757;
-            border: 1px solid #ff4757;
-            margin-top: 10px;
-            padding: 10px;
-        }
-
-        #resultado { width: 100%; max-width: 400px; margin-top: 10px; }
-
-        .bloco {
-            background: #000;
-            border-left: 4px solid var(--primary);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 0 10px 10px 0;
-        }
-
-        .bloco-titulo { color: var(--primary); font-weight: bold; font-size: 14px; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 5px; }
-
-        .grupo-info { margin-bottom: 12px; font-size: 15px; }
-        .grupo-nome { color: #fff; font-weight: bold; }
-        .dezenas-encontradas { color: var(--accent); font-weight: bold; }
-        .integrantes { color: #888; font-size: 12px; display: block; margin-top: 4px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f3; color: #333; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .header { background: #2c3e50; color: #fff; width: 100%; text-align: center; padding: 20px 0; border-radius: 10px; margin-bottom: 20px; width: 100%; max-width: 400px; }
+        .card { background: white; width: 100%; max-width: 400px; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); box-sizing: border-box; }
+        .input-row { display: flex; gap: 15px; margin-bottom: 20px; }
+        .input-box { flex: 1; }
+        label { font-size: 12px; font-weight: bold; color: #7f8c8d; display: block; margin-bottom: 8px; text-transform: uppercase; }
+        input { width: 100%; padding: 15px; border: 2px solid #bdc3c7; border-radius: 10px; font-size: 20px; text-align: center; box-sizing: border-box; font-weight: bold; color: #2c3e50; }
+        input:focus { border-color: #27ae60; outline: none; }
+        button { width: 100%; padding: 18px; background: #27ae60; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        button:active { transform: scale(0.98); background: #219150; }
+        
+        .res-container { width: 100%; max-width: 400px; margin-top: 25px; }
+        .res-item { background: white; margin-bottom: 12px; padding: 15px; border-radius: 12px; border-left: 6px solid #27ae60; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .res-main { display: flex; align-items: center; }
+        .res-gp-box { background: #27ae60; color: white; padding: 10px; border-radius: 8px; font-weight: bold; min-width: 35px; text-align: center; font-size: 18px; }
+        .res-name { margin-left: 15px; font-weight: bold; font-size: 17px; color: #2c3e50; }
+        .res-dezena { font-family: monospace; font-size: 22px; font-weight: bold; color: #27ae60; background: #f0fff4; padding: 5px 10px; border-radius: 5px; border: 1px dashed #27ae60; }
+        .title-secao { text-align: center; color: #7f8c8d; font-size: 13px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>ANALISADOR PRO</h2>
-        
-        <div class="input-group">
-            <label>Milhar (4 dígitos)</label>
-            <input type="number" id="milhar" pattern="\d*" placeholder="Ex: 1234">
-            
-            <label>Dezena Resultado</label>
-            <input type="number" id="dezena" pattern="\d*" placeholder="Ex: 56">
-            
-            <button onclick="analisar()">ANALISAR AGORA</button>
-            <button class="btn-limpar" onclick="limpar()">Limpar Tudo</button>
-        </div>
-
-        <div id="resultado"></div>
+    <div class="header">
+        <h1 style="margin:0; font-size: 26px;">REGINAL JB</h1>
+        <span style="font-size: 12px; opacity: 0.8;">MÓDULO INVERSÃO + REGRA 10</span>
     </div>
+
+    <div class="card">
+        <div class="input-row">
+            <div class="input-box">
+                <label>Milhar</label>
+                <input type="number" id="milhar" pattern="\d*" placeholder="0000">
+            </div>
+            <div class="input-box">
+                <label>Dezena</label>
+                <input type="number" id="dezena" pattern="\d*" placeholder="00">
+            </div>
+        </div>
+        <button onclick="analisar()">BUSCAR 5 GRUPOS ELITE</button>
+    </div>
+
+    <div id="resultado" class="res-container"></div>
 
 <script>
     const animais = [
@@ -139,73 +65,76 @@
         {g:25, n:"Vaca", d:["97","98","99","00"]}
     ];
 
-    function formatar(n) { return String(Math.abs(n) % 100).padStart(2, '0'); }
+    function formatar(n) { 
+        let num = Math.abs(Math.floor(n)) % 100;
+        return String(num).padStart(2, '0'); 
+    }
+
+    // NOVA FUNÇÃO DE INVERSÃO PARA DEZENAS ALTAS
+    function tratarDezena(dStr) {
+        let n = parseInt(dStr);
+        // Se a dezena for maior que 25 (pensando em grupos) ou para criar variação
+        // Invertemos o número (ex: 82 -> 28)
+        let inv = dStr.split('').reverse().join('');
+        return [dStr, inv, formatar(n + 10), formatar(n - 10)];
+    }
 
     function analisar() {
         let milharStr = document.getElementById('milhar').value;
         let dezRes = document.getElementById('dezena').value;
 
-        if(milharStr.length != 4) {
-            alert("Por favor, digite uma milhar com 4 dígitos.");
+        if(milharStr.length < 3) {
+            alert("Digite a milhar.");
             return;
         }
 
-        let m = milharStr.split('').map(Number);
+        let m = milharStr.padStart(4, '0').split('').map(Number);
         let dr = parseInt(dezRes) || 0;
         let soma = m.reduce((a, b) => a + b, 0);
 
-        // Mesma lógica de cálculos do Python
-        let calcs = [
-            formatar(soma), formatar(100-soma), formatar(soma+10), formatar(soma+20),
-            formatar(soma+30), formatar(soma-5), formatar(soma*2), formatar(soma/2),
-            formatar(m[0]+m[3]), formatar(m[1]+m[2]), formatar(m[0]*m[3]), formatar(m[1]*m[2]),
-            formatar(m[0]-m[3]), formatar(m[1]-m[2]), milharStr.slice(0,2), milharStr.slice(2,4),
-            milharStr.split('').reverse().join('').slice(0,2), formatar(dr+7), formatar(dr+14), formatar(dr+21)
-        ];
+        // Cálculos Base
+        let s1 = formatar(soma);
+        let s2 = formatar(dr + 7);
+        let s3 = milharStr.slice(-2);
+        let s4 = formatar(m[0]*m[3]);
+        let s5 = formatar(m[1]*m[2]);
 
-        let agrupados = {};
-        calcs.forEach(d => {
-            let bicho = animais.find(a => a.d.includes(d)) || animais[24];
-            if(!agrupados[bicho.g]) {
-                agrupados[bicho.g] = { nome: bicho.n, encontradas: new Set(), todos: bicho.d };
-            }
-            agrupados[bicho.g].encontradas.add(d);
+        // Aplicando a Regra de Inversão e +/- 10 em cada cálculo base
+        let todasDezenas = [];
+        [s1, s2, s3, s4, s5].forEach(dz => {
+            todasDezenas.push(...tratarDezena(dz));
         });
+
+        // Mapear para Grupos e Contar Força
+        let forcaGrupos = {};
+        todasDezenas.forEach(d => {
+            let bicho = animais.find(a => a.d.includes(d)) || animais[24];
+            if (!forcaGrupos[bicho.g]) {
+                forcaGrupos[bicho.g] = { nome: bicho.n, pontos: 0, dezenaExemplo: d };
+            }
+            forcaGrupos[bicho.g].pontos += 1;
+        });
+
+        // Pegar os 5 Grupos mais fortes sem repetir
+        let top5 = Object.entries(forcaGrupos)
+            .sort((a, b) => b[1].pontos - a[1].pontos)
+            .slice(0, 5);
 
         let resDiv = document.getElementById('resultado');
-        let html = '<div class="bloco"><div class="bloco-titulo">ANÁLISE DOS GRUPOS</div>';
-        
-        Object.keys(agrupados).sort((a,b) => a-b).forEach(g => {
-            let item = agrupados[g];
-            html += `
-                <div class="grupo-info">
-                    <span class="grupo-nome">GRUPO ${g} - ${item.nome.toUpperCase()}</span><br>
-                    <span class="dezenas-encontradas">Encontradas: ${Array.from(item.encontradas).sort().join(', ')}</span>
-                    <span class="integrantes">Integrantes: ${item.todos.join(', ')}</span>
+        resDiv.innerHTML = '<div class="title-secao">Top 5 Grupos Selecionados</div>';
+
+        top5.forEach(([gp, info]) => {
+            resDiv.innerHTML += `
+                <div class="res-item">
+                    <div class="res-main">
+                        <div class="res-gp-box">${gp.padStart(2, '0')}</div>
+                        <span class="res-name">${info.nome.toUpperCase()}</span>
+                    </div>
+                    <div class="res-dezena">${info.dezenaExemplo}</div>
                 </div>`;
         });
-        html += '</div>';
-
-        // Bloco de Frequência (Palpites Fortes)
-        let counts = {};
-        calcs.forEach(x => counts[x] = (counts[x] || 0) + 1);
-        let fortes = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0, 5);
-
-        html += '<div class="bloco"><div class="bloco-titulo">PALPITES MAIS FORTES</div>';
-        fortes.forEach(([dez, freq]) => {
-            let bicho = animais.find(a => a.d.includes(dez)) || animais[24];
-            html += `<div style="margin-bottom:8px;"><b>${dez}</b> (${freq}x) - ${bicho.n.toUpperCase()}</div>`;
-        });
-        html += '</div>';
-
-        resDiv.innerHTML = html;
+        
         window.scrollTo(0, document.body.scrollHeight);
-    }
-
-    function limpar() {
-        document.getElementById('milhar').value = '';
-        document.getElementById('dezena').value = '';
-        document.getElementById('resultado').innerHTML = '';
     }
 </script>
 </body>
