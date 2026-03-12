@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Analisador Mobile v5.0</title>
+    <style>
+        :root {
+            --bg: #121212;
+            --card: #1e1e1e;
+            --primary: #00FF00;
+            --accent: #2ecc71;
+            --text: #ffffff;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 { color: var(--primary); margin-bottom: 20px; font-size: 22px; text-shadow: 0 0 5px rgba(0,255,0,0.3); }
+
+        .container { width: 100%; max-width: 400px; }
+
+        .input-group { 
+            background: var(--card); 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+        label { 
+            display: block; 
+            font-size: 12px; 
+            font-weight: bold; 
+            color: var(--primary); 
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            background: #2a2a2a; 
+            border: 1px solid #444; 
+            color: #fff; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 18px; 
+            text-align: center;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--primary); }
+
+        button { 
+            width: 100%; 
+            padding: 16px; 
+            background: var(--accent); 
+            border: none; 
+            color: #000; 
+            font-weight: bold; 
+            font-size: 16px; 
+            border-radius: 8px; 
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        button:active { transform: scale(0.98); background: #27ae60; }
+
+        .btn-limpar {
+            background: transparent;
+            color: #ff4757;
+            border: 1px solid #ff4757;
+            margin-top: 10px;
+            padding: 10px;
+        }
+
+        #resultado { width: 100%; max-width: 400px; margin-top: 10px; }
+
+        .bloco {
+            background: #000;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .bloco-titulo { color: var(--primary); font-weight: bold; font-size: 14px; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 5px; }
+
+        .grupo-info { margin-bottom: 12px; font-size: 15px; }
+        .grupo-nome { color: #fff; font-weight: bold; }
+        .dezenas-encontradas { color: var(--accent); font-weight: bold; }
+        .integrantes { color: #888; font-size: 12px; display: block; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>ANALISADOR PRO</h2>
+        
+        <div class="input-group">
+            <label>Milhar (4 dígitos)</label>
+            <input type="number" id="milhar" pattern="\d*" placeholder="Ex: 1234">
+            
+            <label>Dezena Resultado</label>
+            <input type="number" id="dezena" pattern="\d*" placeholder="Ex: 56">
+            
+            <button onclick="analisar()">ANALISAR AGORA</button>
+            <button class="btn-limpar" onclick="limpar()">Limpar Tudo</button>
+        </div>
+
+        <div id="resultado"></div>
+    </div>
+
+<script>
+    const animais = [
+        {g:1, n:"Avestruz", d:["01","02","03","04"]}, {g:2, n:"Águia", d:["05","06","07","08"]},
+        {g:3, n:"Burro", d:["09","10","11","12"]}, {g:4, n:"Borboleta", d:["13","14","15","16"]},
+        {g:5, n:"Cachorro", d:["17","18","19","20"]}, {g:6, n:"Cabra", d:["21","22","23","24"]},
+        {g:7, n:"Carneiro", d:["25","26","27","28"]}, {g:8, n:"Camelo", d:["29","30","31","32"]},
+        {g:9, n:"Cobra", d:["33","34","35","36"]}, {g:10, n:"Coelho", d:["37","38","39","40"]},
+        {g:11, n:"Cavalo", d:["41","42","43","44"]}, {g:12, n:"Elefante", d:["45","46","47","48"]},
+        {g:13, n:"Galo", d:["49","50","51","52"]}, {g:14, n:"Gato", d:["53","54","55","56"]},
+        {g:15, n:"Jacaré", d:["57","58","59","60"]}, {g:16, n:"Leão", d:["61","62","63","64"]},
+        {g:17, n:"Macaco", d:["65","66","67","68"]}, {g:18, n:"Porco", d:["69","70","71","72"]},
+        {g:19, n:"Pavão", d:["73","74","75","76"]}, {g:20, n:"Peru", d:["77","78","79","80"]},
+        {g:21, n:"Touro", d:["81","82","83","84"]}, {g:22, n:"Tigre", d:["85","86","87","88"]},
+        {g:23, n:"Urso", d:["89","90","91","92"]}, {g:24, n:"Veado", d:["93","94","95","96"]},
+        {g:25, n:"Vaca", d:["97","98","99","00"]}
+    ];
+
+    function formatar(n) { return String(Math.abs(n) % 100).padStart(2, '0'); }
+
+    function analisar() {
+        let milharStr = document.getElementById('milhar').value;
+        let dezRes = document.getElementById('dezena').value;
+
+        if(milharStr.length != 4) {
+            alert("Por favor, digite uma milhar com 4 dígitos.");
+            return;
+        }
+
+        let m = milharStr.split('').map(Number);
+        let dr = parseInt(dezRes) || 0;
+        let soma = m.reduce((a, b) => a + b, 0);
+
+        // Mesma lógica de cálculos do Python
+        let calcs = [
+            formatar(soma), formatar(100-soma), formatar(soma+10), formatar(soma+20),
+            formatar(soma+30), formatar(soma-5), formatar(soma*2), formatar(soma/2),
+            formatar(m[0]+m[3]), formatar(m[1]+m[2]), formatar(m[0]*m[3]), formatar(m[1]*m[2]),
+            formatar(m[0]-m[3]), formatar(m[1]-m[2]), milharStr.slice(0,2), milharStr.slice(2,4),
+            milharStr.split('').reverse().join('').slice(0,2), formatar(dr+7), formatar(dr+14), formatar(dr+21)
+        ];
+
+        let agrupados = {};
+        calcs.forEach(d => {
+            let bicho = animais.find(a => a.d.includes(d)) || animais[24];
+            if(!agrupados[bicho.g]) {
+                agrupados[bicho.g] = { nome: bicho.n, encontradas: new Set(), todos: bicho.d };
+            }
+            agrupados[bicho.g].encontradas.add(d);
+        });
+
+        let resDiv = document.getElementById('resultado');
+        let html = '<div class="bloco"><div class="bloco-titulo">ANÁLISE DOS GRUPOS</div>';
+        
+        Object.keys(agrupados).sort((a,b) => a-b).forEach(g => {
+            let item = agrupados[g];
+            html += `
+                <div class="grupo-info">
+                    <span class="grupo-nome">GRUPO ${g} - ${item.nome.toUpperCase()}</span><br>
+                    <span class="dezenas-encontradas">Encontradas: ${Array.from(item.encontradas).sort().join(', ')}</span>
+                    <span class="integrantes">Integrantes: ${item.todos.join(', ')}</span>
+                </div>`;
+        });
+        html += '</div>';
+
+        // Bloco de Frequência (Palpites Fortes)
+        let counts = {};
+        calcs.forEach(x => counts[x] = (counts[x] || 0) + 1);
+        let fortes = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0, 5);
+
+        html += '<div class="bloco"><div class="bloco-titulo">PALPITES MAIS FORTES</div>';
+        fortes.forEach(([dez, freq]) => {
+            let bicho = animais.find(a => a.d.includes(dez)) || animais[24];
+            html += `<div style="margin-bottom:8px;"><b>${dez}</b> (${freq}x) - ${bicho.n.toUpperCase()}</div>`;
+        });
+        html += '</div>';
+
+        resDiv.innerHTML = html;
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function limpar() {
+        document.getElementById('milhar').value = '';
+        document.getElementById('dezena').value = '';
+        document.getElementById('resultado').innerHTML = '';
+    }
+</script>
+</body>
+</html>
