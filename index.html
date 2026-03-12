@@ -3,33 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REGINAL JB - SISTEMA ELITE v6.0</title>
+    <title>REGINAL JB - LÓGICA DE GRUPOS</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f3; color: #333; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        .header { background: #2c3e50; color: #fff; width: 100%; text-align: center; padding: 20px 0; border-radius: 10px; margin-bottom: 20px; width: 100%; max-width: 400px; }
-        .card { background: white; width: 100%; max-width: 400px; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); box-sizing: border-box; }
-        .input-row { display: flex; gap: 15px; margin-bottom: 20px; }
+        .header { background: #1a1a1a; color: #fff; width: 100%; text-align: center; padding: 15px 0; border-radius: 10px; margin-bottom: 15px; width: 100%; max-width: 400px; }
+        .card { background: white; width: 100%; max-width: 400px; padding: 20px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); box-sizing: border-box; }
+        .input-row { display: flex; gap: 10px; margin-bottom: 15px; }
         .input-box { flex: 1; }
-        label { font-size: 12px; font-weight: bold; color: #7f8c8d; display: block; margin-bottom: 8px; text-transform: uppercase; }
-        input { width: 100%; padding: 15px; border: 2px solid #bdc3c7; border-radius: 10px; font-size: 20px; text-align: center; box-sizing: border-box; font-weight: bold; color: #2c3e50; }
-        input:focus { border-color: #27ae60; outline: none; }
-        button { width: 100%; padding: 18px; background: #27ae60; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s; }
-        button:active { transform: scale(0.98); background: #219150; }
+        label { font-size: 11px; font-weight: bold; color: #7f8c8d; display: block; margin-bottom: 5px; text-transform: uppercase; }
+        input { width: 100%; padding: 12px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 18px; text-align: center; box-sizing: border-box; font-weight: bold; }
+        button { width: 100%; padding: 16px; background: #27ae60; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; }
         
-        .res-container { width: 100%; max-width: 400px; margin-top: 25px; }
-        .res-item { background: white; margin-bottom: 12px; padding: 15px; border-radius: 12px; border-left: 6px solid #27ae60; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .res-main { display: flex; align-items: center; }
-        .res-gp-box { background: #27ae60; color: white; padding: 10px; border-radius: 8px; font-weight: bold; min-width: 35px; text-align: center; font-size: 18px; }
-        .res-name { margin-left: 15px; font-weight: bold; font-size: 17px; color: #2c3e50; }
-        .res-dezena { font-family: monospace; font-size: 22px; font-weight: bold; color: #27ae60; background: #f0fff4; padding: 5px 10px; border-radius: 5px; border: 1px dashed #27ae60; }
-        .title-secao { text-align: center; color: #7f8c8d; font-size: 13px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .fortes-container { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; width: 100%; max-width: 400px; }
+        .forte-box { background: #fff; border: 2px solid #2c3e50; border-radius: 10px; padding: 10px; flex: 1; text-align: center; }
+        .forte-val { font-size: 20px; font-weight: bold; color: #e67e22; display: block; }
+        .forte-label { font-size: 10px; font-weight: bold; color: #7f8c8d; text-transform: uppercase; }
+
+        .res-container { width: 100%; max-width: 400px; margin-top: 20px; }
+        .res-item { background: white; margin-bottom: 10px; padding: 12px; border-radius: 10px; border-left: 6px solid #27ae60; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .res-gp-box { background: #27ae60; color: white; padding: 8px; border-radius: 6px; font-weight: bold; min-width: 30px; text-align: center; }
+        .res-name { font-weight: bold; font-size: 15px; margin-left: 10px; }
+        .res-dezena { font-size: 18px; font-weight: bold; color: #27ae60; }
+        .title-secao { text-align: center; color: #2c3e50; font-size: 13px; font-weight: bold; margin: 15px 0 10px 0; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1 style="margin:0; font-size: 26px;">REGINAL JB</h1>
-        <span style="font-size: 12px; opacity: 0.8;">MÓDULO INVERSÃO + REGRA 10</span>
+        <h1 style="margin:0; font-size: 22px;">REGINAL JB</h1>
+        <span style="font-size: 10px;">SALTO DE 7 NOS GRUPOS</span>
     </div>
 
     <div class="card">
@@ -43,7 +45,13 @@
                 <input type="number" id="dezena" pattern="\d*" placeholder="00">
             </div>
         </div>
-        <button onclick="analisar()">BUSCAR 5 GRUPOS ELITE</button>
+        <button onclick="analisar()">BUSCAR GRUPOS FORTES</button>
+    </div>
+
+    <div id="bloco-fortes" class="fortes-container" style="display:none;">
+        <div class="forte-box"><span id="res-cent" class="forte-val">--</span><span class="forte-label">CENT</span></div>
+        <div class="forte-box"><span id="res-dez" class="forte-val">--</span><span class="forte-label">DEZ</span></div>
+        <div class="forte-box"><span id="res-data" class="forte-val">--</span><span class="forte-label">DATA</span></div>
     </div>
 
     <div id="resultado" class="res-container"></div>
@@ -65,75 +73,53 @@
         {g:25, n:"Vaca", d:["97","98","99","00"]}
     ];
 
-    function formatar(n) { 
-        let num = Math.abs(Math.floor(n)) % 100;
-        return String(num).padStart(2, '0'); 
-    }
-
-    // NOVA FUNÇÃO DE INVERSÃO PARA DEZENAS ALTAS
-    function tratarDezena(dStr) {
-        let n = parseInt(dStr);
-        // Se a dezena for maior que 25 (pensando em grupos) ou para criar variação
-        // Invertemos o número (ex: 82 -> 28)
-        let inv = dStr.split('').reverse().join('');
-        return [dStr, inv, formatar(n + 10), formatar(n - 10)];
-    }
+    function formatar(n) { return String(Math.abs(Math.floor(n)) % 100).padStart(2, '0'); }
 
     function analisar() {
         let milharStr = document.getElementById('milhar').value;
-        let dezRes = document.getElementById('dezena').value;
+        if(milharStr.length < 3) return alert("Digite a milhar.");
 
-        if(milharStr.length < 3) {
-            alert("Digite a milhar.");
-            return;
-        }
+        document.getElementById('bloco-fortes').style.display = 'flex';
+        document.getElementById('res-cent').innerText = milharStr.slice(-3);
+        document.getElementById('res-dez').innerText = milharStr.slice(-2);
+        document.getElementById('res-data').innerText = new Date().getDate().toString().padStart(2, '0');
 
         let m = milharStr.padStart(4, '0').split('').map(Number);
-        let dr = parseInt(dezRes) || 0;
         let soma = m.reduce((a, b) => a + b, 0);
+        let dr = parseInt(document.getElementById('dezena').value) || 0;
 
-        // Cálculos Base
-        let s1 = formatar(soma);
-        let s2 = formatar(dr + 7);
-        let s3 = milharStr.slice(-2);
-        let s4 = formatar(m[0]*m[3]);
-        let s5 = formatar(m[1]*m[2]);
-
-        // Aplicando a Regra de Inversão e +/- 10 em cada cálculo base
-        let todasDezenas = [];
-        [s1, s2, s3, s4, s5].forEach(dz => {
-            todasDezenas.push(...tratarDezena(dz));
-        });
-
-        // Mapear para Grupos e Contar Força
-        let forcaGrupos = {};
-        todasDezenas.forEach(d => {
-            let bicho = animais.find(a => a.d.includes(d)) || animais[24];
-            if (!forcaGrupos[bicho.g]) {
-                forcaGrupos[bicho.g] = { nome: bicho.n, pontos: 0, dezenaExemplo: d };
-            }
-            forcaGrupos[bicho.g].pontos += 1;
-        });
-
-        // Pegar os 5 Grupos mais fortes sem repetir
-        let top5 = Object.entries(forcaGrupos)
-            .sort((a, b) => b[1].pontos - a[1].pontos)
-            .slice(0, 5);
-
-        let resDiv = document.getElementById('resultado');
-        resDiv.innerHTML = '<div class="title-secao">Top 5 Grupos Selecionados</div>';
-
-        top5.forEach(([gp, info]) => {
-            resDiv.innerHTML += `
-                <div class="res-item">
-                    <div class="res-main">
-                        <div class="res-gp-box">${gp.padStart(2, '0')}</div>
-                        <span class="res-name">${info.nome.toUpperCase()}</span>
-                    </div>
-                    <div class="res-dezena">${info.dezenaExemplo}</div>
-                </div>`;
-        });
+        // Lista de dezenas para processar
+        let dezenasBase = [formatar(soma), formatar(dr), milharStr.slice(-2), formatar(m[0]*m[3]), formatar(m[1]*m[2])];
         
+        let forcaGrupos = {};
+
+        dezenasBase.forEach(dz => {
+            let bichoAtual = animais.find(a => a.d.includes(dz)) || animais[24];
+            
+            // Regra do 7 nos Grupos: se é grupo 5, pula 7 e vai pro 13
+            let proximoGrupoNum = bichoAtual.g + 8; 
+            if (proximoGrupoNum > 25) proximoGrupoNum -= 25;
+            
+            let bichoSalto = animais.find(a => a.g === proximoGrupoNum);
+
+            // Pontuar o bicho do salto (Regra do 7)
+            if (!forcaGrupos[bichoSalto.g]) forcaGrupos[bichoSalto.g] = { nome: bichoSalto.n, pontos: 0, dezena: bichoSalto.d[0] };
+            forcaGrupos[bichoSalto.g].pontos += 2; // Salto tem peso maior
+
+            // Pontuar bicho da inversão
+            let inv = dz.split('').reverse().join('').padStart(2, '0');
+            let bichoInv = animais.find(a => a.d.includes(inv)) || bichoAtual;
+            if (!forcaGrupos[bichoInv.g]) forcaGrupos[bichoInv.g] = { nome: bichoInv.n, pontos: 0, dezena: inv };
+            forcaGrupos[bichoInv.g].pontos += 1;
+        });
+
+        let top5 = Object.entries(forcaGrupos).sort((a, b) => b[1].pontos - a[1].pontos).slice(0, 5);
+
+        let html = '<div class="title-secao">Melhores Grupos (Pulo de 7)</div>';
+        top5.forEach(([gp, info]) => {
+            html += `<div class="res-item"><div style="display:flex; align-items:center;"><div class="res-gp-box">${gp.padStart(2, '0')}</div><span class="res-name">${info.nome.toUpperCase()}</span></div><div class="res-dezena">${info.dezena}</div></div>`;
+        });
+        document.getElementById('resultado').innerHTML = html;
         window.scrollTo(0, document.body.scrollHeight);
     }
 </script>
