@@ -3,53 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REGINAL JB - PALPITE NOVO</title>
+    <title>REGINAL JB - DESDOBRAMENTO TOTAL</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #1a1a1a; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        .header { background: #1a1a1a; color: #fff; width: 100%; max-width: 400px; text-align: center; padding: 15px 0; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .card { background: white; width: 100%; max-width: 400px; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); box-sizing: border-box; border: 1px solid #ddd; }
+        .header { background: #1a1a1a; color: #fff; width: 100%; max-width: 400px; text-align: center; padding: 15px 0; border-radius: 12px; margin-bottom: 10px; }
+        .card { background: white; width: 100%; max-width: 400px; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); box-sizing: border-box; }
         
-        .top-results { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 400px; }
-        .box-fixo { background: #fff; border: 2px solid #1a1a1a; border-radius: 10px; padding: 10px; flex: 1; text-align: center; }
-        .box-val { font-size: 22px; font-weight: bold; color: #27ae60; display: block; }
-        .box-lab { font-size: 9px; font-weight: bold; color: #7f8c8d; text-transform: uppercase; }
+        /* GRID DE 5 BOXES PARA CENTENAS E DEZENAS */
+        .grid-palpites { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 15px; width: 100%; max-width: 400px; }
+        .box-palpite { background: #fff; border: 2px solid #27ae60; border-radius: 8px; padding: 10px 2px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .val-cent { font-size: 18px; font-weight: bold; color: #27ae60; display: block; border-bottom: 1px solid #eee; margin-bottom: 4px; padding-bottom: 4px; }
+        .val-dez { font-size: 14px; font-weight: bold; color: #e67e22; display: block; }
+        .lab-box { font-size: 8px; font-weight: bold; color: #7f8c8d; text-transform: uppercase; margin-top: 4px; display: block; }
+
+        .top-info { display: flex; justify-content: center; margin-top: 10px; width: 100%; max-width: 400px; }
+        .box-data { background: #1a1a1a; color: #2ecc71; border-radius: 8px; padding: 8px 20px; text-align: center; font-weight: bold; }
 
         .input-row { display: flex; gap: 10px; margin-bottom: 15px; }
         input { width: 100%; padding: 12px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 20px; text-align: center; font-weight: bold; }
-        button { width: 100%; padding: 16px; background: #1a1a1a; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        button { width: 100%; padding: 16px; background: #27ae60; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; }
         
-        .res-item { background: white; margin-bottom: 8px; padding: 12px; border-radius: 10px; border-left: 6px solid #e67e22; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 400px; box-sizing: border-box; }
-        .res-gp { background: #e67e22; color: white; padding: 8px 12px; border-radius: 6px; font-weight: bold; font-size: 18px; }
-        .res-nome { font-weight: bold; font-size: 16px; margin-left: 10px; flex-grow: 1; }
-        .res-dez { font-size: 20px; font-weight: bold; color: #e67e22; font-family: monospace; }
-        .sec-title { margin: 20px 0 10px; font-size: 12px; font-weight: bold; color: #7f8c8d; text-transform: uppercase; text-align: center; width: 100%; }
+        .res-item { background: white; margin-bottom: 8px; padding: 12px; border-radius: 10px; border-left: 6px solid #27ae60; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 400px; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .res-gp { background: #1a1a1a; color: white; padding: 8px 10px; border-radius: 6px; font-weight: bold; font-size: 16px; }
+        .res-nome { font-weight: bold; font-size: 15px; margin-left: 10px; flex-grow: 1; }
+        .res-dez-final { font-size: 18px; font-weight: bold; color: #27ae60; font-family: monospace; }
+        .sec-title { margin: 20px 0 10px; font-size: 11px; font-weight: bold; color: #7f8c8d; text-transform: uppercase; text-align: center; width: 100%; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1 style="margin:0; font-size: 20px;">REGINAL JB</h1>
-        <span style="font-size: 10px; opacity: 0.8;">GERADOR DE NOVOS PALPITES</span>
+        <h1 style="margin:0; font-size: 18px;">REGINAL JB - MÁQUINA DE DESDOBRO</h1>
     </div>
 
     <div class="card">
         <div class="input-row">
-            <div style="flex:2">
-                <label style="font-size:10px; font-weight:bold;">MILHAR BASE</label>
+            <div style="flex:1">
+                <label style="font-size:10px; font-weight:bold; color:#7f8c8d">MILHAR BASE</label>
                 <input type="number" id="milhar" placeholder="0000">
             </div>
-            <div style="flex:1">
-                <label style="font-size:10px; font-weight:bold;">DEZENA</label>
-                <input type="number" id="dezena" placeholder="00">
-            </div>
         </div>
-        <button onclick="analisar()">CALCULAR NOVOS PALPITES</button>
+        <button onclick="analisar()">Gerar Desdobramentos</button>
     </div>
 
-    <div id="bloco-topo" class="top-results" style="display:none; margin-top:15px;">
-        <div class="box-fixo"><span id="v-cent" class="box-val">--</span><span class="box-lab">NOVA CENTENA</span></div>
-        <div class="box-fixo"><span id="v-dez" class="box-val">--</span><span class="box-lab">NOVA DEZENA</span></div>
-        <div class="box-fixo"><span id="v-data" class="box-val">--</span><span class="box-lab">DATA</span></div>
+    <div id="info-data" class="top-info" style="display:none;">
+        <div class="box-data">DATA: <span id="v-data">--</span></div>
+    </div>
+
+    <div id="grid-palpites" class="grid-palpites" style="display:none;">
+        <div class="box-palpite"><span id="c1" class="val-cent">---</span><span id="d1" class="val-dez">--</span><span class="lab-box">Jogo 1</span></div>
+        <div class="box-palpite"><span id="c2" class="val-cent">---</span><span id="d2" class="val-dez">--</span><span class="lab-box">Jogo 2</span></div>
+        <div class="box-palpite"><span id="c3" class="val-cent">---</span><span id="d3" class="val-dez">--</span><span class="lab-box">Jogo 3</span></div>
+        <div class="box-palpite"><span id="c4" class="val-cent">---</span><span id="d4" class="val-dez">--</span><span class="lab-box">Jogo 4</span></div>
+        <div class="box-palpite"><span id="c5" class="val-cent">---</span><span id="d5" class="val-dez">--</span><span class="lab-box">Jogo 5</span></div>
     </div>
 
     <div id="resultado" style="width:100%; max-width:400px;"></div>
@@ -71,46 +77,51 @@
         {g:25, n:"Vaca", d:["97","98","99","00"]}
     ];
 
-    function formatar(n, digitos) { return String(Math.abs(Math.floor(n))).slice(-digitos).padStart(digitos, '0'); }
+    function embaralhar(array) {
+        let n = [...array];
+        for (let i = n.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [n[i], n[j]] = [n[j], n[i]];
+        }
+        return n;
+    }
 
     function analisar() {
         let milhar = document.getElementById('milhar').value;
-        if(milhar.length < 3) return alert("Digite a milhar base.");
+        if(milhar.length < 4) return alert("Digite os 4 números da milhar.");
 
-        let mArr = milhar.padStart(4, '0').split('').map(Number);
-        let soma = mArr.reduce((a, b) => a + b, 0);
-        let dEntrada = parseInt(milhar.slice(-2));
-
-        // --- CÁLCULOS DE NOVOS PALPITES ---
-        // Nova Centena: (Soma das Milhar * Primeiro Dígito) + 7
-        let novaCentena = formatar((soma * (mArr[0] || 1)) + 77, 3);
-        // Nova Dezena: Regra do Salto de 7 sobre a dezena da milhar digitada
-        let novaDezena = formatar(dEntrada + 7, 2);
-
-        document.getElementById('bloco-topo').style.display = 'flex';
-        document.getElementById('v-cent').innerText = novaCentena;
-        document.getElementById('v-dez').innerText = novaDezena;
+        let digitos = milhar.split('');
+        document.getElementById('info-data').style.display = 'flex';
         document.getElementById('v-data').innerText = new Date().getDate().toString().padStart(2, '0');
 
-        // --- CÁLCULO DOS 5 GRUPOS ELITE (Com Salto de 7 Grupos) ---
-        let dBase = [novaDezena, formatar(soma + 7, 2), formatar(parseInt(novaCentena), 2)];
-        let forca = {};
+        // --- GERAR 5 JOGOS (CENTENA + DEZENA) ---
+        let jogos = [];
+        for(let i=0; i<5; i++) {
+            let misturado = embaralhar(digitos);
+            let cent = misturado.slice(0,3).join('');
+            let dez = cent.slice(-2);
+            jogos.push({c: cent, d: dez});
+        }
 
-        dBase.forEach(dz => {
-            let b = animais.find(a => a.d.includes(dz)) || animais[Math.floor(Math.random()*25)];
-            let nG = b.g + 8; // Salto de 7 grupos (8º bicho)
+        document.getElementById('grid-palpites').style.display = 'grid';
+        for(let i=1; i<=5; i++) {
+            document.getElementById('c'+i).innerText = jogos[i-1].c;
+            document.getElementById('d'+i).innerText = jogos[i-1].d;
+        }
+
+        // --- 5 GRUPOS (Pelo Salto de 7 Grupos a partir das dezenas geradas) ---
+        let forca = {};
+        jogos.forEach(j => {
+            let b = animais.find(a => a.d.includes(j.d)) || animais[0];
+            let nG = b.g + 8; // Salto de 7 grupos
             if(nG > 25) nG -= 25;
             let bSalto = animais.find(a => a.g === nG);
-
-            if(!forca[bSalto.g]) forca[bSalto.g] = { n: bSalto.n, p: 0, d: bSalto.d[Math.floor(Math.random()*4)] };
-            forca[bSalto.g].p += 1;
+            if(!forca[bSalto.g]) forca[bSalto.g] = { n: bSalto.n, d: bSalto.d[0] };
         });
 
-        let top = Object.entries(forca).sort((a,b) => b[1].p - a[1].p).slice(0,5);
-        
-        let html = '<div class="sec-title">5 GRUPOS CALCULADOS P/ PRÓXIMO</div>';
-        top.forEach(([gp, info]) => {
-            html += `<div class="res-item"><div class="res-gp">${gp.padStart(2,'0')}</div><div class="res-nome">${info.n.toUpperCase()}</div><div class="res-dez">${info.d}</div></div>`;
+        let html = '<div class="sec-title">Bichos Fortes p/ estes Jogos</div>';
+        Object.keys(forca).slice(0, 5).forEach(gp => {
+            html += `<div class="res-item"><div class="res-gp">${gp.padStart(2,'0')}</div><div class="res-nome">${forca[gp].n.toUpperCase()}</div><div class="res-dez-final">${forca[gp].d}</div></div>`;
         });
         document.getElementById('resultado').innerHTML = html;
     }
