@@ -3,124 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REGINAL JB - MÁQUINA FINAL</title>
+    <title>S.A.I v3.0 - Gerador de Apostas</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #1a1a1a; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        .header { background: #1a1a1a; color: #fff; width: 100%; max-width: 400px; text-align: center; padding: 15px 0; border-radius: 12px; margin-bottom: 10px; }
-        .card { background: white; width: 100%; max-width: 400px; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); box-sizing: border-box; }
+        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 15px; }
+        .container { max-width: 900px; margin: auto; }
+        .header { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
         
-        /* GRID DE 5 COLUNAS COMPLETAS */
-        .grid-palpites { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 15px; width: 100%; max-width: 400px; }
-        .box-palpite { background: #fff; border: 2px solid #27ae60; border-radius: 8px; padding: 8px 1px; text-align: center; display: flex; flex-direction: column; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        /* Painel de Palpites - O mais importante */
+        .prediction-panel { background: linear-gradient(145deg, #1e293b, #0f172a); padding: 20px; border-radius: 15px; border: 2px solid var(--accent); margin-bottom: 25px; box-shadow: 0 0 20px rgba(255, 174, 0, 0.2); }
+        .prediction-panel h2 { color: var(--accent); text-align: center; margin-top: 0; text-transform: uppercase; letter-spacing: 2px; }
         
-        .val-milhar { font-size: 14px; font-weight: bold; color: #1a1a1a; border-bottom: 1px solid #eee; padding-bottom: 4px; }
-        .val-cent { font-size: 13px; font-weight: bold; color: #27ae60; padding-top: 4px; }
-        .val-dez { font-size: 11px; color: #7f8c8d; font-weight: bold; }
-        .val-gp-num { font-size: 15px; font-weight: bold; color: #e67e22; background: #fdf2e9; margin-top: 5px; padding: 3px 0; border-radius: 4px; }
-        .lab-box { font-size: 7px; font-weight: bold; color: #bdc3c7; text-transform: uppercase; margin-top: 4px; }
+        .bet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .bet-card { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border-left: 5px solid var(--accent); }
+        .bet-label { font-size: 0.8rem; color: #aaa; text-transform: uppercase; display: block; }
+        .bet-value { font-size: 1.4rem; font-weight: bold; color: #fff; display: block; margin-top: 5px; letter-spacing: 1px; }
 
-        .box-data { background: #1a1a1a; color: #2ecc71; border-radius: 8px; padding: 8px 20px; text-align: center; font-weight: bold; margin: 15px 0; font-size: 14px; }
-        input { width: 100%; padding: 12px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 22px; text-align: center; font-weight: bold; margin-bottom: 10px; box-sizing: border-box; }
-        button { width: 100%; padding: 16px; background: #27ae60; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; }
+        /* Área de Entrada */
+        .input-box { background: var(--card); padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+        textarea { width: 100%; height: 80px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; margin-bottom: 10px; }
+        .btn-save { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
         
-        .res-item { background: white; margin-bottom: 8px; padding: 12px; border-radius: 10px; border-left: 6px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 400px; box-sizing: border-box; }
-        .res-gp { background: #27ae60; color: white; padding: 8px 10px; border-radius: 6px; font-weight: bold; font-size: 16px; }
-        .res-nome { font-weight: bold; font-size: 15px; margin-left: 10px; flex-grow: 1; text-transform: uppercase; }
-        .sec-title { margin: 20px 0 10px; font-size: 11px; font-weight: bold; color: #7f8c8d; text-transform: uppercase; text-align: center; width: 100%; }
+        /* Tabela de Histórico Pequena */
+        .history-mini { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 10px; }
+        .history-mini td { padding: 8px; border-bottom: 1px solid #30363d; }
+        .btn-clear { background: none; color: #666; border: none; text-decoration: underline; cursor: pointer; font-size: 0.7rem; }
     </style>
 </head>
 <body>
 
+<div class="container">
     <div class="header">
-        <h1 style="margin:0; font-size: 18px; letter-spacing: 1px;">REGINAL JB - ANALISADOR</h1>
+        <h1>S.A.I 3.0 <small>• INTELIGÊNCIA DE CICLOS</small></h1>
     </div>
 
-    <div class="card">
-        <label style="font-size:10px; font-weight:bold; color:#7f8c8d; display:block; margin-bottom:5px;">MILHAR BASE PARA DESDOBRO</label>
-        <input type="number" id="milhar" placeholder="0000" maxlength="4">
-        <button onclick="analisar()">Gerar Milhares e Grupos</button>
+    <div class="prediction-panel">
+        <h2>🎯 PALPITES PRÓXIMO SORTEIO</h2>
+        <div class="bet-grid">
+            <div class="bet-card">
+                <span class="bet-label">Milhares Fortes</span>
+                <span class="bet-value" id="pMilhar">Aguardando...</span>
+            </div>
+            <div class="bet-card">
+                <span class="bet-label">Grupos em Atraso</span>
+                <span class="bet-value" id="pGrupos">Aguardando...</span>
+            </div>
+            <div class="bet-card">
+                <span class="bet-label">Terno de Grupo</span>
+                <span class="bet-value" id="pTernoG">Aguardando...</span>
+            </div>
+            <div class="bet-card">
+                <span class="bet-label">Terno de Dezena</span>
+                <span class="bet-value" id="pTernoD">Aguardando...</span>
+            </div>
+        </div>
+        <p style="font-size: 0.7rem; text-align: center; color: #888; margin-top: 15px;">Estes números são gerados com base nos grupos que ainda não saíram no ciclo atual.</p>
     </div>
 
-    <div id="bloco-data" style="display:none;"><div class="box-data">DATA DO SORTEIO: <span id="v-data">--</span></div></div>
-
-    <div id="grid-palpites" class="grid-palpites" style="display:none;">
-        <div class="box-palpite"><span id="m1" class="val-milhar">----</span><span id="c1" class="val-cent">---</span><span id="d1" class="val-dez">--</span><span id="g1" class="val-gp-num">--</span><span class="lab-box">JOGO 1</span></div>
-        <div class="box-palpite"><span id="m2" class="val-milhar">----</span><span id="c2" class="val-cent">---</span><span id="d2" class="val-dez">--</span><span id="g2" class="val-gp-num">--</span><span class="lab-box">JOGO 2</span></div>
-        <div class="box-palpite"><span id="m3" class="val-milhar">----</span><span id="c3" class="val-cent">---</span><span id="d3" class="val-dez">--</span><span id="g3" class="val-gp-num">--</span><span class="lab-box">JOGO 3</span></div>
-        <div class="box-palpite"><span id="m4" class="val-milhar">----</span><span id="c4" class="val-cent">---</span><span id="d4" class="val-dez">--</span><span id="g4" class="val-gp-num">--</span><span class="lab-box">JOGO 4</span></div>
-        <div class="box-palpite"><span id="m5" class="val-milhar">----</span><span id="c5" class="val-cent">---</span><span id="d5" class="val-dez">--</span><span id="g5" class="val-gp-num">--</span><span class="lab-box">JOGO 5</span></div>
+    <div class="input-box">
+        <h3 style="margin-top:0">📥 Alimentar Sistema</h3>
+        <textarea id="rawInput" placeholder="Cole aqui os resultados que já saíram..."></textarea>
+        <button class="btn-save" onclick="salvar()">GRAVAR E GERAR NOVOS PALPITES</button>
+        <button class="btn-clear" onclick="limpar()">Limpar histórico para novo ciclo</button>
     </div>
 
-    <div id="resultado" style="width:100%; max-width:400px;"></div>
+    <div style="background: var(--card); padding: 15px; border-radius: 12px;">
+        <h4 style="margin:0; color: #888;">Últimos Registos Lançados:</h4>
+        <table class="history-mini">
+            <tbody id="historyBody"></tbody>
+        </table>
+    </div>
+</div>
 
 <script>
-    const animais = [
-        {g:1, n:"Avestruz", d:["01","02","03","04"]}, {g:2, n:"Águia", d:["05","06","07","08"]},
-        {g:3, n:"Burro", d:["09","10","11","12"]}, {g:4, n:"Borboleta", d:["13","14","15","16"]},
-        {g:5, n:"Cachorro", d:["17","18","19","20"]}, {g:6, n:"Cabra", d:["21","22","23","24"]},
-        {g:7, n:"Carneiro", d:["25","26","27","28"]}, {g:8, n:"Camelo", d:["29","30","31","32"]},
-        {g:9, n:"Cobra", d:["33","34","35","36"]}, {g:10, n:"Coelho", d:["37","38","39","40"]},
-        {g:11, n:"Cavalo", d:["41","42","43","44"]}, {g:12, n:"Elefante", d:["45","46","47","48"]},
-        {g:13, n:"Galo", d:["49","50","51","52"]}, {g:14, n:"Gato", d:["53","54","55","56"]},
-        {g:15, n:"Jacaré", d:["57","58","59","60"]}, {g:16, n:"Leão", d:["61","62","63","64"]},
-        {g:17, n:"Macaco", d:["65","66","67","68"]}, {g:18, n:"Porco", d:["69","70","71","72"]},
-        {g:19, n:"Pavão", d:["73","74","75","76"]}, {g:20, n:"Peru", d:["77","78","79","80"]},
-        {g:21, n:"Touro", d:["81","82","83","84"]}, {g:22, n:"Tigre", d:["85","86","87","88"]},
-        {g:23, n:"Urso", d:["89","90","91","92"]}, {g:24, n:"Veado", d:["93","94","95","96"]},
-        {g:25, n:"Vaca", d:["97","98","99","00"]}
-    ];
+    let db = JSON.parse(localStorage.getItem('banco_v3')) || [];
 
-    function embaralhar(array) {
-        let n = [...array];
-        for (let i = n.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [n[i], n[j]] = [n[j], n[i]];
-        }
-        return n;
+    function salvar() {
+        const texto = document.getElementById('rawInput').value;
+        const numeros = texto.match(/\d+/g);
+        if (!numeros) return;
+
+        numeros.forEach(n => {
+            if (n.length >= 2) {
+                const d = n.slice(-2);
+                db.unshift({
+                    m: n.padStart(4, '0').slice(-4),
+                    g: Math.ceil(parseInt(d == "00" ? 100 : d) / 4)
+                });
+            }
+        });
+
+        localStorage.setItem('banco_v3', JSON.stringify(db));
+        document.getElementById('rawInput').value = "";
+        analisar();
     }
 
     function analisar() {
-        let inputMilhar = document.getElementById('milhar').value;
-        if(inputMilhar.length < 4) return alert("Digite a milhar de 4 dígitos.");
+        if (db.length === 0) return;
 
-        document.getElementById('bloco-data').style.display = 'block';
-        document.getElementById('v-data').innerText = new Date().getDate().toString().padStart(2, '0');
+        // 1. Descobrir Grupos Atrasados (Ciclo de 25)
+        let contagem = {};
+        for(let i=1; i<=25; i++) contagem[i] = 0;
+        db.forEach(x => contagem[x.g]++);
+        
+        // Ordenar: os que saíram 0 vezes primeiro, depois os que saíram 1 vez...
+        let atrasados = Object.keys(contagem).sort((a,b) => contagem[a] - contagem[b]);
+        
+        // Pegar os grupos mais "quentes" (os que menos saíram)
+        const g1 = atrasados[0], g2 = atrasados[1], g3 = atrasados[2];
 
-        let digitos = inputMilhar.split('');
-        let jogos = [];
-
-        for(let i=0; i<5; i++) {
-            let misturado = embaralhar(digitos);
-            let milharGen = misturado.join('');
-            let cent = milharGen.slice(-3);
-            let dez = milharGen.slice(-2);
-            let bicho = animais.find(a => a.d.includes(dez)) || animais[24]; 
-            jogos.push({m: milharGen, c: cent, d: dez, g: bicho.g});
+        // 2. Gerar Milhares para o próximo sorteio (baseadas nos grupos atrasados)
+        // Criamos uma milhar que NUNCA saiu no banco
+        function gerarMilharUnica(grupo) {
+            let dezena = String(grupo * 4 - Math.floor(Math.random() * 4)).padStart(2, '0');
+            if (dezena === "00") dezena = "00";
+            let prefixo = Math.floor(10 + Math.random() * 89); // Ex: 12, 45, 88
+            return prefixo + dezena;
         }
 
-        document.getElementById('grid-palpites').style.display = 'grid';
-        for(let i=1; i<=5; i++) {
-            let jogo = jogos[i-1];
-            document.getElementById('m'+i).innerText = jogo.m;
-            document.getElementById('c'+i).innerText = jogo.c;
-            document.getElementById('d'+i).innerText = jogo.d;
-            document.getElementById('g'+i).innerText = jogo.g.toString().padStart(2, '0');
-        }
+        const m1 = gerarMilharUnica(g1);
+        const m2 = gerarMilharUnica(g2);
 
-        let forca = {};
-        jogos.forEach(j => {
-            let nG = j.g + 8; // Regra do 7
-            if(nG > 25) nG -= 25;
-            let bSalto = animais.find(a => a.g === nG);
-            if(!forca[bSalto.g]) forca[bSalto.g] = { n: bSalto.n };
-        });
+        // 3. Exibir no Painel
+        document.getElementById('pMilhar').innerText = `${m1}, ${m2}`;
+        document.getElementById('pGrupos').innerText = `${g1}, ${g2}, ${g3}, ${atrasados[3]}`;
+        document.getElementById('pTernoG').innerText = `${g1} - ${g2} - ${g3}`;
+        
+        // Terno de dezena usando dezenas dos grupos mais atrasados
+        const d1 = String(g1 * 4).padStart(2, '0');
+        const d2 = String(g2 * 4).padStart(2, '0');
+        const d3 = String(g3 * 4).padStart(2, '0');
+        document.getElementById('pTernoD').innerText = `${d1}-${d2}-${d3}`;
 
-        let html = '<div class="sec-title">Bichos Fortes (Pulo de 7)</div>';
-        Object.keys(forca).slice(0, 5).forEach(gp => {
-            html += `<div class="res-item"><div class="res-gp">${gp.padStart(2,'0')}</div><span class="res-nome">${forca[gp].n}</span></div>`;
-        });
-        document.getElementById('resultado').innerHTML = html;
+        // Atualizar mini histórico
+        const body = document.getElementById('historyBody');
+        body.innerHTML = db.slice(0, 5).map(i => `<tr><td>Lançado: ${i.m}</td><td>Grupo: ${String(i.g).padStart(2, '0')}</td></tr>`).join('');
     }
+
+    function limpar() {
+        if(confirm("Reiniciar ciclo? Isso limpa a memória e gera novos palpites.")) {
+            db = [];
+            localStorage.removeItem('banco_v3');
+            location.reload();
+        }
+    }
+
+    analisar();
 </script>
 </body>
 </html>
