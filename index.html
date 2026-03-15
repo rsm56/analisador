@@ -2,71 +2,172 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>S.A.I v5.2 - Painel Único</title>
+    <title>S.A.I v5.3 - Dual Radar</title>
     <style>
-        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; }
+        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --look: #00d4ff; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 20px; }
-        .container { max-width: 800px; margin: auto; }
-        .panel { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; text-align: center; }
-        .number { font-size: 5rem; font-weight: 900; color: #fff; text-shadow: 0 0 20px var(--primary); }
-        textarea { width: 100%; height: 100px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
-        .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 10px; }
+        .container { max-width: 1100px; margin: auto; }
+        .grid-main { display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
+        .panel { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; }
+        
+        .strong-box { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 15px; border: 2px solid #333; }
+        .number { font-size: 4rem; font-weight: 900; color: #fff; line-height: 1; }
+        
+        textarea { width: 100%; height: 100px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; }
+        .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; width: 100%; color: #fff; }
+        .btn-rio { background: var(--primary); color: #000; margin-top: 10px; }
+        .btn-look { background: var(--look); color: #000; margin-top: 10px; }
+        
+        .calc-x7 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .calc-box { background: #0d1117; padding: 10px; border-radius: 8px; border: 1px solid var(--accent); text-align: center; }
+        .calc-box input { width: 80%; background: transparent; border: none; border-bottom: 1px solid var(--accent); color: #fff; text-align: center; font-size: 1.1rem; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; overflow-y: auto; }
+        .modal-content { background: var(--bg); margin: 2% auto; padding: 20px; width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid var(--primary); }
     </style>
 </head>
 <body>
+
 <div class="container">
-    <div class="panel">
-        <h2 style="color:var(--primary)">GRUPO MAIS ATRASADO (GERAL)</h2>
-        <div class="number" id="rei">--</div>
-        <div id="top5" style="color:#888; margin-top:10px;">Aguardando dados...</div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v5.3</span></h1>
+        <div style="display:flex; gap:10px;">
+            <button class="btn" style="background:var(--accent); color:#000; width:auto" onclick="document.getElementById('modalInj').style.display='block'">💉 INJETAR BACKUP</button>
+            <button class="btn" style="background:#30363d; color:#fff; width:auto" onclick="abrirEditor()">📂 GESTOR</button>
+        </div>
     </div>
 
-    <div class="panel">
-        <textarea id="input" placeholder="Cole resultados ou backup aqui..."></textarea>
-        <button class="btn" style="background:var(--primary); color:#000" onclick="gravar()">GRAVAR / ATUALIZAR</button>
-        <button class="btn" style="background:var(--accent); color:#000" onclick="importar()">💉 INJETAR BACKUP TXT</button>
+    <div class="grid-main">
+        <div>
+            <div class="strong-box" style="border-color: var(--primary);">
+                <span style="color: var(--primary); font-weight: bold;">🏇 MAIS ATRASADO RIO</span>
+                <div class="number" id="reiRio" style="text-shadow: 0 0 15px var(--primary);">--</div>
+                <div style="color: #888; margin-top: 10px;" id="topRio">Aguardando...</div>
+            </div>
+
+            <div class="strong-box" style="border-color: var(--look);">
+                <span style="color: var(--look); font-weight: bold;">🎯 MAIS ATRASADO LOOK</span>
+                <div class="number" id="reiLook" style="text-shadow: 0 0 15px var(--look);">--</div>
+                <div style="color: #888; margin-top: 10px;" id="topLook">Aguardando...</div>
+            </div>
+
+            <div class="panel">
+                <h3>📥 Lançar Resultados</h3>
+                <textarea id="rawInput" placeholder="Cole o resultado aqui..."></textarea>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button class="btn btn-rio" onclick="gravar('RIO')">GRAVAR NO RIO</button>
+                    <button class="btn btn-look" onclick="gravar('LOOK')">GRAVAR NA LOOK</button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="panel" style="border-color: var(--accent);">
+                <h3 style="color: var(--accent);">🧮 CALCULADORA X7</h3>
+                <div class="calc-x7" style="grid-template-columns: 1fr;">
+                    <div class="calc-box"><small>1º Prêmio</small><br><input type="number" id="m1" oninput="calcX7(1)"><div id="c1" style="color:var(--accent); font-weight:bold; margin-top:5px;">--</div></div>
+                    <div class="calc-box"><small>3º Prêmio</small><br><input type="number" id="m3" oninput="calcX7(3)"><div id="c3" style="color:var(--accent); font-weight:bold; margin-top:5px;">--</div></div>
+                    <div class="calc-box"><small>5º Prêmio</small><br><input type="number" id="m5" oninput="calcX7(5)"><div id="c5" style="color:var(--accent); font-weight:bold; margin-top:5px;">--</div></div>
+                </div>
+            </div>
+            <button class="btn" style="background:#238636; margin-bottom:10px" onclick="exportar()">📥 SALVAR BACKUP .TXT</button>
+            <button class="btn" style="background:var(--danger);" onclick="limparTudo()">REINICIAR TUDO</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalInj" class="modal">
+    <div class="modal-content">
+        <h2 style="color:var(--accent)">💉 Injetar Backup</h2>
+        <textarea id="txtInj" style="height:200px" placeholder="Cole o conteúdo do arquivo aqui..."></textarea>
+        <button class="btn btn-rio" style="background:var(--accent)" onclick="injetar()">RESTAURAR AGORA</button>
+        <button class="btn" style="background:#333; margin-top:10px;" onclick="document.getElementById('modalInj').style.display='none'">VOLTAR</button>
+    </div>
+</div>
+
+<div id="modalEditor" class="modal">
+    <div class="modal-content">
+        <h2 style="color:var(--primary)">📂 Banco de Dados <button style="float:right; background:red; color:#fff; border:none; padding:5px; cursor:pointer;" onclick="document.getElementById('modalEditor').style.display='none'">X</button></h2>
+        <table style="width:100%; border-collapse:collapse; margin-top:20px; text-align:left;">
+            <thead><tr><th>Data</th><th>Praça</th><th>Milhar</th><th>Grp</th><th>Ação</th></tr></thead>
+            <tbody id="fullDbBody"></tbody>
+        </table>
     </div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('sai_v52_db')) || [];
+    let db = JSON.parse(localStorage.getItem('sai_v53_db')) || [];
 
-    function gravar() {
-        const txt = document.getElementById('input').value;
-        txt.split('\n').forEach(l => {
+    function gravar(praca) {
+        const txt = document.getElementById('rawInput').value;
+        const linhas = txt.split('\n');
+        linhas.forEach(l => {
             let m = l.match(/\d{3,4}/);
             if(m) {
                 let milhar = m[0].padStart(4, '0');
                 let grp = (milhar.slice(-2) === "00") ? 25 : Math.ceil(parseInt(milhar.slice(-2))/4);
-                db.unshift({ m: milhar, g: grp });
+                db.unshift({ m: milhar, g: grp, p: praca, dt: new Date().toLocaleString() });
             }
         });
         salvar();
+        document.getElementById('rawInput').value = "";
+    }
+
+    function calcX7(pos) {
+        let v = document.getElementById('m' + pos).value;
+        if(v) {
+            let res = (parseInt(v)*7).toString().slice(-3).padStart(3,'0');
+            document.getElementById('c' + pos).innerText = "C: " + res + " (Dz: " + res.slice(-2) + ")";
+        }
     }
 
     function analisar() {
-        if(db.length === 0) return;
-        let f = {}; for(let i=1; i<=25; i++) f[i]=0;
-        db.forEach(x => f[x.g]++);
-        let ordenados = Object.keys(f).sort((a,b) => f[a] - f[b]);
-        document.getElementById('rei').innerText = ordenados[0].padStart(2,'0');
-        document.getElementById('top5').innerText = "Top Atrasados: " + ordenados.slice(0,5).join(" - ");
+        const processar = (praca) => {
+            let f = {}; for(let i=1; i<=25; i++) f[i]=0;
+            // Se o dado não tem 'p' (vindo do backup antigo), conta em ambos
+            db.filter(x => !x.p || x.p === praca).forEach(x => f[x.g]++);
+            return Object.keys(f).sort((a,b) => f[a] - f[b]);
+        };
+        const rio = processar('RIO'); const look = processar('LOOK');
+        if(rio.length) { 
+            document.getElementById('reiRio').innerText = rio[0].padStart(2,'0');
+            document.getElementById('topRio').innerText = "Top: " + rio.slice(0,5).join("-");
+        }
+        if(look.length) { 
+            document.getElementById('reiLook').innerText = look[0].padStart(2,'0');
+            document.getElementById('topLook').innerText = "Top: " + look.slice(0,5).join("-");
+        }
     }
 
-    function importar() {
-        try {
-            let backup = JSON.parse(document.getElementById('input').value);
-            db = backup;
-            salvar();
-            alert("Backup carregado com sucesso!");
-        } catch(e) { alert("Erro ao ler backup!"); }
+    function salvar() { localStorage.setItem('sai_v53_db', JSON.stringify(db)); analisar(); }
+    
+    function abrirEditor() {
+        document.getElementById('fullDbBody').innerHTML = db.map((x,i)=>`
+            <tr style="border-bottom:1px solid #333">
+                <td>${x.dt}</td><td>${x.p || 'ANTIGO'}</td><td>${x.m}</td><td>${x.g}</td>
+                <td><button onclick="apagar(${i})" style="background:red; color:#fff; border:none; cursor:pointer">X</button></td>
+            </tr>`).join('');
+        document.getElementById('modalEditor').style.display='block';
     }
 
-    function salvar() {
-        localStorage.setItem('sai_v52_db', JSON.stringify(db));
-        analisar();
-        document.getElementById('input').value = "";
+    function apagar(i) { db.splice(i,1); salvar(); abrirEditor(); }
+    
+    function injetar() { 
+        try { 
+            db = JSON.parse(document.getElementById('txtInj').value); 
+            salvar(); 
+            alert("Backup Restaurado!"); 
+            document.getElementById('modalInj').style.display='none'; 
+        } catch(e) { alert("Erro no formato!"); } 
     }
+
+    function exportar() {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([JSON.stringify(db)], {type:'text/plain'}));
+        a.download = 'backup_sai.txt'; a.click();
+    }
+
+    function limparTudo() { if(confirm("Apagar tudo?")) { db=[]; salvar(); location.reload(); } }
 
     analisar();
 </script>
