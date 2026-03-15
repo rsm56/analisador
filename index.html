@@ -2,155 +2,153 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>S.A.I v4.6 - ESTÁVEL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.I v4.3.1 - Ciclo Mestre REPARADO</title>
     <style>
         :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; }
-        body { font-family: sans-serif; background: var(--bg); color: var(--text); padding: 15px; }
-        .panel { background: var(--card); padding: 15px; border-radius: 10px; border: 1px solid #30363d; margin-bottom: 15px; }
-        .btn { padding: 10px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; color: #fff; }
-        .btn-save { background: var(--primary); color: #000; width: 100%; font-size: 1.2rem; }
-        .grid { display: grid; grid-template-columns: 1fr 350px; gap: 15px; }
-        textarea { width: 100%; height: 80px; background: #000; color: var(--primary); border: 1px solid #333; padding: 10px; box-sizing: border-box; }
-        .big-number { font-size: 4rem; text-align: center; display: block; color: #fff; text-shadow: 0 0 10px var(--primary); }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 10px; border-bottom: 1px solid #333; text-align: left; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: auto; }
+        .grid-main { display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
+        .panel { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; }
+        h3 { color: var(--primary); margin-top: 0; text-transform: uppercase; font-size: 1rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; display: flex; justify-content: space-between; }
+        textarea { width: 100%; height: 100px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; }
+        .strong-box { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 2px solid var(--primary); padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
+        .strong-number { font-size: 4rem; font-weight: 900; color: #fff; line-height: 1; margin: 10px 0; text-shadow: 0 0 15px var(--primary); }
+        .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-save { background: var(--primary); color: #000; width: 100%; font-size: 1rem; margin: 10px 0; }
+        .btn-tool { background: #30363d; color: #fff; font-size: 0.8rem; }
+        .btn-delete { background: var(--danger); color: #fff; padding: 5px 10px; font-size: 0.7rem; }
+        .calc-x7 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .calc-box { background: #0d1117; padding: 10px; border-radius: 8px; border: 1px solid var(--accent); text-align: center; }
+        .calc-box input { width: 80%; background: transparent; border: none; border-bottom: 1px solid var(--accent); color: #fff; font-size: 1.2rem; text-align: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; overflow-y: auto; }
+        .modal-content { background: var(--bg); margin: 2% auto; padding: 20px; width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid var(--primary); }
     </style>
 </head>
 <body>
-
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-    <h2>S.A.I <span style="color:var(--primary)">v4.6</span></h2>
-    <div>
-        <button class="btn" style="background:var(--primary); color:#000" onclick="exportar()">💾 BACKUP</button>
-        <button class="btn" style="background:#8957e5" onclick="abrirBanco()">📂 BANCO (APAGAR)</button>
-        <button class="btn" style="background:var(--accent); color:#000" onclick="document.getElementById('injecao').style.display='block'">💉 INJETAR</button>
-    </div>
-</div>
-
-<div id="injecao" class="panel" style="display:none; border: 2px solid var(--accent)">
-    <h3>Injeção Manual (Cole o conteúdo do seu TXT aqui)</h3>
-    <textarea id="txtInjetar"></textarea>
-    <button class="btn btn-save" onclick="injetar()">RESTAURAR AGORA</button>
-</div>
-
-<div class="grid">
-    <div>
-        <div class="panel">
-            <h3 style="margin-top:0">1. LANÇAR RESULTADOS</h3>
-            <textarea id="entrada" placeholder="Cole os resultados aqui..."></textarea>
-            <button class="btn btn-save" onclick="gravar()">GRAVAR E ANALISAR</button>
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v4.3.1</span></h1>
+        <div style="display:flex; gap:10px;">
+            <button class="btn btn-tool" style="background:var(--accent); color:#000" onclick="document.getElementById('modalInjetar').style.display='block'">💉 REPARAR BANCO</button>
+            <button class="btn btn-tool" onclick="abrirEditor()">📂 GESTOR</button>
         </div>
+    </div>
 
-        <div class="panel">
-            <h3 style="color:var(--accent)">2. CALCULADORA X7 (RIO -> LOOK)</h3>
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
-                <input type="number" id="v1" placeholder="1º prêmio" style="flex:1; padding:10px;">
-                <input type="number" id="v3" placeholder="3º prêmio" style="flex:1; padding:10px;">
-                <input type="number" id="v5" placeholder="5º prêmio" style="flex:1; padding:10px;">
+    <div class="grid-main">
+        <div>
+            <div class="strong-box" id="boxForte">
+                <span class="strong-label">🔥 Grupo Mais Forte (Atraso)</span>
+                <div class="strong-number" id="grupoRei">--</div>
+                <div class="cycle-info" id="progressoCiclo">Aguardando dados...</div>
             </div>
-            <button class="btn" style="background:var(--accent); color:#000; width:100%" onclick="calcX7()">CALCULAR CENTENAS</button>
-            <div id="resX7" style="margin-top:15px; font-weight:bold; color:var(--primary)"></div>
-        </div>
-    </div>
 
-    <div>
-        <div class="panel" style="text-align:center">
-            <span>GRUPO MAIS FORTE (REI)</span>
-            <span class="big-number" id="rei">--</span>
+            <div class="panel">
+                <h3>📥 Importar Sorteio (1º ao 7º)</h3>
+                <textarea id="rawInput" placeholder="Cole o resultado aqui..."></textarea>
+                <button class="btn btn-save" onclick="salvarComFiltro()">GRAVAR DADOS NO CICLO</button>
+            </div>
         </div>
-        <div class="panel">
-            <h3 style="color:var(--primary)">TOP ATRASADOS</h3>
-            <div id="listaAtraso" style="font-size:1.4rem; font-weight:bold">--</div>
+
+        <div class="panel" style="border-color: var(--primary);">
+            <h3>🎯 TENDÊNCIA</h3>
+            <div id="pGrupos" style="font-size: 1.4rem; font-weight: bold; color: #fff; margin-top:5px;">---</div>
+            <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
+            <button class="btn" style="background:var(--danger); width:100%; font-size:0.7rem;" onclick="limparCiclo()">REINICIAR TUDO</button>
         </div>
     </div>
 </div>
 
-<div id="modalBanco" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); padding:20px; overflow-y:auto;">
-    <div style="background:var(--bg); padding:20px; border-radius:10px; border:1px solid var(--primary); max-width:700px; margin:auto;">
-        <div style="display:flex; justify-content:space-between">
-            <h3>LANÇAMENTOS</h3>
-            <button class="btn" style="background:var(--danger)" onclick="document.getElementById('modalBanco').style.display='none'">FECHAR X</button>
+<div id="modalInjetar" class="modal">
+    <div class="modal-content">
+        <h2 style="color:var(--accent)">💉 Reparar / Injetar Dados</h2>
+        <p>Se o sistema não estiver salvando, cole o conteúdo do seu Backup abaixo e clique em Reparar.</p>
+        <textarea id="txtInjetar" style="height:200px;"></textarea>
+        <button class="btn btn-save" style="background:var(--accent)" onclick="repararBanco()">REPARAR E SINCRONIZAR AGORA</button>
+        <button class="btn btn-tool" style="width:100%; margin-top:10px;" onclick="document.getElementById('modalInjetar').style.display='none'">FECHAR</button>
+    </div>
+</div>
+
+<div id="modalEditor" class="modal">
+    <div class="modal-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin:0; color: var(--primary);">📋 GESTOR DE REGISTOS</h2>
+            <button class="btn btn-delete" onclick="fecharEditor()">FECHAR [X]</button>
         </div>
-        <table id="tabelaBanco">
-            <thead><tr><th>Data</th><th>Milhar</th><th>Grp</th><th>Ação</th></tr></thead>
-            <tbody id="corpoBanco"></tbody>
+        <table style="width:100%; border-collapse: collapse; font-size: 0.9rem;">
+            <tbody id="fullDbBody"></tbody>
         </table>
     </div>
 </div>
 
 <script>
-    let dados = JSON.parse(localStorage.getItem('banco_sai_v4_6')) || [];
+    // Usa uma chave de banco estável
+    let db = JSON.parse(localStorage.getItem('banco_sai_final')) || [];
 
-    function gravar() {
-        const texto = document.getElementById('entrada').value;
-        const linhas = texto.split('\n');
-        linhas.forEach(l => {
-            let m = l.match(/\d{3,4}/);
-            if(m) {
-                let milhar = m[0].padStart(4, '0');
-                let dezena = parseInt(milhar.slice(-2));
-                let grupo = (dezena === 0) ? 25 : Math.ceil(dezena / 4);
-                dados.unshift({ m: milhar, g: grupo, d: new Date().toLocaleString() });
+    function salvarComFiltro() {
+        const texto = document.getElementById('rawInput').value;
+        const linhas = texto.split('\n').filter(l => l.trim() !== "");
+        const agora = new Date().toLocaleString('pt-BR');
+        let cont = 0;
+
+        linhas.forEach(linha => {
+            let match = linha.match(/\d{3,4}/);
+            if (match) {
+                let milhar = match[0].padStart(4, '0');
+                let dezena = milhar.slice(-2);
+                let grupo = Math.ceil(parseInt(dezena == "00" ? 100 : dezena) / 4);
+                db.unshift({ m: milhar, g: grupo, dt: agora });
+                cont++;
             }
         });
-        atualizar();
-        document.getElementById('entrada').value = "";
+
+        if (cont > 0) {
+            localStorage.setItem('banco_sai_final', JSON.stringify(db));
+            document.getElementById('rawInput').value = "";
+            analisar();
+            alert("Sucesso! " + cont + " números salvos.");
+        }
     }
 
-    function calcX7() {
-        let r = "";
-        ['v1', 'v3', 'v5'].forEach(id => {
-            let v = document.getElementById(id).value;
-            if(v) {
-                let c = (parseInt(v)*7).toString().slice(-3);
-                r += `Centena: ${c} (Dezena: ${c.slice(-2)})<br>`;
-            }
-        });
-        document.getElementById('resX7').innerHTML = r;
+    function analisar() {
+        if (db.length === 0) return;
+        let freq = {}; for(let i=1; i<=25; i++) freq[i] = 0;
+        db.forEach(x => { if(freq[x.g] !== undefined) freq[x.g]++; });
+        let ordenados = Object.keys(freq).sort((a,b) => freq[a] - freq[b]);
+        document.getElementById('grupoRei').innerText = String(ordenados[0]).padStart(2, '0');
+        document.getElementById('pGrupos').innerText = ordenados.slice(0, 5).join(" - ");
+        document.getElementById('progressoCiclo').innerText = `Registros no Banco: ${db.length}`;
     }
 
-    function atualizar() {
-        localStorage.setItem('banco_sai_v4_6', JSON.stringify(dados));
-        if(dados.length === 0) return;
-        let f = {}; for(let i=1; i<=25; i++) f[i]=0;
-        dados.forEach(x => f[x.g]++);
-        let ord = Object.keys(f).sort((a,b) => f[a] - f[b]);
-        document.getElementById('rei').innerText = ord[0];
-        document.getElementById('listaAtraso').innerText = ord.slice(0, 5).join(" - ");
-    }
-
-    function abrirBanco() {
-        document.getElementById('modalBanco').style.display = 'block';
-        document.getElementById('corpoBanco').innerHTML = dados.map((x, i) => `
-            <tr><td>${x.d}</td><td>${x.m}</td><td>${x.g}</td>
-            <td><button class="btn" style="background:var(--danger); padding:2px 5px" onclick="apagar(${i})">Apagar</button></td></tr>
-        `).join('');
-    }
-
-    function apagar(i) {
-        dados.splice(i, 1);
-        atualizar();
-        abrirBanco();
-    }
-
-    function injetar() {
+    function repararBanco() {
+        const txt = document.getElementById('txtInjetar').value;
         try {
-            dados = JSON.parse(document.getElementById('txtInjetar').value);
-            atualizar();
-            alert("Sucesso!");
-            document.getElementById('injecao').style.display='none';
-        } catch(e) { alert("Erro no texto!"); }
+            db = JSON.parse(txt);
+            localStorage.setItem('banco_sai_final', JSON.stringify(db));
+            analisar();
+            alert("Banco Reparado! Tudo voltou ao normal.");
+            document.getElementById('modalInjetar').style.display='none';
+        } catch(e) { alert("Erro: O texto do backup não é válido."); }
     }
 
-    function exportar() {
-        const blob = new Blob([JSON.stringify(dados)], {type:'text/plain'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'backup.txt';
-        a.click();
+    function abrirEditor() {
+        const body = document.getElementById('fullDbBody');
+        body.innerHTML = db.map((item, index) => `
+            <tr style="border-bottom:1px solid #333;">
+                <td style="padding:10px; color:#888;">${item.dt}</td>
+                <td style="padding:10px; color:var(--primary); font-weight:bold;">${item.m}</td>
+                <td style="padding:10px;">Grp ${String(item.g).padStart(2, '0')}</td>
+                <td style="padding:10px; text-align:right;"><button class="btn-delete" onclick="apagarItem(${index})">Apagar</button></td>
+            </tr>
+        `).join('');
+        document.getElementById('modalEditor').style.display = 'block';
     }
 
-    atualizar();
+    function fecharEditor() { document.getElementById('modalEditor').style.display = 'none'; }
+    function apagarItem(index) { db.splice(index, 1); localStorage.setItem('banco_sai_final', JSON.stringify(db)); abrirEditor(); analisar(); }
+    function limparCiclo() { if(confirm("Apagar tudo?")) { db = []; localStorage.removeItem('banco_sai_final'); location.reload(); } }
+
+    analisar();
 </script>
 </body>
 </html>
