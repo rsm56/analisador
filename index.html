@@ -3,149 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A.I v3.0 - Gerador de Apostas</title>
+    <title>S.A.I v4.0 - Professional Suite</title>
     <style>
         :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 15px; }
-        .container { max-width: 900px; margin: auto; }
-        .header { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: auto; }
         
-        /* Painel de Palpites - O mais importante */
-        .prediction-panel { background: linear-gradient(145deg, #1e293b, #0f172a); padding: 20px; border-radius: 15px; border: 2px solid var(--accent); margin-bottom: 25px; box-shadow: 0 0 20px rgba(255, 174, 0, 0.2); }
-        .prediction-panel h2 { color: var(--accent); text-align: center; margin-top: 0; text-transform: uppercase; letter-spacing: 2px; }
+        .grid-main { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
+        .panel { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; }
         
-        .bet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .bet-card { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border-left: 5px solid var(--accent); }
-        .bet-label { font-size: 0.8rem; color: #aaa; text-transform: uppercase; display: block; }
-        .bet-value { font-size: 1.4rem; font-weight: bold; color: #fff; display: block; margin-top: 5px; letter-spacing: 1px; }
+        h2, h3 { color: var(--primary); margin-top: 0; text-transform: uppercase; font-size: 1.1rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
+        
+        textarea { width: 100%; height: 80px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; }
+        
+        .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-save { background: var(--primary); color: #000; width: 100%; font-size: 1rem; margin: 10px 0; }
+        .btn-tool { background: #30363d; color: #fff; margin-top: 5px; font-size: 0.8rem; }
+        .btn-delete { background: #ff4d4d; color: #fff; padding: 5px 10px; font-size: 0.7rem; }
 
-        /* Área de Entrada */
-        .input-box { background: var(--card); padding: 20px; border-radius: 12px; margin-bottom: 20px; }
-        textarea { width: 100%; height: 80px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; margin-bottom: 10px; }
-        .btn-save { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+        /* Calculadora X7 */
+        .calc-x7 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .calc-box { background: #0d1117; padding: 10px; border-radius: 8px; border: 1px solid var(--accent); }
+        .calc-box input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--accent); color: #fff; font-size: 1.2rem; text-align: center; margin: 5px 0; }
+        .res-val { color: var(--accent); font-weight: bold; font-size: 1.3rem; display: block; text-align: center; }
+        .res-label { font-size: 0.7rem; color: #8b949e; text-align: center; display: block; }
+
+        /* Tabela de Dados Geral */
+        .db-view { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .db-view th { text-align: left; color: #8b949e; font-size: 0.8rem; padding: 10px; }
+        .db-view td { padding: 10px; border-bottom: 1px solid #30363d; font-size: 0.9rem; }
         
-        /* Tabela de Histórico Pequena */
-        .history-mini { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 10px; }
-        .history-mini td { padding: 8px; border-bottom: 1px solid #30363d; }
-        .btn-clear { background: none; color: #666; border: none; text-decoration: underline; cursor: pointer; font-size: 0.7rem; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; overflow-y: auto; }
+        .modal-content { background: var(--bg); margin: 5% auto; padding: 20px; width: 80%; border-radius: 15px; border: 1px solid var(--primary); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>S.A.I 3.0 <small>• INTELIGÊNCIA DE CICLOS</small></h1>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v4.0</span></h1>
+        <button class="btn btn-tool" onclick="abrirEditor()">📂 ACEDER TODO O BANCO DE DADOS</button>
     </div>
+    <hr style="border: 0; border-top: 1px solid #30363d; margin: 20px 0;">
 
-    <div class="prediction-panel">
-        <h2>🎯 PALPITES PRÓXIMO SORTEIO</h2>
-        <div class="bet-grid">
-            <div class="bet-card">
-                <span class="bet-label">Milhares Fortes</span>
-                <span class="bet-value" id="pMilhar">Aguardando...</span>
+    <div class="grid-main">
+        <div>
+            <div class="panel">
+                <h3>📥 Importar Sorteio (1º ao 7º)</h3>
+                <textarea id="rawInput" placeholder="Cole os resultados aqui. O sistema filtrará apenas os primeiros 7 números..."></textarea>
+                <button class="btn btn-save" onclick="salvarComFiltro()">GRAVAR NO BANCO DE DADOS</button>
             </div>
-            <div class="bet-card">
-                <span class="bet-label">Grupos em Atraso</span>
-                <span class="bet-value" id="pGrupos">Aguardando...</span>
-            </div>
-            <div class="bet-card">
-                <span class="bet-label">Terno de Grupo</span>
-                <span class="bet-value" id="pTernoG">Aguardando...</span>
-            </div>
-            <div class="bet-card">
-                <span class="bet-label">Terno de Dezena</span>
-                <span class="bet-value" id="pTernoD">Aguardando...</span>
+
+            <div class="panel" style="border-color: var(--accent);">
+                <h3 style="color: var(--accent);">🧮 Calculadora de Centena X7</h3>
+                <div class="calc-x7">
+                    <div class="calc-box">
+                        <span class="res-label">1º Prémio</span>
+                        <input type="number" id="m1" placeholder="0000" oninput="calcX7(1)">
+                        <span class="res-label">Centena Resultante</span>
+                        <span id="c1" class="res-val">---</span>
+                        <span id="g1" class="res-label">Grupo: --</span>
+                    </div>
+                    <div class="calc-box">
+                        <span class="res-label">2º Prémio</span>
+                        <input type="number" id="m2" placeholder="0000" oninput="calcX7(2)">
+                        <span class="res-label">Centena Resultante</span>
+                        <span id="c2" class="res-val">---</span>
+                        <span id="g2" class="res-label">Grupo: --</span>
+                    </div>
+                    <div class="calc-box">
+                        <span class="res-label">3º Prémio</span>
+                        <input type="number" id="m3" placeholder="0000" oninput="calcX7(3)">
+                        <span class="res-label">Centena Resultante</span>
+                        <span id="c3" class="res-val">---</span>
+                        <span id="g3" class="res-label">Grupo: --</span>
+                    </div>
+                </div>
             </div>
         </div>
-        <p style="font-size: 0.7rem; text-align: center; color: #888; margin-top: 15px;">Estes números são gerados com base nos grupos que ainda não saíram no ciclo atual.</p>
-    </div>
 
-    <div class="input-box">
-        <h3 style="margin-top:0">📥 Alimentar Sistema</h3>
-        <textarea id="rawInput" placeholder="Cole aqui os resultados que já saíram..."></textarea>
-        <button class="btn-save" onclick="salvar()">GRAVAR E GERAR NOVOS PALPITES</button>
-        <button class="btn-clear" onclick="limpar()">Limpar histórico para novo ciclo</button>
+        <div class="panel" style="border-color: var(--primary);">
+            <h3>🎯 PALPITES ATUALIZADOS</h3>
+            <div style="margin-bottom: 15px;">
+                <small style="color: #8b949e;">GRUPOS ATRASADOS</small>
+                <div id="pGrupos" style="font-size: 1.5rem; font-weight: bold;">---</div>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <small style="color: #8b949e;">TERNO DE GRUPO</small>
+                <div id="pTernoG" style="font-size: 1.2rem; font-weight: bold; color: var(--primary);">---</div>
+            </div>
+            <div>
+                <small style="color: #8b949e;">MILHAR/CENTENA SUGESTÃO</small>
+                <div id="pMilhar" style="font-size: 1.2rem; font-weight: bold;">---</div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div style="background: var(--card); padding: 15px; border-radius: 12px;">
-        <h4 style="margin:0; color: #888;">Últimos Registos Lançados:</h4>
-        <table class="history-mini">
-            <tbody id="historyBody"></tbody>
+<div id="modalEditor" class="modal">
+    <div class="modal-content">
+        <div style="display: flex; justify-content: space-between;">
+            <h2>📋 GESTOR DO BANCO DE DADOS</h2>
+            <button class="btn btn-delete" onclick="fecharEditor()">FECHAR [X]</button>
+        </div>
+        <p>Aqui pode visualizar e apagar lançamentos específicos.</p>
+        <table class="db-view">
+            <thead>
+                <tr>
+                    <th>Data/Hora</th>
+                    <th>Milhar</th>
+                    <th>Grupo</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody id="fullDbBody"></tbody>
         </table>
     </div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('banco_v3')) || [];
+    let db = JSON.parse(localStorage.getItem('banco_v4')) || [];
 
-    function salvar() {
+    // --- FUNÇÃO SALVAR COM FILTRO 1-7 ---
+    function salvarComFiltro() {
         const texto = document.getElementById('rawInput').value;
-        const numeros = texto.match(/\d+/g);
+        let numeros = texto.match(/\d+/g);
         if (!numeros) return;
 
-        numeros.forEach(n => {
-            if (n.length >= 2) {
-                const d = n.slice(-2);
-                db.unshift({
-                    m: n.padStart(4, '0').slice(-4),
-                    g: Math.ceil(parseInt(d == "00" ? 100 : d) / 4)
-                });
-            }
+        // Filtra apenas os primeiros 7 números (1º ao 7º prémio)
+        const apenasSete = numeros.slice(0, 7);
+        const agora = new Date().toLocaleString('pt-BR');
+
+        apenasSete.forEach(n => {
+            const milhar = n.padStart(4, '0').slice(-4);
+            const dezena = milhar.slice(-2);
+            const grupo = Math.ceil(parseInt(dezena == "00" ? 100 : dezena) / 4);
+            db.unshift({ m: milhar, g: grupo, dt: agora });
         });
 
-        localStorage.setItem('banco_v3', JSON.stringify(db));
+        salvarLocal();
         document.getElementById('rawInput').value = "";
         analisar();
     }
 
-    function analisar() {
-        if (db.length === 0) return;
-
-        // 1. Descobrir Grupos Atrasados (Ciclo de 25)
-        let contagem = {};
-        for(let i=1; i<=25; i++) contagem[i] = 0;
-        db.forEach(x => contagem[x.g]++);
-        
-        // Ordenar: os que saíram 0 vezes primeiro, depois os que saíram 1 vez...
-        let atrasados = Object.keys(contagem).sort((a,b) => contagem[a] - contagem[b]);
-        
-        // Pegar os grupos mais "quentes" (os que menos saíram)
-        const g1 = atrasados[0], g2 = atrasados[1], g3 = atrasados[2];
-
-        // 2. Gerar Milhares para o próximo sorteio (baseadas nos grupos atrasados)
-        // Criamos uma milhar que NUNCA saiu no banco
-        function gerarMilharUnica(grupo) {
-            let dezena = String(grupo * 4 - Math.floor(Math.random() * 4)).padStart(2, '0');
-            if (dezena === "00") dezena = "00";
-            let prefixo = Math.floor(10 + Math.random() * 89); // Ex: 12, 45, 88
-            return prefixo + dezena;
+    // --- CALCULADORA X7 ---
+    function calcX7(pos) {
+        const milhar = document.getElementById('m' + pos).value;
+        if (milhar.length >= 1) {
+            const result = milhar * 7;
+            const centena = String(result).slice(-3).padStart(3, '0');
+            const dezena = centena.slice(-2);
+            const grupo = Math.ceil(parseInt(dezena == "00" ? 100 : dezena) / 4);
+            
+            document.getElementById('c' + pos).innerText = centena;
+            document.getElementById('g' + pos).innerText = "Grupo: " + String(grupo).padStart(2, '0');
+        } else {
+            document.getElementById('c' + pos).innerText = "---";
+            document.getElementById('g' + pos).innerText = "Grupo: --";
         }
-
-        const m1 = gerarMilharUnica(g1);
-        const m2 = gerarMilharUnica(g2);
-
-        // 3. Exibir no Painel
-        document.getElementById('pMilhar').innerText = `${m1}, ${m2}`;
-        document.getElementById('pGrupos').innerText = `${g1}, ${g2}, ${g3}, ${atrasados[3]}`;
-        document.getElementById('pTernoG').innerText = `${g1} - ${g2} - ${g3}`;
-        
-        // Terno de dezena usando dezenas dos grupos mais atrasados
-        const d1 = String(g1 * 4).padStart(2, '0');
-        const d2 = String(g2 * 4).padStart(2, '0');
-        const d3 = String(g3 * 4).padStart(2, '0');
-        document.getElementById('pTernoD').innerText = `${d1}-${d2}-${d3}`;
-
-        // Atualizar mini histórico
-        const body = document.getElementById('historyBody');
-        body.innerHTML = db.slice(0, 5).map(i => `<tr><td>Lançado: ${i.m}</td><td>Grupo: ${String(i.g).padStart(2, '0')}</td></tr>`).join('');
     }
 
-    function limpar() {
-        if(confirm("Reiniciar ciclo? Isso limpa a memória e gera novos palpites.")) {
-            db = [];
-            localStorage.removeItem('banco_v3');
-            location.reload();
+    // --- GESTÃO DO BANCO ---
+    function abrirEditor() {
+        const body = document.getElementById('fullDbBody');
+        body.innerHTML = db.map((item, index) => `
+            <tr>
+                <td>${item.dt}</td>
+                <td><b>${item.m}</b></td>
+                <td>Grp ${String(item.g).padStart(2, '0')}</td>
+                <td><button class="btn-delete" onclick="apagarItem(${index})">Apagar</button></td>
+            </tr>
+        `).join('');
+        document.getElementById('modalEditor').style.display = 'block';
+    }
+
+    function fecharEditor() { document.getElementById('modalEditor').style.display = 'none'; }
+
+    function apagarItem(index) {
+        if(confirm("Deseja apagar este lançamento?")) {
+            db.splice(index, 1);
+            salvarLocal();
+            abrirEditor();
+            analisar();
         }
+    }
+
+    function salvarLocal() { localStorage.setItem('banco_v4', JSON.stringify(db)); }
+
+    function analisar() {
+        if (db.length === 0) return;
+        let cont = {}; for(let i=1; i<=25; i++) cont[i] = 0;
+        db.forEach(x => cont[x.g]++);
+        let ordenados = Object.keys(cont).sort((a,b) => cont[a] - cont[b]);
+        
+        document.getElementById('pGrupos').innerText = ordenados.slice(0, 5).join(" - ");
+        document.getElementById('pTernoG').innerText = ordenados.slice(0, 3).join(", ");
+        document.getElementById('pMilhar').innerText = "C: " + String(ordenados[0]*4-1).padStart(2, '0') + " (Grp " + ordenados[0] + ")";
     }
 
     analisar();
