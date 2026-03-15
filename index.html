@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>S.A.I v4.5.1 - FIX BACKUP</title>
+    <title>S.A.I v4.5.2 - CONTROLE TOTAL</title>
     <style>
         :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --purp: #8957e5; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); padding: 15px; margin: 0; }
@@ -15,10 +15,12 @@
         .btn-calc { background: var(--accent); color: #000; width: 100%; margin-top: 5px; }
         .btn-save { background: var(--primary); color: #000; width: 100%; font-size: 1.1rem; }
         input[type="number"] { width: 80px; background: #000; color: var(--primary); border: 1px solid #444; padding: 8px; border-radius: 4px; text-align: center; font-size: 1.1rem; }
-        textarea { width: 100%; height: 70px; background: #000; color: var(--primary); border: 1px solid #333; padding: 10px; box-sizing: border-box; border-radius: 5px; resize: none; font-family: monospace; }
+        textarea { width: 100%; height: 60px; background: #000; color: var(--primary); border: 1px solid #333; padding: 10px; box-sizing: border-box; border-radius: 5px; resize: none; font-family: monospace; }
         .strong-number { font-size: 3.5rem; color: #fff; text-align: center; display: block; font-weight: bold; text-shadow: 0 0 15px var(--primary); }
         .x7-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; }
         .highlight { color: var(--primary); font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; color: #fff; }
+        th, td { padding: 8px; border-bottom: 1px solid #333; text-align: left; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -26,13 +28,21 @@
 <div class="container">
     <div class="menu-topo">
         <div>
-            <b style="color:var(--primary); font-size: 1.4rem;">S.A.I <span style="font-weight:200">v4.5.1</span></b><br>
-            <small style="color:var(--accent)">RESTAURAÇÃO DE EMERGÊNCIA</small>
+            <b style="color:var(--primary); font-size: 1.4rem;">S.A.I <span style="font-weight:200">v4.5.2</span></b><br>
+            <small style="color:var(--accent)">GESTOR DE BANCO + X7</small>
         </div>
         <div style="display:flex; gap:10px;">
-            <button class="btn btn-backup" onclick="exportarBackup()">📥 SALVAR BACKUP</button>
-            <button class="btn" style="background:var(--purp)" onclick="injetarDados()">💉 INJETAR BACKUP</button>
+            <button class="btn btn-backup" onclick="exportarBackup()">📥 BACKUP</button>
+            <button class="btn" style="background:var(--purp)" onclick="abrirEditor()">📂 BANCO</button>
+            <button class="btn" style="background:#30363d" onclick="document.getElementById('injecaoDiv').style.display='block'">💉 INJETAR</button>
         </div>
+    </div>
+
+    <div id="injecaoDiv" class="panel" style="display:none; border: 1px solid var(--purp)">
+        <h3 style="margin:0">💉 Injeção Direta de Texto</h3>
+        <textarea id="injecaoInput" placeholder="Cole o texto do seu backup aqui..."></textarea>
+        <button class="btn" style="background:var(--purp); width:100%; margin-top:10px" onclick="processarInjecao()">CONFIRMAR INJEÇÃO</button>
+        <button onclick="document.getElementById('injecaoDiv').style.display='none'" style="background:none; border:none; color:gray; cursor:pointer; width:100%; margin-top:5px">Fechar</button>
     </div>
 
     <div class="grid">
@@ -44,24 +54,36 @@
             </div>
 
             <div class="panel">
-                <h3>📥 Colar Conteúdo do Backup</h3>
-                <textarea id="injecaoInput" placeholder="Abra seu arquivo .txt, copie tudo e cole aqui..."></textarea>
-                <button class="btn btn-save" onclick="processarInjecao()" style="margin-top:10px">RESTAURAR AGORA</button>
+                <h3 style="margin-top:0">📥 Lançar Sorteio</h3>
+                <textarea id="rawInput" placeholder="Cole os novos resultados aqui..."></textarea>
+                <button class="btn btn-save" onclick="salvarComFiltro()" style="margin-top:10px">GRAVAR NO BANCO</button>
             </div>
 
-            <div class="panel">
-                <h3 style="color:var(--accent)">🧮 CALCULADORA X7</h3>
+            <div class="panel" style="border-left: 5px solid var(--accent);">
+                <h3 style="margin:0; color:var(--accent)">🧮 CALCULADORA X7</h3>
                 <div class="x7-row"><span>1º Prêmio:</span> <input type="number" id="p1"> <span id="res1" class="highlight">---</span></div>
                 <div class="x7-row"><span>3º Prêmio:</span> <input type="number" id="p3"> <span id="res3" class="highlight">---</span></div>
                 <div class="x7-row"><span>5º Prêmio:</span> <input type="number" id="p5"> <span id="res5" class="highlight">---</span></div>
-                <button class="btn btn-calc" onclick="calcularX7()">CALCULAR</button>
+                <button class="btn btn-calc" onclick="calcularX7()">EXECUTAR CÁLCULO</button>
             </div>
         </div>
 
         <div class="panel">
             <h3 style="color:var(--primary)">🎯 TOP 5 ATRASADOS</h3>
             <div id="pGrupos" style="font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;">---</div>
+            <hr style="border:0; border-top:1px solid #333; margin:20px 0;">
+            <p style="font-size:0.8rem; color:#888">Use o botão <b>BANCO</b> no topo para apagar ou editar lançamentos específicos.</p>
         </div>
+    </div>
+</div>
+
+<div id="modalEditor" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); padding:20px; overflow-y:auto; z-index:999;">
+    <div style="background:var(--bg); padding:20px; border-radius:10px; border:1px solid var(--primary); max-width:800px; margin:auto;">
+        <h2 style="display:flex; justify-content:space-between; color:var(--primary)">LANÇAMENTOS ATUAIS <button onclick="fecharEditor()" class="btn" style="background:var(--danger)">X</button></h2>
+        <table id="fullDbTable">
+            <thead><tr><th>Data/Hora</th><th>Milhar</th><th>Grp</th><th>Ação</th></tr></thead>
+            <tbody id="fullDbBody"></tbody>
+        </table>
     </div>
 </div>
 
@@ -71,47 +93,4 @@
     function processarInjecao() {
         const txt = document.getElementById('injecaoInput').value;
         try {
-            db = JSON.parse(txt);
-            localStorage.setItem('banco_sai_v4_5', JSON.stringify(db));
-            analisar();
-            alert("Dados restaurados! " + db.length + " registros carregados.");
-            document.getElementById('injecaoInput').value = "";
-        } catch(e) {
-            alert("Erro: O conteúdo colado não é válido.");
-        }
-    }
-
-    function calcularX7() {
-        ['p1', 'p3', 'p5'].forEach((id, i) => {
-            let v = document.getElementById(id).value;
-            if(v) {
-                let r = (parseInt(v) * 7).toString();
-                let centena = r.slice(-3);
-                document.getElementById('res' + (i == 0 ? 1 : i == 1 ? 3 : 5)).innerHTML = `C: ${centena} | Dz: ${centena.slice(-2)}`;
-            }
-        });
-    }
-
-    function analisar() {
-        if (db.length === 0) return;
-        let freq = {}; for(let i=1; i<=25; i++) freq[i] = 0;
-        db.forEach(item => { if(freq[item.g] !== undefined) freq[item.g]++; });
-        let ord = Object.keys(freq).sort((a,b) => freq[a] - freq[b]);
-        document.getElementById('grupoRei').innerText = ord[0];
-        document.getElementById('pGrupos').innerText = ord.slice(0, 5).join(" - ");
-        let sorteados = Object.values(freq).filter(f => f > 0).length;
-        document.getElementById('progressoCiclo').innerText = `Ciclo: ${sorteados} de 25 mapeados.`;
-    }
-
-    function exportarBackup() {
-        const blob = new Blob([JSON.stringify(db)], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `backup_sai_v451.txt`;
-        a.click();
-    }
-
-    analisar();
-</script>
-</body>
-</html>
+            db
