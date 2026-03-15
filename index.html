@@ -3,188 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A.I v4.3 - Ciclo Mestre</title>
+    <title>S.A.I v4.4 - Segurança Máxima</title>
     <style>
         :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         .container { max-width: 1100px; margin: auto; }
         .grid-main { display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
         .panel { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; }
-        h3 { color: var(--primary); margin-top: 0; text-transform: uppercase; font-size: 1rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; display: flex; justify-content: space-between; }
+        h3 { color: var(--primary); margin-top: 0; text-transform: uppercase; font-size: 1rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         textarea { width: 100%; height: 100px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; }
         
-        /* Box Grupo Forte */
         .strong-box { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 2px solid var(--primary); padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
-        .strong-label { color: var(--primary); font-size: 0.9rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
         .strong-number { font-size: 4rem; font-weight: 900; color: #fff; line-height: 1; margin: 10px 0; text-shadow: 0 0 15px var(--primary); }
-        .cycle-info { font-size: 0.8rem; color: #8b949e; }
 
-        .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn { padding: 10px 15px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 0.8rem; }
         .btn-save { background: var(--primary); color: #000; width: 100%; font-size: 1rem; margin: 10px 0; }
-        .btn-tool { background: #30363d; color: #fff; font-size: 0.8rem; }
-        .btn-delete { background: var(--danger); color: #fff; padding: 5px 10px; font-size: 0.7rem; }
-
+        .btn-backup { background: #238636; color: #fff; margin-right: 5px; }
+        .btn-import { background: #8957e5; color: #fff; }
+        .btn-tool { background: #30363d; color: #fff; }
+        
         .calc-x7 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
         .calc-box { background: #0d1117; padding: 10px; border-radius: 8px; border: 1px solid var(--accent); text-align: center; }
         .calc-box input { width: 80%; background: transparent; border: none; border-bottom: 1px solid var(--accent); color: #fff; font-size: 1.2rem; text-align: center; }
         
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; overflow-y: auto; }
-        .modal-content { background: var(--bg); margin: 2% auto; padding: 20px; width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid var(--primary); }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v4.3</span></h1>
-        <button class="btn btn-tool" onclick="abrirEditor()">📂 BANCO DE DADOS COMPLETO</button>
-    </div>
-
-    <div class="grid-main">
-        <div>
-            <div class="strong-box" id="boxForte">
-                <span class="strong-label">🔥 Grupo Mais Forte (Atraso)</span>
-                <div class="strong-number" id="grupoRei">--</div>
-                <div class="cycle-info" id="progressoCiclo">Aguardando dados para análise...</div>
-            </div>
-
-            <div class="panel">
-                <h3>📥 Importar Sorteio (1º ao 7º)</h3>
-                <textarea id="rawInput" placeholder="Cole o resultado aqui..."></textarea>
-                <button class="btn btn-save" onclick="salvarComFiltro()">GRAVAR DADOS NO CICLO</button>
-            </div>
-
-            <div class="panel" style="border-color: var(--accent);">
-                <h3 style="color: var(--accent);">🧮 Calculadora X7</h3>
-                <div class="calc-x7">
-                    <div class="calc-box">
-                        <small>1º Prémio</small><input type="number" id="m1" oninput="calcX7(1)">
-                        <div id="c1" style="color:var(--accent); font-weight:bold; font-size:1.2rem; margin-top:5px;">---</div>
-                        <small id="g1">Gr: --</small>
-                    </div>
-                    <div class="calc-box">
-                        <small>2º Prémio</small><input type="number" id="m2" oninput="calcX7(2)">
-                        <div id="c2" style="color:var(--accent); font-weight:bold; font-size:1.2rem; margin-top:5px;">---</div>
-                        <small id="g2">Gr: --</small>
-                    </div>
-                    <div class="calc-box">
-                        <small>3º Prémio</small><input type="number" id="m3" oninput="calcX7(3)">
-                        <div id="c3" style="color:var(--accent); font-weight:bold; font-size:1.2rem; margin-top:5px;">---</div>
-                        <small id="g3">Gr: --</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel" style="border-color: var(--primary);">
-            <h3>🎯 ANALISE DE TENDÊNCIA</h3>
-            <div style="margin-bottom: 20px;">
-                <small style="color: #888;">TOP 5 ATRASADOS</small>
-                <div id="pGrupos" style="font-size: 1.4rem; font-weight: bold; color: #fff; margin-top:5px;">---</div>
-            </div>
-            <div style="margin-bottom: 20px;">
-                <small style="color: #888;">TERNO DE GRUPO SUGERIDO</small>
-                <div id="pTernoG" style="font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-top:5px;">---</div>
-            </div>
-            <div style="padding: 15px; background: rgba(0,255,136,0.05); border-radius: 8px; border-left: 4px solid var(--primary);">
-                <small style="color: #888;">DICA DO SISTEMA</small>
-                <div style="font-size: 0.9rem; margin-top: 5px;" id="dicaSistema">Alimente o banco para ver a tendência.</div>
-            </div>
-            <button class="btn" style="background:var(--danger); width:100%; margin-top:20px; font-size:0.7rem;" onclick="limparCiclo()">REINICIAR TODO O CICLO</button>
-        </div>
-    </div>
-</div>
-
-<div id="modalEditor" class="modal">
-    <div class="modal-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin:0; color: var(--primary);">📋 GESTOR DE REGISTOS</h2>
-            <button class="btn btn-delete" onclick="fecharEditor()">FECHAR [X]</button>
-        </div>
-        <div style="max-height: 500px; overflow-y: auto;">
-            <table style="width:100%; border-collapse: collapse; font-size: 0.9rem;">
-                <tbody id="fullDbBody"></tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<script>
-    let db = JSON.parse(localStorage.getItem('banco_v4_3')) || [];
-
-    function salvarComFiltro() {
-        const texto = document.getElementById('rawInput').value;
-        const linhas = texto.split('\n').filter(l => l.trim() !== "");
-        const agora = new Date().toLocaleString('pt-BR');
-        let cont = 0;
-
-        for (let i = 0; i < linhas.length && cont < 7; i++) {
-            let match = linhas[i].match(/\d{3,4}/);
-            if (match) {
-                let milhar = match[0].padStart(4, '0');
-                let dezena = milhar.slice(-2);
-                let grupo = Math.ceil(parseInt(dezena == "00" ? 100 : dezena) / 4);
-                db.unshift({ m: milhar, g: grupo, dt: agora });
-                cont++;
-            }
-        }
-        if (cont > 0) {
-            localStorage.setItem('banco_v4_3', JSON.stringify(db));
-            document.getElementById('rawInput').value = "";
-            analisar();
-        }
-    }
-
-    function calcX7(pos) {
-        const val = document.getElementById('m' + pos).value;
-        if (val.length >= 1) {
-            const res = val * 7;
-            const cent = String(res).slice(-3).padStart(3, '0');
-            const grp = Math.ceil(parseInt(cent.slice(-2) == "00" ? 100 : cent.slice(-2)) / 4);
-            document.getElementById('c' + pos).innerText = cent;
-            document.getElementById('g' + pos).innerText = "Gr: " + String(grp).padStart(2, '0');
-        }
-    }
-
-    function analisar() {
-        if (db.length === 0) return;
-        
-        let freq = {}; 
-        for(let i=1; i<=25; i++) freq[i] = 0;
-        db.forEach(x => freq[x.g]++);
-        
-        let ordenados = Object.keys(freq).sort((a,b) => freq[a] - freq[b]);
-        let gruposSaíram = Object.values(freq).filter(f => f > 0).length;
-
-        // Atualiza Box Grupo Forte
-        document.getElementById('grupoRei').innerText = String(ordenados[0]).padStart(2, '0');
-        document.getElementById('progressoCiclo').innerText = `Progresso: ${gruposSaíram} de 25 grupos já apareceram.`;
-        
-        // Atualiza Palpites
-        document.getElementById('pGrupos').innerText = ordenados.slice(0, 5).join(" - ");
-        document.getElementById('pTernoG').innerText = ordenados.slice(0, 3).join(", ");
-        
-        document.getElementById('dicaSistema').innerText = `O grupo ${ordenados[0]} é o que está há mais tempo sem aparecer neste ciclo.`;
-    }
-
-    function abrirEditor() {
-        const body = document.getElementById('fullDbBody');
-        body.innerHTML = db.map((item, index) => `
-            <tr style="border-bottom:1px solid #333;">
-                <td style="padding:10px; color:#888;">${item.dt}</td>
-                <td style="padding:10px; color:var(--primary); font-weight:bold;">${item.m}</td>
-                <td style="padding:10px;">Grp ${String(item.g).padStart(2, '0')}</td>
-                <td style="padding:10px; text-align:right;"><button class="btn-delete" onclick="apagarItem(${index})">Apagar</button></td>
-            </tr>
-        `).join('');
-        document.getElementById('modalEditor').style.display = 'block';
-    }
-
-    function fecharEditor() { document.getElementById('modalEditor').style.display = 'none'; }
-    function apagarItem(index) { db.splice(index, 1); localStorage.setItem('banco_v4_3', JSON.stringify(db)); abrirEditor(); analisar(); }
-    function limparCiclo() { if(confirm("CUIDADO: Isso apaga todo o histórico e reinicia a análise do zero!")) { db = []; localStorage.removeItem('banco_v4_3'); location.reload(); } }
-
-    analisar();
-</script>
-</body>
-</html>
