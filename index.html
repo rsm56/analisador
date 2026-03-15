@@ -2,123 +2,132 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>S.A.I v4.8 - DUAL RADAR</title>
+    <title>S.A.I v5.1 - GESTOR TOTAL</title>
     <style>
         :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --look: #00d4ff; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 15px; margin: 0; }
-        .container { max-width: 1300px; margin: auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; background: #010409; padding: 15px; border-radius: 10px; border: 1px solid var(--primary); margin-bottom: 15px; }<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>S.A.I v4.9 - Dual Radar</title>
-    <style>
-        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --look: #00d4ff; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        .container { max-width: 1200px; margin: auto; }
-        .grid-main { display: grid; grid-template-columns: 1fr 400px; gap: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; }
+        .container { max-width: 1100px; margin: auto; }
+        .grid-main { display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
         .panel { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; }
-        h3 { color: var(--primary); margin-top: 0; text-transform: uppercase; font-size: 0.9rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; display: flex; justify-content: space-between; }
+        
+        /* Painéis de Atraso */
+        .strong-box { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 15px; border: 2px solid #333; }
+        .number { font-size: 4rem; font-weight: 900; color: #fff; line-height: 1; text-shadow: 0 0 15px var(--primary); }
+        
         textarea { width: 100%; height: 80px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; }
+        .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; color: #fff; }
+        .btn-rio { background: var(--primary); color: #000; margin-top: 10px; }
+        .btn-look { background: var(--look); color: #000; margin-top: 10px; }
         
-        /* Boxes de Destaque */
-        .radar-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .strong-box { padding: 15px; border-radius: 12px; text-align: center; border: 2px solid #333; }
-        .box-rio { border-color: var(--primary); background: rgba(0, 255, 136, 0.05); }
-        .box-look { border-color: var(--look); background: rgba(0, 212, 255, 0.05); }
-        .label { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-        .number { font-size: 3rem; font-weight: 900; color: #fff; line-height: 1.2; }
-
-        .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; color: #fff; }
-        .btn-rio { background: var(--primary); color: #000; width: 100%; margin: 5px 0; }
-        .btn-look { background: var(--look); color: #000; width: 100%; margin: 5px 0; }
-        
+        /* Calculadora X7 */
         .calc-x7 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .calc-box { background: #0d1117; padding: 10px; border-radius: 8px; border: 1px solid var(--accent); text-align: center; font-size: 0.8rem; }
-        .calc-box input { width: 90%; background: transparent; border: none; border-bottom: 1px solid var(--accent); color: #fff; text-align: center; font-size: 1.1rem; }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; overflow-y: auto; }
-        .modal-content { background: var(--bg); margin: 2% auto; padding: 20px; width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid var(--primary); }
+        .calc-box { background: #0d1117; padding: 10px; border-radius: 8px; border: 1px solid var(--accent); text-align: center; }
+        .calc-box input { width: 80%; background: transparent; border: none; border-bottom: 1px solid var(--accent); color: #fff; font-size: 1.2rem; text-align: center; }
+
+        /* Modal e Tabela de Dados */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; overflow-y: auto; }
+        .modal-content { background: var(--bg); margin: 2% auto; padding: 20px; width: 95%; max-width: 900px; border-radius: 15px; border: 1px solid var(--primary); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
+        th { background: #010409; color: var(--primary); padding: 10px; text-align: left; border-bottom: 2px solid #333; }
+        td { padding: 10px; border-bottom: 1px solid #333; }
+        .badge { padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 0.7rem; }
+        .badge-rio { background: var(--primary); color: #000; }
+        .badge-look { background: var(--look); color: #000; }
     </style>
 </head>
 <body>
+
 <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v4.9</span></h1>
+        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v5.1</span></h1>
         <div style="display:flex; gap:10px;">
-            <button class="btn" style="background:var(--accent); color:#000" onclick="document.getElementById('modalInj').style.display='block'">💉 INJETAR BACKUP</button>
-            <button class="btn" style="background:#30363d" onclick="abrirEditor()">📂 GESTOR</button>
+            <button class="btn" style="background:var(--accent); color:#000; width:auto" onclick="document.getElementById('modalInj').style.display='block'">💉 INJETAR BACKUP</button>
+            <button class="btn" style="background:var(--primary); color:#000; width:auto; border: 2px solid #fff" onclick="abrirEditor()">📂 ACESSAR/MODIFICAR DADOS</button>
         </div>
     </div>
 
     <div class="grid-main">
         <div>
-            <div class="radar-container">
-                <div class="strong-box box-rio">
-                    <span class="label" style="color:var(--primary)">🔥 Rei do Rio (Atraso)</span>
-                    <div class="number" id="reiRio">--</div>
-                    <small id="topRio" style="color:var(--text)">--</small>
-                </div>
-                <div class="strong-box box-look">
-                    <span class="label" style="color:var(--look)">🔥 Rei da Look (Atraso)</span>
-                    <div class="number" id="reiLook">--</div>
-                    <small id="topLook" style="color:var(--text)">--</small>
-                </div>
+            <div class="strong-box" style="border-color: var(--primary);">
+                <span style="color: var(--primary); font-weight: bold;">🏇 MAIS ATRASADO RIO</span>
+                <div class="number" id="reiRio">--</div>
+                <div style="color: #888; margin-top: 10px;" id="topRio">Sem dados...</div>
+            </div>
+
+            <div class="strong-box" style="border-color: var(--look);">
+                <span style="color: var(--look); font-weight: bold;">🎯 MAIS ATRASADO LOOK</span>
+                <div class="number" id="reiLook" style="text-shadow: 0 0 15px var(--look);">--</div>
+                <div style="color: #888; margin-top: 10px;" id="topLook">Sem dados...</div>
             </div>
 
             <div class="panel">
-                <h3>📥 Lançar Resultados</h3>
-                <textarea id="rawInput" placeholder="Cole os resultados aqui..."></textarea>
+                <h3>📥 Lançar Novos Resultados</h3>
+                <textarea id="rawInput" placeholder="Cole os números aqui..."></textarea>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <button class="btn btn-rio" onclick="gravar('RIO')">GRAVAR NO RIO</button>
                     <button class="btn btn-look" onclick="gravar('LOOK')">GRAVAR NA LOOK</button>
                 </div>
             </div>
+        </div>
 
+        <div>
             <div class="panel" style="border-color: var(--accent);">
-                <h3 style="color: var(--accent);">🧮 Calculadora X7 (Prêmios 1, 3 e 5)</h3>
-                <div class="calc-x7">
-                    <div class="calc-box"><small>1º Prêmio</small><input type="number" id="m1" oninput="calcX7(1)"><div id="c1" style="color:var(--accent); font-weight:bold; margin-top:5px;">--</div></div>
-                    <div class="calc-box"><small>3º Prêmio</small><input type="number" id="m3" oninput="calcX7(3)"><div id="c3" style="color:var(--accent); font-weight:bold; margin-top:5px;">--</div></div>
-                    <div class="calc-box"><small>5º Prêmio</small><input type="number" id="m5" oninput="calcX7(5)"><div id="c5" style="color:var(--accent); font-weight:bold; margin-top:5px;">--</div></div>
+                <h3 style="color: var(--accent);">🧮 CALCULADORA X7</h3>
+                <div class="calc-x7" style="grid-template-columns: 1fr;">
+                    <div class="calc-box"><small>1º Prêmio</small><br><input type="number" id="m1" oninput="calcX7(1)"><div id="c1" style="color:var(--accent); font-weight:bold; font-size:1.2rem; margin-top:5px;">--</div></div>
+                    <div class="calc-box"><small>3º Prêmio</small><br><input type="number" id="m3" oninput="calcX7(3)"><div id="c3" style="color:var(--accent); font-weight:bold; font-size:1.2rem; margin-top:5px;">--</div></div>
+                    <div class="calc-box"><small>5º Prêmio</small><br><input type="number" id="m5" oninput="calcX7(5)"><div id="c5" style="color:var(--accent); font-weight:bold; font-size:1.2rem; margin-top:5px;">--</div></div>
                 </div>
             </div>
+            
+            <div class="panel">
+                <button class="btn" style="background:#238636; margin-bottom: 10px;" onclick="exportar()">📥 SALVAR BACKUP TXT</button>
+                <button class="btn" style="background:var(--danger);" onclick="limparTudo()">REINICIAR TUDO</button>
+            </div>
         </div>
-
-        <div class="panel">
-            <h3 style="color:var(--primary)">🎯 Resumo de Ciclo</h3>
-            <p style="font-size:0.8rem">O sistema analisa os atrasos de cada praça de forma independente.</p>
-            <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
-            <button class="btn" style="background:var(--danger); width:100%; font-size:0.7rem;" onclick="limparCiclo()">REINICIAR TUDO</button>
-            <button class="btn" style="background:#238636; width:100%; margin-top:10px;" onclick="exportar()">📥 GERAR NOVO BACKUP TXT</button>
-        </div>
-    </div>
-</div>
-
-<div id="modalInj" class="modal">
-    <div class="modal-content">
-        <h2 style="color:var(--accent)">💉 Injetar Dados</h2>
-        <textarea id="txtInj" style="height:250px" placeholder="Cole o conteúdo do backup aqui..."></textarea>
-        <button class="btn btn-rio" style="background:var(--accent)" onclick="injetar()">RESTAURAR BANCO</button>
-        <button class="btn" style="width:100%; background:#333; margin-top:10px" onclick="document.getElementById('modalInj').style.display='none'">FECHAR</button>
     </div>
 </div>
 
 <div id="modalEditor" class="modal">
     <div class="modal-content">
-        <h2 style="color:var(--primary)">📋 Registros <button class="btn btn-delete" style="float:right" onclick="fecharEditor()">[X]</button></h2>
-        <table style="width:100%; border-collapse:collapse; font-size:0.8rem; margin-top:20px;">
-            <tbody id="fullDbBody"></tbody>
-        </table>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2 style="color:var(--primary); margin:0;">📂 ACESSO AOS DADOS INSERIDOS</h2>
+            <button class="btn" style="background:var(--danger); width:auto;" onclick="fecharEditor()">FECHAR [X]</button>
+        </div>
+        <p style="color:#888;">Aqui você pode conferir todos os números da Look e do Rio e apagar os que desejar modificar.</p>
+        
+        <div style="max-height: 60vh; overflow-y: auto; border: 1px solid #333; border-radius: 8px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data/Hora</th>
+                        <th>Praça</th>
+                        <th>Milhar</th>
+                        <th>Grupo</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="fullDbBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="modalInj" class="modal">
+    <div class="modal-content" style="max-width:500px;">
+        <h2 style="color:var(--accent)">💉 Restaurar Dados</h2>
+        <textarea id="txtInj" style="height:200px" placeholder="Cole aqui o conteúdo do seu Bloco de Notas..."></textarea>
+        <button class="btn btn-rio" style="background:var(--accent)" onclick="injetar()">CONFIRMAR RESTAURAÇÃO</button>
+        <button class="btn" style="background:#333; margin-top:10px;" onclick="document.getElementById('modalInj').style.display='none'">VOLTAR</button>
     </div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('sai_v49_final')) || [];
+    let db = JSON.parse(localStorage.getItem('sai_v51_db')) || [];
 
     function gravar(praca) {
-        const texto = document.getElementById('rawInput').value;
-        const linhas = texto.split('\n');
+        const txt = document.getElementById('rawInput').value;
+        const linhas = txt.split('\n');
         let cont = 0;
         linhas.forEach(l => {
             let m = l.match(/\d{3,4}/);
@@ -126,11 +135,11 @@
                 let milhar = m[0].padStart(4, '0');
                 let dezena = milhar.slice(-2);
                 let grupo = (dezena === "00") ? 25 : Math.ceil(parseInt(dezena)/4);
-                db.unshift({ m: milhar, g: grupo, p: praca, dt: new Date().toLocaleString() });
+                db.unshift({ m: milhar, g: grupo, p: praca, dt: new Date().toLocaleString('pt-BR') });
                 cont++;
             }
         });
-        if(cont > 0) { salvar(); document.getElementById('rawInput').value = ""; alert(cont + " salvos na " + praca); }
+        if(cont > 0) { salvar(); document.getElementById('rawInput').value = ""; }
     }
 
     function calcX7(pos) {
@@ -142,154 +151,47 @@
     }
 
     function analisar() {
-        const getAtrasos = (p) => {
+        const calcAtraso = (praca) => {
             let f = {}; for(let i=1; i<=25; i++) f[i]=0;
-            db.filter(x => x.p === p).forEach(x => f[x.g]++);
+            db.filter(x => x.p === praca).forEach(x => f[x.g]++);
             return Object.keys(f).sort((a,b) => f[a] - f[b]);
         };
-        const rio = getAtrasos('RIO'); const look = getAtrasos('LOOK');
-        if(rio.length) { document.getElementById('reiRio').innerText = rio[0].padStart(2,'0'); document.getElementById('topRio').innerText = "Top 3: " + rio.slice(0,3).join("-"); }
-        if(look.length) { document.getElementById('reiLook').innerText = look[0].padStart(2,'0'); document.getElementById('topLook').innerText = "Top 3: " + look.slice(0,3).join("-"); }
+        const rio = calcAtraso('RIO');
+        const look = calcAtraso('LOOK');
+        
+        if(rio.length) {
+            document.getElementById('reiRio').innerText = rio[0].padStart(2,'0');
+            document.getElementById('topRio').innerText = "Atrasados: " + rio.slice(0,5).join(" - ");
+        }
+        if(look.length) {
+            document.getElementById('reiLook').innerText = look[0].padStart(2,'0');
+            document.getElementById('topLook').innerText = "Atrasados: " + look.slice(0,5).join(" - ");
+        }
     }
 
-    function salvar() { localStorage.setItem('sai_v49_final', JSON.stringify(db)); analisar(); }
+    function salvar() { localStorage.setItem('sai_v51_db', JSON.stringify(db)); analisar(); }
+    
     function abrirEditor() {
-        document.getElementById('fullDbBody').innerHTML = db.map((x,i)=>`<tr><td>${x.p}</td><td style="color:var(--primary)">${x.m}</td><td>Grp ${x.g}</td><td><button onclick="apagar(${i})">X</button></td></tr>`).join('');
-        document.getElementById('modalEditor').style.display='block';
+        const body = document.getElementById('fullDbBody');
+        body.innerHTML = db.map((x, i) => `
+            <tr>
+                <td style="color:#888">${x.dt}</td>
+                <td><span class="badge ${x.p==='RIO'?'badge-rio':'badge-look'}">${x.p}</span></td>
+                <td style="font-weight:bold; color:white; font-size:1.1rem">${x.m}</td>
+                <td>Grupo ${x.g}</td>
+                <td><button onclick="apagar(${i})" style="background:var(--danger); border:none; color:white; padding:5px 10px; border-radius:4px; cursor:pointer;">Apagar</button></td>
+            </tr>
+        `).join('');
+        document.getElementById('modalEditor').style.display = 'block';
     }
-    function fecharEditor() { document.getElementById('modalEditor').style.display='none'; }
-    function apagar(i) { db.splice(i,1); salvar(); abrirEditor(); }
-    function injetar() { try { db = JSON.parse(document.getElementById('txtInj').value); salvar(); alert("OK!"); document.getElementById('modalInj').style.display='none'; } catch(e) { alert("Erro!"); } }
-    function exportar() { const blob = new Blob([JSON.stringify(db)], {type:'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'backup.txt'; a.click(); }
-    function limparCiclo() { if(confirm("Limpar tudo?")) { db = []; localStorage.removeItem('sai_v49_final'); location.reload(); } }
+
+    function fecharEditor() { document.getElementById('modalEditor').style.display = 'none'; }
+    function apagar(i) { db.splice(i, 1); salvar(); abrirEditor(); }
+    function injetar() { try { db = JSON.parse(document.getElementById('txtInj').value); salvar(); alert("Dados Carregados!"); document.getElementById('modalInj').style.display='none'; } catch(e) { alert("Erro no Backup!"); } }
+    function exportar() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(db)], {type:'text/plain'})); a.download = 'backup_sai.txt'; a.click(); }
+    function limparTudo() { if(confirm("Apagar tudo?")) { db = []; localStorage.removeItem('sai_v51_db'); location.reload(); } }
 
     analisar();
 </script>
 </body>
 </html>
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .panel { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 15px; }
-        h3 { margin-top: 0; font-size: 1rem; color: var(--primary); border-bottom: 1px solid #333; padding-bottom: 8px; display: flex; justify-content: space-between; }
-        textarea { width: 100%; height: 70px; background: #000; color: var(--primary); border: 1px solid #333; padding: 10px; box-sizing: border-box; border-radius: 5px; }
-        .btn { padding: 10px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; color: #fff; }
-        .btn-rio { background: var(--primary); color: #000; width: 100%; margin-top: 5px; }
-        .btn-look { background: var(--look); color: #000; width: 100%; margin-top: 5px; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .stat-box { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #333; }
-        .big-n { font-size: 2.5rem; font-weight: 900; display: block; }
-        .calc-row { display: flex; align-items: center; gap: 5px; margin-bottom: 8px; font-size: 0.85rem; }
-        .calc-row input { width: 60px; background: #000; border: 1px solid var(--accent); color: #fff; padding: 4px; text-align: center; }
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; padding:20px; overflow-y:auto; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div class="header">
-        <div>
-            <b style="font-size: 1.5rem; color: var(--primary);">S.A.I v4.8</b>
-            <div style="font-size: 0.7rem; color: var(--accent);">RADAR INDEPENDENTE: RIO & LOOK</div>
-        </div>
-        <div style="display: flex; gap: 10px;">
-            <button class="btn" style="background:var(--accent); color:#000" onclick="document.getElementById('modalReparar').style.display='block'">💉 INJETAR</button>
-            <button class="btn" style="background:#30363d" onclick="abrirGestor()">📂 BANCO</button>
-            <button class="btn" style="background:#238636" onclick="exportar()">📥 BACKUP</button>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div>
-            <div class="panel" style="border-top: 4px solid var(--primary);">
-                <h3>🏇 RIO DE JANEIRO</h3>
-                <textarea id="inputRio" placeholder="Resultados do Rio..."></textarea>
-                <button class="btn btn-rio" onclick="gravar('RIO')">GRAVAR NO RIO</button>
-                
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <small style="color:var(--primary)">MAIS ATRASADO RIO</small>
-                        <span class="big-n" id="reiRio" style="color:#fff">--</span>
-                    </div>
-                    <div class="stat-box">
-                        <small>TOP 3 RIO</small>
-                        <div id="topRio" style="font-weight:bold; margin-top:5px; color:var(--primary)">--</div>
-                    </div>
-                </div>
-
-                <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 10px;">
-                    <small style="color:var(--accent)">CÁLCULO X7 (BASE RIO)</small>
-                    <div class="calc-row">1º <input type="number" id="r1" oninput="execX7('r1','res1')"> <span id="res1"></span></div>
-                    <div class="calc-row">3º <input type="number" id="r3" oninput="execX7('r3','res3')"> <span id="res3"></span></div>
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="panel" style="border-top: 4px solid var(--look);">
-                <h3 style="color:var(--look)">🎯 LOOK GOIÁS</h3>
-                <textarea id="inputLook" placeholder="Resultados da Look..."></textarea>
-                <button class="btn btn-look" onclick="gravar('LOOK')">GRAVAR NA LOOK</button>
-
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <small style="color:var(--look)">MAIS ATRASADO LOOK</small>
-                        <span class="big-n" id="reiLook" style="color:#fff">--</span>
-                    </div>
-                    <div class="stat-box">
-                        <small>TOP 3 LOOK</small>
-                        <div id="topLook" style="font-weight:bold; margin-top:5px; color:var(--look)">--</div>
-                    </div>
-                </div>
-
-                <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 10px;">
-                    <small style="color:var(--accent)">CÁLCULO X7 (BASE LOOK)</small>
-                    <div class="calc-row">1º <input type="number" id="l1" oninput="execX7('l1','resL1')"> <span id="resL1"></span></div>
-                    <div class="calc-row">3º <input type="number" id="l3" oninput="execX7('l3','resL3')"> <span id="resL3"></span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="modalGestor" class="modal">
-    <div style="background:var(--bg); max-width: 800px; margin: auto; padding: 20px; border: 1px solid var(--primary); border-radius: 10px;">
-        <div style="display:flex; justify-content:space-between; align-items:center"><h2>GESTOR</h2> <button onclick="document.getElementById('modalGestor').style.display='none'">[X]</button></div>
-        <div id="corpoTabela" style="max-height:400px; overflow-y:auto"></div>
-    </div>
-</div>
-
-<div id="modalReparar" class="modal">
-    <div style="background:var(--bg); max-width: 500px; margin: auto; padding: 20px; border: 1px solid var(--accent); border-radius: 10px;">
-        <h3>INJETAR BACKUP</h3>
-        <textarea id="txtInjetar" style="height:150px"></textarea>
-        <button class="btn btn-rio" onclick="injeter()">RESTAURAR</button>
-    </div>
-</div>
-
-<script>
-    let db = JSON.parse(localStorage.getItem('sai_v48_db')) || [];
-
-    function gravar(praca) {
-        const id = praca === 'RIO' ? 'inputRio' : 'inputLook';
-        const txt = document.getElementById(id).value;
-        txt.split('\n').forEach(l => {
-            let m = l.match(/\d{3,4}/);
-            if(m) {
-                let milhar = m[0].padStart(4, '0');
-                let grp = (milhar.slice(-2) === "00") ? 25 : Math.ceil(parseInt(milhar.slice(-2))/4);
-                db.unshift({ m: milhar, g: grp, p: praca, dt: new Date().toLocaleString() });
-            }
-        });
-        salvar();
-        document.getElementById(id).value = "";
-    }
-
-    function execX7(id, res) {
-        const v = document.getElementById(id).value;
-        if(v) {
-            let c = (parseInt(v)*7).toString().slice(-3).padStart(3,'0');
-            document.getElementById(res).innerHTML = `<b>${c}</b> (Dz: ${c.slice(-2)})`;
-        }
-    }
-
-    function salvar() {
-        localStorage.setItem('sai_v4
