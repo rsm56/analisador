@@ -3,45 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A.I v4.0 - Professional Suite</title>
+    <title>S.A.I v4.1 - Filtro de Precisão</title>
     <style>
         :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         .container { max-width: 1100px; margin: auto; }
-        
         .grid-main { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
         .panel { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; }
-        
         h2, h3 { color: var(--primary); margin-top: 0; text-transform: uppercase; font-size: 1.1rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
-        
-        textarea { width: 100%; height: 80px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; }
-        
+        textarea { width: 100%; height: 100px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; }
         .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-save { background: var(--primary); color: #000; width: 100%; font-size: 1rem; margin: 10px 0; }
         .btn-tool { background: #30363d; color: #fff; margin-top: 5px; font-size: 0.8rem; }
         .btn-delete { background: #ff4d4d; color: #fff; padding: 5px 10px; font-size: 0.7rem; }
-
-        /* Calculadora X7 */
         .calc-x7 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
         .calc-box { background: #0d1117; padding: 10px; border-radius: 8px; border: 1px solid var(--accent); }
         .calc-box input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--accent); color: #fff; font-size: 1.2rem; text-align: center; margin: 5px 0; }
         .res-val { color: var(--accent); font-weight: bold; font-size: 1.3rem; display: block; text-align: center; }
         .res-label { font-size: 0.7rem; color: #8b949e; text-align: center; display: block; }
-
-        /* Tabela de Dados Geral */
         .db-view { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .db-view th { text-align: left; color: #8b949e; font-size: 0.8rem; padding: 10px; }
         .db-view td { padding: 10px; border-bottom: 1px solid #30363d; font-size: 0.9rem; }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; overflow-y: auto; }
-        .modal-content { background: var(--bg); margin: 5% auto; padding: 20px; width: 80%; border-radius: 15px; border: 1px solid var(--primary); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; overflow-y: auto; }
+        .modal-content { background: var(--bg); margin: 2% auto; padding: 20px; width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid var(--primary); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v4.0</span></h1>
+        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v4.1</span></h1>
         <button class="btn btn-tool" onclick="abrirEditor()">📂 ACEDER TODO O BANCO DE DADOS</button>
     </div>
     <hr style="border: 0; border-top: 1px solid #30363d; margin: 20px 0;">
@@ -50,7 +41,8 @@
         <div>
             <div class="panel">
                 <h3>📥 Importar Sorteio (1º ao 7º)</h3>
-                <textarea id="rawInput" placeholder="Cole os resultados aqui. O sistema filtrará apenas os primeiros 7 números..."></textarea>
+                <p style="font-size: 0.75rem; color: #888; margin-bottom: 10px;">O sistema vai ignorar emojis e números de grupos, focando apenas nas milhares/centenas.</p>
+                <textarea id="rawInput" placeholder="Cole os resultados aqui..."></textarea>
                 <button class="btn btn-save" onclick="salvarComFiltro()">GRAVAR NO BANCO DE DADOS</button>
             </div>
 
@@ -102,68 +94,65 @@
 
 <div id="modalEditor" class="modal">
     <div class="modal-content">
-        <div style="display: flex; justify-content: space-between;">
-            <h2>📋 GESTOR DO BANCO DE DADOS</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h2 style="margin:0;">📋 GESTOR DO BANCO</h2>
             <button class="btn btn-delete" onclick="fecharEditor()">FECHAR [X]</button>
         </div>
-        <p>Aqui pode visualizar e apagar lançamentos específicos.</p>
-        <table class="db-view">
-            <thead>
-                <tr>
-                    <th>Data/Hora</th>
-                    <th>Milhar</th>
-                    <th>Grupo</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody id="fullDbBody"></tbody>
-        </table>
+        <div style="max-height: 500px; overflow-y: auto;">
+            <table class="db-view">
+                <thead>
+                    <tr><th>Data</th><th>Milhar/Cent.</th><th>Grupo</th><th>Ação</th></tr>
+                </thead>
+                <tbody id="fullDbBody"></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('banco_v4')) || [];
+    let db = JSON.parse(localStorage.getItem('banco_v4_1')) || [];
 
-    // --- FUNÇÃO SALVAR COM FILTRO 1-7 ---
     function salvarComFiltro() {
         const texto = document.getElementById('rawInput').value;
-        let numeros = texto.match(/\d+/g);
-        if (!numeros) return;
+        // FILTRO MELHORADO: Busca números que tenham de 3 a 4 dígitos
+        let numerosEncontrados = texto.match(/\b\d{3,4}\b/g);
+        
+        if (!numerosEncontrados) {
+            alert("Nenhuma milhar ou centena válida encontrada!");
+            return;
+        }
 
-        // Filtra apenas os primeiros 7 números (1º ao 7º prémio)
-        const apenasSete = numeros.slice(0, 7);
+        const apenasSete = numerosEncontrados.slice(0, 7);
         const agora = new Date().toLocaleString('pt-BR');
 
         apenasSete.forEach(n => {
-            const milhar = n.padStart(4, '0').slice(-4);
+            const milhar = n.padStart(4, '0');
             const dezena = milhar.slice(-2);
             const grupo = Math.ceil(parseInt(dezena == "00" ? 100 : dezena) / 4);
             db.unshift({ m: milhar, g: grupo, dt: agora });
         });
 
-        salvarLocal();
+        localStorage.setItem('banco_v4_1', JSON.stringify(db));
         document.getElementById('rawInput').value = "";
+        alert("7 Prémios gravados com sucesso!");
         analisar();
     }
 
-    // --- CALCULADORA X7 ---
     function calcX7(pos) {
-        const milhar = document.getElementById('m' + pos).value;
-        if (milhar.length >= 1) {
-            const result = milhar * 7;
-            const centena = String(result).slice(-3).padStart(3, '0');
-            const dezena = centena.slice(-2);
-            const grupo = Math.ceil(parseInt(dezena == "00" ? 100 : dezena) / 4);
-            
-            document.getElementById('c' + pos).innerText = centena;
-            document.getElementById('g' + pos).innerText = "Grupo: " + String(grupo).padStart(2, '0');
+        const val = document.getElementById('m' + pos).value;
+        if (val.length >= 1) {
+            const res = val * 7;
+            const cent = String(res).slice(-3).padStart(3, '0');
+            const dez = cent.slice(-2);
+            const grp = Math.ceil(parseInt(dez == "00" ? 100 : dez) / 4);
+            document.getElementById('c' + pos).innerText = cent;
+            document.getElementById('g' + pos).innerText = "Grupo: " + String(grp).padStart(2, '0');
         } else {
             document.getElementById('c' + pos).innerText = "---";
             document.getElementById('g' + pos).innerText = "Grupo: --";
         }
     }
 
-    // --- GESTÃO DO BANCO ---
     function abrirEditor() {
         const body = document.getElementById('fullDbBody');
         body.innerHTML = db.map((item, index) => `
@@ -180,25 +169,20 @@
     function fecharEditor() { document.getElementById('modalEditor').style.display = 'none'; }
 
     function apagarItem(index) {
-        if(confirm("Deseja apagar este lançamento?")) {
-            db.splice(index, 1);
-            salvarLocal();
-            abrirEditor();
-            analisar();
-        }
+        db.splice(index, 1);
+        localStorage.setItem('banco_v4_1', JSON.stringify(db));
+        abrirEditor();
+        analisar();
     }
-
-    function salvarLocal() { localStorage.setItem('banco_v4', JSON.stringify(db)); }
 
     function analisar() {
         if (db.length === 0) return;
         let cont = {}; for(let i=1; i<=25; i++) cont[i] = 0;
         db.forEach(x => cont[x.g]++);
         let ordenados = Object.keys(cont).sort((a,b) => cont[a] - cont[b]);
-        
         document.getElementById('pGrupos').innerText = ordenados.slice(0, 5).join(" - ");
         document.getElementById('pTernoG').innerText = ordenados.slice(0, 3).join(", ");
-        document.getElementById('pMilhar').innerText = "C: " + String(ordenados[0]*4-1).padStart(2, '0') + " (Grp " + ordenados[0] + ")";
+        document.getElementById('pMilhar').innerText = "Gr. " + ordenados[0] + " (Atrasado)";
     }
 
     analisar();
