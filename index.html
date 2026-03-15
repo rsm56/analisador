@@ -7,7 +7,166 @@
         :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --look: #00d4ff; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 15px; margin: 0; }
         .container { max-width: 1300px; margin: auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; background: #010409; padding: 15px; border-radius: 10px; border: 1px solid var(--primary); margin-bottom: 15px; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: #010409; padding: 15px; border-radius: 10px; border: 1px solid var(--primary); margin-bottom: 15px; }<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>S.A.I v4.9 - Dual Radar</title>
+    <style>
+        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --look: #00d4ff; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: auto; }
+        .grid-main { display: grid; grid-template-columns: 1fr 400px; gap: 20px; }
+        .panel { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; }
+        h3 { color: var(--primary); margin-top: 0; text-transform: uppercase; font-size: 0.9rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; display: flex; justify-content: space-between; }
+        textarea { width: 100%; height: 80px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; }
+        
+        /* Boxes de Destaque */
+        .radar-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .strong-box { padding: 15px; border-radius: 12px; text-align: center; border: 2px solid #333; }
+        .box-rio { border-color: var(--primary); background: rgba(0, 255, 136, 0.05); }
+        .box-look { border-color: var(--look); background: rgba(0, 212, 255, 0.05); }
+        .label { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        .number { font-size: 3rem; font-weight: 900; color: #fff; line-height: 1.2; }
+
+        .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; color: #fff; }
+        .btn-rio { background: var(--primary); color: #000; width: 100%; margin: 5px 0; }
+        .btn-look { background: var(--look); color: #000; width: 100%; margin: 5px 0; }
+        
+        .calc-x7 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .calc-box { background: #0d1117; padding: 10px; border-radius: 8px; border: 1px solid var(--accent); text-align: center; font-size: 0.8rem; }
+        .calc-box input { width: 90%; background: transparent; border: none; border-bottom: 1px solid var(--accent); color: #fff; text-align: center; font-size: 1.1rem; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; overflow-y: auto; }
+        .modal-content { background: var(--bg); margin: 2% auto; padding: 20px; width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid var(--primary); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v4.9</span></h1>
+        <div style="display:flex; gap:10px;">
+            <button class="btn" style="background:var(--accent); color:#000" onclick="document.getElementById('modalInj').style.display='block'">💉 INJETAR BACKUP</button>
+            <button class="btn" style="background:#30363d" onclick="abrirEditor()">📂 GESTOR</button>
+        </div>
+    </div>
+
+    <div class="grid-main">
+        <div>
+            <div class="radar-container">
+                <div class="strong-box box-rio">
+                    <span class="label" style="color:var(--primary)">🔥 Rei do Rio (Atraso)</span>
+                    <div class="number" id="reiRio">--</div>
+                    <small id="topRio" style="color:var(--text)">--</small>
+                </div>
+                <div class="strong-box box-look">
+                    <span class="label" style="color:var(--look)">🔥 Rei da Look (Atraso)</span>
+                    <div class="number" id="reiLook">--</div>
+                    <small id="topLook" style="color:var(--text)">--</small>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>📥 Lançar Resultados</h3>
+                <textarea id="rawInput" placeholder="Cole os resultados aqui..."></textarea>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button class="btn btn-rio" onclick="gravar('RIO')">GRAVAR NO RIO</button>
+                    <button class="btn btn-look" onclick="gravar('LOOK')">GRAVAR NA LOOK</button>
+                </div>
+            </div>
+
+            <div class="panel" style="border-color: var(--accent);">
+                <h3 style="color: var(--accent);">🧮 Calculadora X7 (Prêmios 1, 3 e 5)</h3>
+                <div class="calc-x7">
+                    <div class="calc-box"><small>1º Prêmio</small><input type="number" id="m1" oninput="calcX7(1)"><div id="c1" style="color:var(--accent); font-weight:bold; margin-top:5px;">--</div></div>
+                    <div class="calc-box"><small>3º Prêmio</small><input type="number" id="m3" oninput="calcX7(3)"><div id="c3" style="color:var(--accent); font-weight:bold; margin-top:5px;">--</div></div>
+                    <div class="calc-box"><small>5º Prêmio</small><input type="number" id="m5" oninput="calcX7(5)"><div id="c5" style="color:var(--accent); font-weight:bold; margin-top:5px;">--</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3 style="color:var(--primary)">🎯 Resumo de Ciclo</h3>
+            <p style="font-size:0.8rem">O sistema analisa os atrasos de cada praça de forma independente.</p>
+            <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
+            <button class="btn" style="background:var(--danger); width:100%; font-size:0.7rem;" onclick="limparCiclo()">REINICIAR TUDO</button>
+            <button class="btn" style="background:#238636; width:100%; margin-top:10px;" onclick="exportar()">📥 GERAR NOVO BACKUP TXT</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalInj" class="modal">
+    <div class="modal-content">
+        <h2 style="color:var(--accent)">💉 Injetar Dados</h2>
+        <textarea id="txtInj" style="height:250px" placeholder="Cole o conteúdo do backup aqui..."></textarea>
+        <button class="btn btn-rio" style="background:var(--accent)" onclick="injetar()">RESTAURAR BANCO</button>
+        <button class="btn" style="width:100%; background:#333; margin-top:10px" onclick="document.getElementById('modalInj').style.display='none'">FECHAR</button>
+    </div>
+</div>
+
+<div id="modalEditor" class="modal">
+    <div class="modal-content">
+        <h2 style="color:var(--primary)">📋 Registros <button class="btn btn-delete" style="float:right" onclick="fecharEditor()">[X]</button></h2>
+        <table style="width:100%; border-collapse:collapse; font-size:0.8rem; margin-top:20px;">
+            <tbody id="fullDbBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    let db = JSON.parse(localStorage.getItem('sai_v49_final')) || [];
+
+    function gravar(praca) {
+        const texto = document.getElementById('rawInput').value;
+        const linhas = texto.split('\n');
+        let cont = 0;
+        linhas.forEach(l => {
+            let m = l.match(/\d{3,4}/);
+            if(m) {
+                let milhar = m[0].padStart(4, '0');
+                let dezena = milhar.slice(-2);
+                let grupo = (dezena === "00") ? 25 : Math.ceil(parseInt(dezena)/4);
+                db.unshift({ m: milhar, g: grupo, p: praca, dt: new Date().toLocaleString() });
+                cont++;
+            }
+        });
+        if(cont > 0) { salvar(); document.getElementById('rawInput').value = ""; alert(cont + " salvos na " + praca); }
+    }
+
+    function calcX7(pos) {
+        let v = document.getElementById('m' + pos).value;
+        if(v) {
+            let res = (parseInt(v)*7).toString().slice(-3).padStart(3,'0');
+            document.getElementById('c' + pos).innerText = "C: " + res + " (Dz: " + res.slice(-2) + ")";
+        }
+    }
+
+    function analisar() {
+        const getAtrasos = (p) => {
+            let f = {}; for(let i=1; i<=25; i++) f[i]=0;
+            db.filter(x => x.p === p).forEach(x => f[x.g]++);
+            return Object.keys(f).sort((a,b) => f[a] - f[b]);
+        };
+        const rio = getAtrasos('RIO'); const look = getAtrasos('LOOK');
+        if(rio.length) { document.getElementById('reiRio').innerText = rio[0].padStart(2,'0'); document.getElementById('topRio').innerText = "Top 3: " + rio.slice(0,3).join("-"); }
+        if(look.length) { document.getElementById('reiLook').innerText = look[0].padStart(2,'0'); document.getElementById('topLook').innerText = "Top 3: " + look.slice(0,3).join("-"); }
+    }
+
+    function salvar() { localStorage.setItem('sai_v49_final', JSON.stringify(db)); analisar(); }
+    function abrirEditor() {
+        document.getElementById('fullDbBody').innerHTML = db.map((x,i)=>`<tr><td>${x.p}</td><td style="color:var(--primary)">${x.m}</td><td>Grp ${x.g}</td><td><button onclick="apagar(${i})">X</button></td></tr>`).join('');
+        document.getElementById('modalEditor').style.display='block';
+    }
+    function fecharEditor() { document.getElementById('modalEditor').style.display='none'; }
+    function apagar(i) { db.splice(i,1); salvar(); abrirEditor(); }
+    function injetar() { try { db = JSON.parse(document.getElementById('txtInj').value); salvar(); alert("OK!"); document.getElementById('modalInj').style.display='none'; } catch(e) { alert("Erro!"); } }
+    function exportar() { const blob = new Blob([JSON.stringify(db)], {type:'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'backup.txt'; a.click(); }
+    function limparCiclo() { if(confirm("Limpar tudo?")) { db = []; localStorage.removeItem('sai_v49_final'); location.reload(); } }
+
+    analisar();
+</script>
+</body>
+</html>
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .panel { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 15px; }
         h3 { margin-top: 0; font-size: 1rem; color: var(--primary); border-bottom: 1px solid #333; padding-bottom: 8px; display: flex; justify-content: space-between; }
