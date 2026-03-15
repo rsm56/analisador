@@ -2,95 +2,155 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>S.A.I v4.5.2 - CONTROLE TOTAL</title>
+    <title>S.A.I v4.6 - ESTÁVEL</title>
     <style>
-        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --purp: #8957e5; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); padding: 15px; margin: 0; }
-        .container { max-width: 1100px; margin: auto; }
-        .menu-topo { display: flex; justify-content: space-between; background: #010409; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--primary); align-items: center; }
-        .grid { display: grid; grid-template-columns: 1fr 380px; gap: 15px; }
-        .panel { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 15px; }
-        .btn { padding: 10px 15px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; color: #fff; transition: 0.3s; }
-        .btn-backup { background: #238636; }
-        .btn-calc { background: var(--accent); color: #000; width: 100%; margin-top: 5px; }
-        .btn-save { background: var(--primary); color: #000; width: 100%; font-size: 1.1rem; }
-        input[type="number"] { width: 80px; background: #000; color: var(--primary); border: 1px solid #444; padding: 8px; border-radius: 4px; text-align: center; font-size: 1.1rem; }
-        textarea { width: 100%; height: 60px; background: #000; color: var(--primary); border: 1px solid #333; padding: 10px; box-sizing: border-box; border-radius: 5px; resize: none; font-family: monospace; }
-        .strong-number { font-size: 3.5rem; color: #fff; text-align: center; display: block; font-weight: bold; text-shadow: 0 0 15px var(--primary); }
-        .x7-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; }
-        .highlight { color: var(--primary); font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; color: #fff; }
-        th, td { padding: 8px; border-bottom: 1px solid #333; text-align: left; font-size: 0.9rem; }
+        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); padding: 15px; }
+        .panel { background: var(--card); padding: 15px; border-radius: 10px; border: 1px solid #30363d; margin-bottom: 15px; }
+        .btn { padding: 10px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; color: #fff; }
+        .btn-save { background: var(--primary); color: #000; width: 100%; font-size: 1.2rem; }
+        .grid { display: grid; grid-template-columns: 1fr 350px; gap: 15px; }
+        textarea { width: 100%; height: 80px; background: #000; color: var(--primary); border: 1px solid #333; padding: 10px; box-sizing: border-box; }
+        .big-number { font-size: 4rem; text-align: center; display: block; color: #fff; text-shadow: 0 0 10px var(--primary); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border-bottom: 1px solid #333; text-align: left; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="menu-topo">
-        <div>
-            <b style="color:var(--primary); font-size: 1.4rem;">S.A.I <span style="font-weight:200">v4.5.2</span></b><br>
-            <small style="color:var(--accent)">GESTOR DE BANCO + X7</small>
-        </div>
-        <div style="display:flex; gap:10px;">
-            <button class="btn btn-backup" onclick="exportarBackup()">📥 BACKUP</button>
-            <button class="btn" style="background:var(--purp)" onclick="abrirEditor()">📂 BANCO</button>
-            <button class="btn" style="background:#30363d" onclick="document.getElementById('injecaoDiv').style.display='block'">💉 INJETAR</button>
-        </div>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <h2>S.A.I <span style="color:var(--primary)">v4.6</span></h2>
+    <div>
+        <button class="btn" style="background:var(--primary); color:#000" onclick="exportar()">💾 BACKUP</button>
+        <button class="btn" style="background:#8957e5" onclick="abrirBanco()">📂 BANCO (APAGAR)</button>
+        <button class="btn" style="background:var(--accent); color:#000" onclick="document.getElementById('injecao').style.display='block'">💉 INJETAR</button>
     </div>
+</div>
 
-    <div id="injecaoDiv" class="panel" style="display:none; border: 1px solid var(--purp)">
-        <h3 style="margin:0">💉 Injeção Direta de Texto</h3>
-        <textarea id="injecaoInput" placeholder="Cole o texto do seu backup aqui..."></textarea>
-        <button class="btn" style="background:var(--purp); width:100%; margin-top:10px" onclick="processarInjecao()">CONFIRMAR INJEÇÃO</button>
-        <button onclick="document.getElementById('injecaoDiv').style.display='none'" style="background:none; border:none; color:gray; cursor:pointer; width:100%; margin-top:5px">Fechar</button>
-    </div>
+<div id="injecao" class="panel" style="display:none; border: 2px solid var(--accent)">
+    <h3>Injeção Manual (Cole o conteúdo do seu TXT aqui)</h3>
+    <textarea id="txtInjetar"></textarea>
+    <button class="btn btn-save" onclick="injetar()">RESTAURAR AGORA</button>
+</div>
 
-    <div class="grid">
-        <div>
-            <div class="panel" style="text-align:center">
-                <span style="color:var(--primary); letter-spacing: 2px;">🔥 GRUPO MAIS FORTE</span>
-                <span class="strong-number" id="grupoRei">--</span>
-                <small id="progressoCiclo">Carregue os dados...</small>
-            </div>
-
-            <div class="panel">
-                <h3 style="margin-top:0">📥 Lançar Sorteio</h3>
-                <textarea id="rawInput" placeholder="Cole os novos resultados aqui..."></textarea>
-                <button class="btn btn-save" onclick="salvarComFiltro()" style="margin-top:10px">GRAVAR NO BANCO</button>
-            </div>
-
-            <div class="panel" style="border-left: 5px solid var(--accent);">
-                <h3 style="margin:0; color:var(--accent)">🧮 CALCULADORA X7</h3>
-                <div class="x7-row"><span>1º Prêmio:</span> <input type="number" id="p1"> <span id="res1" class="highlight">---</span></div>
-                <div class="x7-row"><span>3º Prêmio:</span> <input type="number" id="p3"> <span id="res3" class="highlight">---</span></div>
-                <div class="x7-row"><span>5º Prêmio:</span> <input type="number" id="p5"> <span id="res5" class="highlight">---</span></div>
-                <button class="btn btn-calc" onclick="calcularX7()">EXECUTAR CÁLCULO</button>
-            </div>
+<div class="grid">
+    <div>
+        <div class="panel">
+            <h3 style="margin-top:0">1. LANÇAR RESULTADOS</h3>
+            <textarea id="entrada" placeholder="Cole os resultados aqui..."></textarea>
+            <button class="btn btn-save" onclick="gravar()">GRAVAR E ANALISAR</button>
         </div>
 
         <div class="panel">
-            <h3 style="color:var(--primary)">🎯 TOP 5 ATRASADOS</h3>
-            <div id="pGrupos" style="font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;">---</div>
-            <hr style="border:0; border-top:1px solid #333; margin:20px 0;">
-            <p style="font-size:0.8rem; color:#888">Use o botão <b>BANCO</b> no topo para apagar ou editar lançamentos específicos.</p>
+            <h3 style="color:var(--accent)">2. CALCULADORA X7 (RIO -> LOOK)</h3>
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <input type="number" id="v1" placeholder="1º prêmio" style="flex:1; padding:10px;">
+                <input type="number" id="v3" placeholder="3º prêmio" style="flex:1; padding:10px;">
+                <input type="number" id="v5" placeholder="5º prêmio" style="flex:1; padding:10px;">
+            </div>
+            <button class="btn" style="background:var(--accent); color:#000; width:100%" onclick="calcX7()">CALCULAR CENTENAS</button>
+            <div id="resX7" style="margin-top:15px; font-weight:bold; color:var(--primary)"></div>
+        </div>
+    </div>
+
+    <div>
+        <div class="panel" style="text-align:center">
+            <span>GRUPO MAIS FORTE (REI)</span>
+            <span class="big-number" id="rei">--</span>
+        </div>
+        <div class="panel">
+            <h3 style="color:var(--primary)">TOP ATRASADOS</h3>
+            <div id="listaAtraso" style="font-size:1.4rem; font-weight:bold">--</div>
         </div>
     </div>
 </div>
 
-<div id="modalEditor" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); padding:20px; overflow-y:auto; z-index:999;">
-    <div style="background:var(--bg); padding:20px; border-radius:10px; border:1px solid var(--primary); max-width:800px; margin:auto;">
-        <h2 style="display:flex; justify-content:space-between; color:var(--primary)">LANÇAMENTOS ATUAIS <button onclick="fecharEditor()" class="btn" style="background:var(--danger)">X</button></h2>
-        <table id="fullDbTable">
-            <thead><tr><th>Data/Hora</th><th>Milhar</th><th>Grp</th><th>Ação</th></tr></thead>
-            <tbody id="fullDbBody"></tbody>
+<div id="modalBanco" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); padding:20px; overflow-y:auto;">
+    <div style="background:var(--bg); padding:20px; border-radius:10px; border:1px solid var(--primary); max-width:700px; margin:auto;">
+        <div style="display:flex; justify-content:space-between">
+            <h3>LANÇAMENTOS</h3>
+            <button class="btn" style="background:var(--danger)" onclick="document.getElementById('modalBanco').style.display='none'">FECHAR X</button>
+        </div>
+        <table id="tabelaBanco">
+            <thead><tr><th>Data</th><th>Milhar</th><th>Grp</th><th>Ação</th></tr></thead>
+            <tbody id="corpoBanco"></tbody>
         </table>
     </div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('banco_sai_v4_5')) || [];
+    let dados = JSON.parse(localStorage.getItem('banco_sai_v4_6')) || [];
 
-    function processarInjecao() {
-        const txt = document.getElementById('injecaoInput').value;
+    function gravar() {
+        const texto = document.getElementById('entrada').value;
+        const linhas = texto.split('\n');
+        linhas.forEach(l => {
+            let m = l.match(/\d{3,4}/);
+            if(m) {
+                let milhar = m[0].padStart(4, '0');
+                let dezena = parseInt(milhar.slice(-2));
+                let grupo = (dezena === 0) ? 25 : Math.ceil(dezena / 4);
+                dados.unshift({ m: milhar, g: grupo, d: new Date().toLocaleString() });
+            }
+        });
+        atualizar();
+        document.getElementById('entrada').value = "";
+    }
+
+    function calcX7() {
+        let r = "";
+        ['v1', 'v3', 'v5'].forEach(id => {
+            let v = document.getElementById(id).value;
+            if(v) {
+                let c = (parseInt(v)*7).toString().slice(-3);
+                r += `Centena: ${c} (Dezena: ${c.slice(-2)})<br>`;
+            }
+        });
+        document.getElementById('resX7').innerHTML = r;
+    }
+
+    function atualizar() {
+        localStorage.setItem('banco_sai_v4_6', JSON.stringify(dados));
+        if(dados.length === 0) return;
+        let f = {}; for(let i=1; i<=25; i++) f[i]=0;
+        dados.forEach(x => f[x.g]++);
+        let ord = Object.keys(f).sort((a,b) => f[a] - f[b]);
+        document.getElementById('rei').innerText = ord[0];
+        document.getElementById('listaAtraso').innerText = ord.slice(0, 5).join(" - ");
+    }
+
+    function abrirBanco() {
+        document.getElementById('modalBanco').style.display = 'block';
+        document.getElementById('corpoBanco').innerHTML = dados.map((x, i) => `
+            <tr><td>${x.d}</td><td>${x.m}</td><td>${x.g}</td>
+            <td><button class="btn" style="background:var(--danger); padding:2px 5px" onclick="apagar(${i})">Apagar</button></td></tr>
+        `).join('');
+    }
+
+    function apagar(i) {
+        dados.splice(i, 1);
+        atualizar();
+        abrirBanco();
+    }
+
+    function injetar() {
         try {
-            db
+            dados = JSON.parse(document.getElementById('txtInjetar').value);
+            atualizar();
+            alert("Sucesso!");
+            document.getElementById('injecao').style.display='none';
+        } catch(e) { alert("Erro no texto!"); }
+    }
+
+    function exportar() {
+        const blob = new Blob([JSON.stringify(dados)], {type:'text/plain'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'backup.txt';
+        a.click();
+    }
+
+    atualizar();
+</script>
+</body>
+</html>
