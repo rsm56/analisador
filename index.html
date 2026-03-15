@@ -2,151 +2,212 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A.I v4.3.1 - Ciclo Mestre REPARADO</title>
+    <title>S.A.I v4.7 - RIO & LOOK</title>
     <style>
-        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        .container { max-width: 1100px; margin: auto; }
-        .grid-main { display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
-        .panel { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; }
-        h3 { color: var(--primary); margin-top: 0; text-transform: uppercase; font-size: 1rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; display: flex; justify-content: space-between; }
-        textarea { width: 100%; height: 100px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; }
-        .strong-box { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 2px solid var(--primary); padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
-        .strong-number { font-size: 4rem; font-weight: 900; color: #fff; line-height: 1; margin: 10px 0; text-shadow: 0 0 15px var(--primary); }
-        .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-save { background: var(--primary); color: #000; width: 100%; font-size: 1rem; margin: 10px 0; }
-        .btn-tool { background: #30363d; color: #fff; font-size: 0.8rem; }
-        .btn-delete { background: var(--danger); color: #fff; padding: 5px 10px; font-size: 0.7rem; }
-        .calc-x7 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .calc-box { background: #0d1117; padding: 10px; border-radius: 8px; border: 1px solid var(--accent); text-align: center; }
-        .calc-box input { width: 80%; background: transparent; border: none; border-bottom: 1px solid var(--accent); color: #fff; font-size: 1.2rem; text-align: center; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; overflow-y: auto; }
-        .modal-content { background: var(--bg); margin: 2% auto; padding: 20px; width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid var(--primary); }
+        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --look: #00d4ff; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 15px; margin: 0; }
+        .container { max-width: 1200px; margin: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: #010409; padding: 15px; border-radius: 10px; border: 1px solid var(--primary); margin-bottom: 15px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr 350px; gap: 15px; }
+        .panel { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #30363d; }
+        h3 { margin-top: 0; font-size: 0.9rem; color: var(--primary); border-bottom: 1px solid #333; padding-bottom: 8px; }
+        textarea { width: 100%; height: 80px; background: #000; color: var(--primary); border: 1px solid #333; padding: 10px; box-sizing: border-box; border-radius: 5px; }
+        .btn { padding: 10px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; color: #fff; }
+        .btn-rio { background: var(--primary); color: #000; width: 100%; margin-top: 5px; }
+        .btn-look { background: var(--look); color: #000; width: 100%; margin-top: 5px; }
+        .strong-number { font-size: 3.5rem; font-weight: 900; display: block; text-align: center; color: #fff; text-shadow: 0 0 10px var(--primary); }
+        .calc-row { display: flex; align-items: center; gap: 5px; margin-bottom: 10px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 5px; }
+        .calc-row input { width: 70px; background: #000; border: 1px solid var(--accent); color: #fff; padding: 5px; text-align: center; }
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; padding:20px; overflow-y:auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 8px; border-bottom: 1px solid #333; text-align: left; }
+        .badge-rio { background: var(--primary); color: #000; padding: 2px 5px; border-radius: 3px; font-size: 0.7rem; }
+        .badge-look { background: var(--look); color: #000; padding: 2px 5px; border-radius: 3px; font-size: 0.7rem; }
     </style>
 </head>
 <body>
+
 <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v4.3.1</span></h1>
-        <div style="display:flex; gap:10px;">
-            <button class="btn btn-tool" style="background:var(--accent); color:#000" onclick="document.getElementById('modalInjetar').style.display='block'">💉 REPARAR BANCO</button>
-            <button class="btn btn-tool" onclick="abrirEditor()">📂 GESTOR</button>
-        </div>
-    </div>
-
-    <div class="grid-main">
+    <div class="header">
         <div>
-            <div class="strong-box" id="boxForte">
-                <span class="strong-label">🔥 Grupo Mais Forte (Atraso)</span>
-                <div class="strong-number" id="grupoRei">--</div>
-                <div class="cycle-info" id="progressoCiclo">Aguardando dados...</div>
-            </div>
+            <b style="font-size: 1.5rem; color: var(--primary);">S.A.I v4.7</b>
+            <div style="font-size: 0.7rem; color: var(--accent);">PROJETO RIO & LOOK INTEGRADO</div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn" style="background:var(--accent); color:#000" onclick="document.getElementById('modalReparar').style.display='block'">💉 INJETAR BACKUP</button>
+            <button class="btn" style="background:#30363d" onclick="abrirGestor()">📂 GESTOR DE BANCO</button>
+            <button class="btn" style="background:#238636" onclick="exportar()">📥 SALVAR TXT</button>
+        </div>
+    </div>
 
-            <div class="panel">
-                <h3>📥 Importar Sorteio (1º ao 7º)</h3>
-                <textarea id="rawInput" placeholder="Cole o resultado aqui..."></textarea>
-                <button class="btn btn-save" onclick="salvarComFiltro()">GRAVAR DADOS NO CICLO</button>
+    <div class="grid">
+        <div class="panel" style="border-top: 4px solid var(--primary);">
+            <h3>🏇 LANÇAR RIO DE JANEIRO</h3>
+            <textarea id="inputRio" placeholder="Cole o resultado do Rio..."></textarea>
+            <button class="btn btn-rio" onclick="gravar('RIO')">GRAVAR NO RIO</button>
+            
+            <div style="margin-top: 20px;">
+                <h3 style="color:var(--accent)">🧮 CALCULADORA X7 (RIO)</h3>
+                <div class="calc-row">
+                    <span>1º:</span> <input type="number" id="r1" oninput="execX7('r1','res1')"> <span id="res1" style="color:var(--accent)">--</span>
+                </div>
+                <div class="calc-row">
+                    <span>3º:</span> <input type="number" id="r3" oninput="execX7('r3','res3')"> <span id="res3" style="color:var(--accent)">--</span>
+                </div>
+                <div class="calc-row">
+                    <span>5º:</span> <input type="number" id="r5" oninput="execX7('r5','res5')"> <span id="res5" style="color:var(--accent)">--</span>
+                </div>
             </div>
         </div>
 
-        <div class="panel" style="border-color: var(--primary);">
-            <h3>🎯 TENDÊNCIA</h3>
-            <div id="pGrupos" style="font-size: 1.4rem; font-weight: bold; color: #fff; margin-top:5px;">---</div>
-            <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
-            <button class="btn" style="background:var(--danger); width:100%; font-size:0.7rem;" onclick="limparCiclo()">REINICIAR TUDO</button>
+        <div class="panel" style="border-top: 4px solid var(--look);">
+            <h3>🎯 LANÇAR LOOK GOIÁS</h3>
+            <textarea id="inputLook" placeholder="Cole o resultado da Look..."></textarea>
+            <button class="btn btn-look" onclick="gravar('LOOK')">GRAVAR NA LOOK</button>
+
+            <div style="margin-top: 20px;">
+                <h3 style="color:var(--accent)">🧮 CALCULADORA X7 (LOOK)</h3>
+                <div class="calc-row">
+                    <span>1º:</span> <input type="number" id="l1" oninput="execX7('l1','resL1')"> <span id="resL1" style="color:var(--accent)">--</span>
+                </div>
+                <div class="calc-row">
+                    <span>3º:</span> <input type="number" id="l3" oninput="execX7('l3','resL3')"> <span id="resL3" style="color:var(--accent)">--</span>
+                </div>
+                <div class="calc-row">
+                    <span>5º:</span> <input type="number" id="l5" oninput="execX7('l5','resL5')"> <span id="resL5" style="color:var(--accent)">--</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>📊 TENDÊNCIA GERAL</h3>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <small>GRUPO MAIS ATRASADO</small>
+                <span class="strong-number" id="rei">--</span>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+                <small style="color:var(--primary)">TOP 5 ATRASADOS (CICLO)</small>
+                <div id="topAtraso" style="font-size: 1.2rem; font-weight: bold; margin-top: 5px;">--</div>
+            </div>
+            <div style="margin-top: 20px;">
+                <button class="btn" style="background:var(--danger); width: 100%; font-size: 0.7rem;" onclick="limparTudo()">REINICIAR SISTEMA</button>
+            </div>
         </div>
     </div>
 </div>
 
-<div id="modalInjetar" class="modal">
-    <div class="modal-content">
-        <h2 style="color:var(--accent)">💉 Reparar / Injetar Dados</h2>
-        <p>Se o sistema não estiver salvando, cole o conteúdo do seu Backup abaixo e clique em Reparar.</p>
-        <textarea id="txtInjetar" style="height:200px;"></textarea>
-        <button class="btn btn-save" style="background:var(--accent)" onclick="repararBanco()">REPARAR E SINCRONIZAR AGORA</button>
-        <button class="btn btn-tool" style="width:100%; margin-top:10px;" onclick="document.getElementById('modalInjetar').style.display='none'">FECHAR</button>
+<div id="modalGestor" class="modal">
+    <div style="background:var(--bg); max-width: 800px; margin: auto; padding: 20px; border: 1px solid var(--primary); border-radius: 10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center">
+            <h2 style="color:var(--primary)">GESTOR DE LANÇAMENTOS</h2>
+            <button class="btn" style="background:var(--danger)" onclick="document.getElementById('modalGestor').style.display='none'">FECHAR</button>
+        </div>
+        <div style="max-height: 500px; overflow-y: auto;">
+            <table>
+                <thead><tr><th>Data</th><th>Praça</th><th>Milhar</th><th>Grp</th><th>Ação</th></tr></thead>
+                <tbody id="corpoTabela"></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
-<div id="modalEditor" class="modal">
-    <div class="modal-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin:0; color: var(--primary);">📋 GESTOR DE REGISTOS</h2>
-            <button class="btn btn-delete" onclick="fecharEditor()">FECHAR [X]</button>
-        </div>
-        <table style="width:100%; border-collapse: collapse; font-size: 0.9rem;">
-            <tbody id="fullDbBody"></tbody>
-        </table>
+<div id="modalReparar" class="modal">
+    <div style="background:var(--bg); max-width: 600px; margin: auto; padding: 20px; border: 1px solid var(--accent); border-radius: 10px;">
+        <h2 style="color:var(--accent)">💉 Injetar Dados</h2>
+        <textarea id="txtInjetar" style="height: 200px;" placeholder="Cole seu backup aqui..."></textarea>
+        <button class="btn btn-rio" style="background:var(--accent)" onclick="injetar()">RESTAURAR AGORA</button>
+        <button class="btn" style="width:100%; margin-top:10px; background:#333" onclick="document.getElementById('modalReparar').style.display='none'">CANCELAR</button>
     </div>
 </div>
 
 <script>
-    // Usa uma chave de banco estável
-    let db = JSON.parse(localStorage.getItem('banco_sai_final')) || [];
+    let db = JSON.parse(localStorage.getItem('sai_v47_db')) || [];
 
-    function salvarComFiltro() {
-        const texto = document.getElementById('rawInput').value;
-        const linhas = texto.split('\n').filter(l => l.trim() !== "");
-        const agora = new Date().toLocaleString('pt-BR');
+    function gravar(praca) {
+        const id = praca === 'RIO' ? 'inputRio' : 'inputLook';
+        const texto = document.getElementById(id).value;
+        const linhas = texto.split('\n');
         let cont = 0;
 
-        linhas.forEach(linha => {
-            let match = linha.match(/\d{3,4}/);
-            if (match) {
-                let milhar = match[0].padStart(4, '0');
+        linhas.forEach(l => {
+            let m = l.match(/\d{3,4}/);
+            if(m) {
+                let milhar = m[0].padStart(4, '0');
                 let dezena = milhar.slice(-2);
-                let grupo = Math.ceil(parseInt(dezena == "00" ? 100 : dezena) / 4);
-                db.unshift({ m: milhar, g: grupo, dt: agora });
+                let grupo = (dezena === "00") ? 25 : Math.ceil(parseInt(dezena)/4);
+                db.unshift({ m: milhar, g: grupo, p: praca, dt: new Date().toLocaleString() });
                 cont++;
             }
         });
 
-        if (cont > 0) {
-            localStorage.setItem('banco_sai_final', JSON.stringify(db));
-            document.getElementById('rawInput').value = "";
-            analisar();
-            alert("Sucesso! " + cont + " números salvos.");
+        if(cont > 0) {
+            salvar();
+            document.getElementById(id).value = "";
+            alert(cont + " resultados salvos na praça " + praca);
         }
     }
 
+    function execX7(inputId, resId) {
+        const v = document.getElementById(inputId).value;
+        if(v) {
+            let conta = (parseInt(v) * 7).toString();
+            let centena = conta.slice(-3).padStart(3, '0');
+            let dezena = centena.slice(-2);
+            document.getElementById(resId).innerHTML = `C: <b>${centena}</b> | Dz: <b style="color:#fff">${dezena}</b>`;
+        }
+    }
+
+    function salvar() {
+        localStorage.setItem('sai_v47_db', JSON.stringify(db));
+        analisar();
+    }
+
     function analisar() {
-        if (db.length === 0) return;
-        let freq = {}; for(let i=1; i<=25; i++) freq[i] = 0;
-        db.forEach(x => { if(freq[x.g] !== undefined) freq[x.g]++; });
-        let ordenados = Object.keys(freq).sort((a,b) => freq[a] - freq[b]);
-        document.getElementById('grupoRei').innerText = String(ordenados[0]).padStart(2, '0');
-        document.getElementById('pGrupos').innerText = ordenados.slice(0, 5).join(" - ");
-        document.getElementById('progressoCiclo').innerText = `Registros no Banco: ${db.length}`;
+        if(db.length === 0) return;
+        let f = {}; for(let i=1; i<=25; i++) f[i]=0;
+        db.forEach(x => f[x.g]++);
+        let ord = Object.keys(f).sort((a,b) => f[a] - f[b]);
+        document.getElementById('rei').innerText = ord[0].padStart(2, '0');
+        document.getElementById('topAtraso').innerText = ord.slice(0, 5).join(" - ");
     }
 
-    function repararBanco() {
-        const txt = document.getElementById('txtInjetar').value;
-        try {
-            db = JSON.parse(txt);
-            localStorage.setItem('banco_sai_final', JSON.stringify(db));
-            analisar();
-            alert("Banco Reparado! Tudo voltou ao normal.");
-            document.getElementById('modalInjetar').style.display='none';
-        } catch(e) { alert("Erro: O texto do backup não é válido."); }
-    }
-
-    function abrirEditor() {
-        const body = document.getElementById('fullDbBody');
-        body.innerHTML = db.map((item, index) => `
-            <tr style="border-bottom:1px solid #333;">
-                <td style="padding:10px; color:#888;">${item.dt}</td>
-                <td style="padding:10px; color:var(--primary); font-weight:bold;">${item.m}</td>
-                <td style="padding:10px;">Grp ${String(item.g).padStart(2, '0')}</td>
-                <td style="padding:10px; text-align:right;"><button class="btn-delete" onclick="apagarItem(${index})">Apagar</button></td>
+    function abrirGestor() {
+        document.getElementById('modalGestor').style.display = 'block';
+        document.getElementById('corpoTabela').innerHTML = db.map((x, i) => `
+            <tr>
+                <td>${x.dt}</td>
+                <td><span class="${x.p === 'RIO' ? 'badge-rio' : 'badge-look'}">${x.p}</span></td>
+                <td style="color:var(--primary); font-weight:bold">${x.m}</td>
+                <td>Grp ${x.g}</td>
+                <td><button onclick="apagar(${i})" style="background:red; border:none; color:white; border-radius:3px; cursor:pointer">X</button></td>
             </tr>
         `).join('');
-        document.getElementById('modalEditor').style.display = 'block';
     }
 
-    function fecharEditor() { document.getElementById('modalEditor').style.display = 'none'; }
-    function apagarItem(index) { db.splice(index, 1); localStorage.setItem('banco_sai_final', JSON.stringify(db)); abrirEditor(); analisar(); }
-    function limparCiclo() { if(confirm("Apagar tudo?")) { db = []; localStorage.removeItem('banco_sai_final'); location.reload(); } }
+    function apagar(i) {
+        if(confirm("Apagar?")) { db.splice(i, 1); salvar(); abrirGestor(); }
+    }
+
+    function injetar() {
+        try {
+            db = JSON.parse(document.getElementById('txtInjetar').value);
+            salvar();
+            alert("Backup Restaurado com Sucesso!");
+            document.getElementById('modalReparar').style.display = 'none';
+        } catch(e) { alert("Erro no formato do texto!"); }
+    }
+
+    function exportar() {
+        const blob = new Blob([JSON.stringify(db)], {type:'text/plain'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'backup_rio_look.txt';
+        a.click();
+    }
+
+    function limparTudo() {
+        if(confirm("Zerar tudo?")) { db = []; localStorage.removeItem('sai_v47_db'); location.reload(); }
+    }
 
     analisar();
 </script>
