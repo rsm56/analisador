@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A.I v4.1 - Filtro de Precisão</title>
+    <title>S.A.I v4.2 - Filtro por Linha</title>
     <style>
         :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         .container { max-width: 1100px; margin: auto; }
         .grid-main { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
         .panel { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; }
-        h2, h3 { color: var(--primary); margin-top: 0; text-transform: uppercase; font-size: 1.1rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
-        textarea { width: 100%; height: 100px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; }
+        h3 { color: var(--primary); margin-top: 0; text-transform: uppercase; font-size: 1.1rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
+        textarea { width: 100%; height: 120px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; font-family: monospace; }
         .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-save { background: var(--primary); color: #000; width: 100%; font-size: 1rem; margin: 10px 0; }
         .btn-tool { background: #30363d; color: #fff; margin-top: 5px; font-size: 0.8rem; }
@@ -22,9 +22,8 @@
         .res-val { color: var(--accent); font-weight: bold; font-size: 1.3rem; display: block; text-align: center; }
         .res-label { font-size: 0.7rem; color: #8b949e; text-align: center; display: block; }
         .db-view { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .db-view th { text-align: left; color: #8b949e; font-size: 0.8rem; padding: 10px; }
         .db-view td { padding: 10px; border-bottom: 1px solid #30363d; font-size: 0.9rem; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; overflow-y: auto; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; overflow-y: auto; }
         .modal-content { background: var(--bg); margin: 2% auto; padding: 20px; width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid var(--primary); }
     </style>
 </head>
@@ -32,7 +31,7 @@
 
 <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v4.1</span></h1>
+        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v4.2</span></h1>
         <button class="btn btn-tool" onclick="abrirEditor()">📂 ACEDER TODO O BANCO DE DADOS</button>
     </div>
     <hr style="border: 0; border-top: 1px solid #30363d; margin: 20px 0;">
@@ -41,9 +40,9 @@
         <div>
             <div class="panel">
                 <h3>📥 Importar Sorteio (1º ao 7º)</h3>
-                <p style="font-size: 0.75rem; color: #888; margin-bottom: 10px;">O sistema vai ignorar emojis e números de grupos, focando apenas nas milhares/centenas.</p>
-                <textarea id="rawInput" placeholder="Cole os resultados aqui..."></textarea>
-                <button class="btn btn-save" onclick="salvarComFiltro()">GRAVAR NO BANCO DE DADOS</button>
+                <p style="font-size: 0.75rem; color: #888; margin-bottom: 10px;">Cole o resultado completo. O sistema pegará o primeiro número grande de cada uma das primeiras 7 linhas.</p>
+                <textarea id="rawInput" placeholder="Exemplo:&#10;1 - 8596 - 24&#10;2 - 9807 - 02..."></textarea>
+                <button class="btn btn-save" onclick="salvarComFiltro()">GRAVAR DADOS FILTRADOS</button>
             </div>
 
             <div class="panel" style="border-color: var(--accent);">
@@ -52,22 +51,19 @@
                     <div class="calc-box">
                         <span class="res-label">1º Prémio</span>
                         <input type="number" id="m1" placeholder="0000" oninput="calcX7(1)">
-                        <span class="res-label">Centena Resultante</span>
-                        <span id="c1" class="res-val">---</span>
+                        <span class="res-label">Centena</span><span id="c1" class="res-val">---</span>
                         <span id="g1" class="res-label">Grupo: --</span>
                     </div>
                     <div class="calc-box">
                         <span class="res-label">2º Prémio</span>
                         <input type="number" id="m2" placeholder="0000" oninput="calcX7(2)">
-                        <span class="res-label">Centena Resultante</span>
-                        <span id="c2" class="res-val">---</span>
+                        <span class="res-label">Centena</span><span id="c2" class="res-val">---</span>
                         <span id="g2" class="res-label">Grupo: --</span>
                     </div>
                     <div class="calc-box">
                         <span class="res-label">3º Prémio</span>
                         <input type="number" id="m3" placeholder="0000" oninput="calcX7(3)">
-                        <span class="res-label">Centena Resultante</span>
-                        <span id="c3" class="res-val">---</span>
+                        <span class="res-label">Centena</span><span id="c3" class="res-val">---</span>
                         <span id="g3" class="res-label">Grupo: --</span>
                     </div>
                 </div>
@@ -75,19 +71,10 @@
         </div>
 
         <div class="panel" style="border-color: var(--primary);">
-            <h3>🎯 PALPITES ATUALIZADOS</h3>
-            <div style="margin-bottom: 15px;">
-                <small style="color: #8b949e;">GRUPOS ATRASADOS</small>
-                <div id="pGrupos" style="font-size: 1.5rem; font-weight: bold;">---</div>
-            </div>
-            <div style="margin-bottom: 15px;">
-                <small style="color: #8b949e;">TERNO DE GRUPO</small>
-                <div id="pTernoG" style="font-size: 1.2rem; font-weight: bold; color: var(--primary);">---</div>
-            </div>
-            <div>
-                <small style="color: #8b949e;">MILHAR/CENTENA SUGESTÃO</small>
-                <div id="pMilhar" style="font-size: 1.2rem; font-weight: bold;">---</div>
-            </div>
+            <h3>🎯 PALPITES</h3>
+            <div style="margin-bottom: 15px;"><small>GRUPOS ATRASADOS</small><div id="pGrupos" style="font-size: 1.5rem; font-weight: bold;">---</div></div>
+            <div style="margin-bottom: 15px;"><small>TERNO DE GRUPO</small><div id="pTernoG" style="font-size: 1.2rem; font-weight: bold; color: var(--primary);">---</div></div>
+            <div><small>SUGESTÃO</small><div id="pMilhar" style="font-size: 1.1rem; font-weight: bold;">---</div></div>
         </div>
     </div>
 </div>
@@ -95,14 +82,11 @@
 <div id="modalEditor" class="modal">
     <div class="modal-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h2 style="margin:0;">📋 GESTOR DO BANCO</h2>
+            <h2 style="margin:0; color: var(--primary);">📋 BANCO DE DADOS COMPLETO</h2>
             <button class="btn btn-delete" onclick="fecharEditor()">FECHAR [X]</button>
         </div>
         <div style="max-height: 500px; overflow-y: auto;">
             <table class="db-view">
-                <thead>
-                    <tr><th>Data</th><th>Milhar/Cent.</th><th>Grupo</th><th>Ação</th></tr>
-                </thead>
                 <tbody id="fullDbBody"></tbody>
             </table>
         </div>
@@ -110,31 +94,38 @@
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('banco_v4_1')) || [];
+    let db = JSON.parse(localStorage.getItem('banco_v4_2')) || [];
 
     function salvarComFiltro() {
         const texto = document.getElementById('rawInput').value;
-        // FILTRO MELHORADO: Busca números que tenham de 3 a 4 dígitos
-        let numerosEncontrados = texto.match(/\b\d{3,4}\b/g);
-        
-        if (!numerosEncontrados) {
-            alert("Nenhuma milhar ou centena válida encontrada!");
+        const linhas = texto.split('\n').filter(l => l.trim() !== "");
+        const agora = new Date().toLocaleString('pt-BR');
+        let contagem = 0;
+
+        // Processa apenas as primeiras 7 linhas
+        for (let i = 0; i < linhas.length && contagem < 7; i++) {
+            // Busca o primeiro número de 3 ou 4 dígitos na linha
+            let match = linhas[i].match(/\d{3,4}/);
+            
+            if (match) {
+                let n = match[0];
+                let milhar = n.padStart(4, '0');
+                let dezena = milhar.slice(-2);
+                let grupo = Math.ceil(parseInt(dezena == "00" ? 100 : dezena) / 4);
+                
+                db.unshift({ m: milhar, g: grupo, dt: agora });
+                contagem++;
+            }
+        }
+
+        if (contagem === 0) {
+            alert("Nenhum prémio detectado. Verifique se colou corretamente.");
             return;
         }
 
-        const apenasSete = numerosEncontrados.slice(0, 7);
-        const agora = new Date().toLocaleString('pt-BR');
-
-        apenasSete.forEach(n => {
-            const milhar = n.padStart(4, '0');
-            const dezena = milhar.slice(-2);
-            const grupo = Math.ceil(parseInt(dezena == "00" ? 100 : dezena) / 4);
-            db.unshift({ m: milhar, g: grupo, dt: agora });
-        });
-
-        localStorage.setItem('banco_v4_1', JSON.stringify(db));
+        localStorage.setItem('banco_v4_2', JSON.stringify(db));
         document.getElementById('rawInput').value = "";
-        alert("7 Prémios gravados com sucesso!");
+        alert(contagem + " prémios registrados!");
         analisar();
     }
 
@@ -157,8 +148,8 @@
         const body = document.getElementById('fullDbBody');
         body.innerHTML = db.map((item, index) => `
             <tr>
-                <td>${item.dt}</td>
-                <td><b>${item.m}</b></td>
+                <td style="color:#888; font-size:0.7rem">${item.dt}</td>
+                <td style="font-size:1.1rem; color:var(--primary)"><b>${item.m}</b></td>
                 <td>Grp ${String(item.g).padStart(2, '0')}</td>
                 <td><button class="btn-delete" onclick="apagarItem(${index})">Apagar</button></td>
             </tr>
@@ -170,7 +161,7 @@
 
     function apagarItem(index) {
         db.splice(index, 1);
-        localStorage.setItem('banco_v4_1', JSON.stringify(db));
+        localStorage.setItem('banco_v4_2', JSON.stringify(db));
         abrirEditor();
         analisar();
     }
@@ -182,7 +173,7 @@
         let ordenados = Object.keys(cont).sort((a,b) => cont[a] - cont[b]);
         document.getElementById('pGrupos').innerText = ordenados.slice(0, 5).join(" - ");
         document.getElementById('pTernoG').innerText = ordenados.slice(0, 3).join(", ");
-        document.getElementById('pMilhar').innerText = "Gr. " + ordenados[0] + " (Atrasado)";
+        document.getElementById('pMilhar').innerText = "Ciclo Faltante: Gr. " + ordenados[0];
     }
 
     analisar();
