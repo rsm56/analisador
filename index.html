@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>S.A.I v4.5 - ESTRATÉGIA X7</title>
+    <title>S.A.I v4.5.1 - FIX BACKUP</title>
     <style>
         :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --purp: #8957e5; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); padding: 15px; margin: 0; }
@@ -12,7 +12,6 @@
         .panel { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 15px; }
         .btn { padding: 10px 15px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; color: #fff; transition: 0.3s; }
         .btn-backup { background: #238636; }
-        .btn-import { background: var(--purp); }
         .btn-calc { background: var(--accent); color: #000; width: 100%; margin-top: 5px; }
         .btn-save { background: var(--primary); color: #000; width: 100%; font-size: 1.1rem; }
         input[type="number"] { width: 80px; background: #000; color: var(--primary); border: 1px solid #444; padding: 8px; border-radius: 4px; text-align: center; font-size: 1.1rem; }
@@ -20,10 +19,6 @@
         .strong-number { font-size: 3.5rem; color: #fff; text-align: center; display: block; font-weight: bold; text-shadow: 0 0 15px var(--primary); }
         .x7-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; }
         .highlight { color: var(--primary); font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 8px; border-bottom: 1px solid #333; text-align: left; }
-        .badge { padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
-        .badge-win { background: var(--primary); color: #000; }
     </style>
 </head>
 <body>
@@ -31,150 +26,92 @@
 <div class="container">
     <div class="menu-topo">
         <div>
-            <b style="color:var(--primary); font-size: 1.4rem;">S.A.I <span style="font-weight:200">v4.5</span></b><br>
-            <small style="color:var(--accent)">FOCO: RIO & LOOK (X7 ATIVO)</small>
+            <b style="color:var(--primary); font-size: 1.4rem;">S.A.I <span style="font-weight:200">v4.5.1</span></b><br>
+            <small style="color:var(--accent)">RESTAURAÇÃO DE EMERGÊNCIA</small>
         </div>
         <div style="display:flex; gap:10px;">
             <button class="btn btn-backup" onclick="exportarBackup()">📥 SALVAR BACKUP</button>
-            <button class="btn btn-import" onclick="document.getElementById('fileInput').click()">📤 CARREGAR</button>
-            <input type="file" id="fileInput" style="display:none" onchange="importarBackup(event)">
-            <button class="btn" style="background:#30363d" onclick="abrirEditor()">📂 BANCO</button>
+            <button class="btn" style="background:var(--purp)" onclick="injetarDados()">💉 INJETAR BACKUP</button>
         </div>
     </div>
 
     <div class="grid">
         <div>
             <div class="panel" style="text-align:center">
-                <span style="color:var(--primary); letter-spacing: 2px;">🔥 GRUPO MAIS FORTE (ATRASO)</span>
+                <span style="color:var(--primary); letter-spacing: 2px;">🔥 GRUPO MAIS FORTE</span>
                 <span class="strong-number" id="grupoRei">--</span>
-                <small id="progressoCiclo" style="opacity:0.7">Aguardando dados...</small>
+                <small id="progressoCiclo">Carregue os dados...</small>
             </div>
 
             <div class="panel">
-                <h3 style="margin-top:0">📥 Importar Sorteio (RIO ou LOOK)</h3>
-                <textarea id="rawInput" placeholder="Cole os resultados aqui..."></textarea>
-                <button class="btn btn-save" onclick="salvarComFiltro()" style="margin-top:10px">GRAVAR E ANALISAR CICLO</button>
+                <h3>📥 Colar Conteúdo do Backup</h3>
+                <textarea id="injecaoInput" placeholder="Abra seu arquivo .txt, copie tudo e cole aqui..."></textarea>
+                <button class="btn btn-save" onclick="processarInjecao()" style="margin-top:10px">RESTAURAR AGORA</button>
             </div>
 
-            <div class="panel" style="border-left: 5px solid var(--accent);">
-                <h3 style="margin-top:0; color:var(--accent)">🧮 CALCULADORA X7 (1º, 3º, 5º)</h3>
-                <p style="font-size:0.85rem; margin-bottom:15px;">Insira os prêmios do Rio para buscar a Centena/Dezena na Look.</p>
-                
-                <div class="x7-row">
-                    <span>1º Prêmio:</span>
-                    <input type="number" id="p1" placeholder="0000">
-                    <span>➔</span>
-                    <span id="res1" class="highlight">---</span>
-                </div>
-                <div class="x7-row">
-                    <span>3º Prêmio:</span>
-                    <input type="number" id="p3" placeholder="0000">
-                    <span>➔</span>
-                    <span id="res3" class="highlight">---</span>
-                </div>
-                <div class="x7-row">
-                    <span>5º Prêmio:</span>
-                    <input type="number" id="p5" placeholder="0000">
-                    <span>➔</span>
-                    <span id="res5" class="highlight">---</span>
-                </div>
-                <button class="btn btn-calc" onclick="calcularX7()">EXECUTAR CÁLCULO X7</button>
-            </div>
-        </div>
-
-        <div>
             <div class="panel">
-                <h3 style="color:var(--primary)">🎯 TOP 5 ATRASADOS</h3>
-                <div id="pGrupos" style="font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;">---</div>
-                <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
-                <p>TERNO SUGERIDO: <br><b id="pTernoG" style="font-size:1.2rem; color:var(--accent)">---</b></p>
-                <div id="dicaSistema" style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px; font-size:0.9rem; color:#888;">
-                    DICA: Use o X7 para confirmar as dezenas dos grupos acima.
-                </div>
-            </div>
-
-            <div class="panel" style="text-align:center">
-                <button class="btn" style="background:var(--danger); width:100%; opacity:0.6" onclick="limparCiclo()">REINICIAR TODO O CICLO</button>
-                <p style="font-size:0.7rem; margin-top:10px;">Versão Offline com Caixa de Ferramentas Manual</p>
+                <h3 style="color:var(--accent)">🧮 CALCULADORA X7</h3>
+                <div class="x7-row"><span>1º Prêmio:</span> <input type="number" id="p1"> <span id="res1" class="highlight">---</span></div>
+                <div class="x7-row"><span>3º Prêmio:</span> <input type="number" id="p3"> <span id="res3" class="highlight">---</span></div>
+                <div class="x7-row"><span>5º Prêmio:</span> <input type="number" id="p5"> <span id="res5" class="highlight">---</span></div>
+                <button class="btn btn-calc" onclick="calcularX7()">CALCULAR</button>
             </div>
         </div>
-    </div>
-</div>
 
-<div id="modalEditor" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); padding:20px; overflow-y:auto; z-index:999;">
-    <div style="background:var(--bg); padding:20px; border-radius:10px; border:1px solid var(--primary); max-width:800px; margin:auto;">
-        <h2 style="display:flex; justify-content:space-between">LANÇAMENTOS DO BANCO <button onclick="fecharEditor()" class="btn" style="background:var(--danger)">X</button></h2>
-        <table id="fullDbTable">
-            <thead><tr><th>Data/Hora</th><th>Milhar</th><th>Grp</th><th>Ação</th></tr></thead>
-            <tbody id="fullDbBody"></tbody>
-        </table>
+        <div class="panel">
+            <h3 style="color:var(--primary)">🎯 TOP 5 ATRASADOS</h3>
+            <div id="pGrupos" style="font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;">---</div>
+        </div>
     </div>
 </div>
 
 <script>
     let db = JSON.parse(localStorage.getItem('banco_sai_v4_5')) || [];
 
-    function salvarComFiltro() {
-        const texto = document.getElementById('rawInput').value;
-        const linhas = texto.split('\n').filter(l => l.trim() !== "");
-        let adicionados = 0;
-        
-        linhas.forEach(linha => {
-            let match = linha.match(/\d{3,4}/);
-            if (match) {
-                let milhar = match[0].padStart(4, '0');
-                let dezena = parseInt(milhar.slice(-2));
-                if(dezena === 0) dezena = 100;
-                let grupo = Math.ceil(dezena / 4);
-                if(dezena === 0) grupo = 25;
-
-                db.unshift({
-                    m: milhar,
-                    g: grupo,
-                    dt: new Date().toLocaleString('pt-BR')
-                });
-                adicionados++;
-            }
-        });
-
-        if(adicionados > 0) {
-            salvarEAtualizar();
-            document.getElementById('rawInput').value = "";
-            alert(adicionados + " resultados gravados!");
+    function processarInjecao() {
+        const txt = document.getElementById('injecaoInput').value;
+        try {
+            db = JSON.parse(txt);
+            localStorage.setItem('banco_sai_v4_5', JSON.stringify(db));
+            analisar();
+            alert("Dados restaurados! " + db.length + " registros carregados.");
+            document.getElementById('injecaoInput').value = "";
+        } catch(e) {
+            alert("Erro: O conteúdo colado não é válido.");
         }
     }
 
     function calcularX7() {
-        const IDs = ['p1', 'p3', 'p5'];
-        const RES = ['res1', 'res3', 'res5'];
-        
-        IDs.forEach((id, index) => {
-            let val = document.getElementById(id).value;
-            if(val) {
-                let conta = parseInt(val) * 7;
-                let strConta = conta.toString();
-                let centena = strConta.slice(-3); // Pega a centena final
-                let dezena = centena.slice(-2);   // Pega a dezena da centena
-                
-                document.getElementById(RES[index]).innerHTML = `C: <b>${centena}</b> | Dz: <span class="badge badge-win">${dezena}</span>`;
+        ['p1', 'p3', 'p5'].forEach((id, i) => {
+            let v = document.getElementById(id).value;
+            if(v) {
+                let r = (parseInt(v) * 7).toString();
+                let centena = r.slice(-3);
+                document.getElementById('res' + (i == 0 ? 1 : i == 1 ? 3 : 5)).innerHTML = `C: ${centena} | Dz: ${centena.slice(-2)}`;
             }
         });
     }
 
     function analisar() {
         if (db.length === 0) return;
-        
-        let freq = {}; 
-        for(let i=1; i<=25; i++) freq[i] = 0;
+        let freq = {}; for(let i=1; i<=25; i++) freq[i] = 0;
         db.forEach(item => { if(freq[item.g] !== undefined) freq[item.g]++; });
-
         let ord = Object.keys(freq).sort((a,b) => freq[a] - freq[b]);
-        
-        // Grupo Mais Forte
         document.getElementById('grupoRei').innerText = ord[0];
-        
-        // Top 5 Atrasados
         document.getElementById('pGrupos').innerText = ord.slice(0, 5).join(" - ");
-        
-        // Terno
-        document.getElementById('pTernoG').innerText = ord.slice(0, 3).join(", ");
+        let sorteados = Object.values(freq).filter(f => f > 0).length;
+        document.getElementById('progressoCiclo').innerText = `Ciclo: ${sorteados} de 25 mapeados.`;
+    }
+
+    function exportarBackup() {
+        const blob = new Blob([JSON.stringify(db)], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `backup_sai_v451.txt`;
+        a.click();
+    }
+
+    analisar();
+</script>
+</body>
+</html>
