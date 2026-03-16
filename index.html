@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>S.A.I v5.5 - OFICIAL</title>
     <style>
-        /* MANTENDO SEU CSS ORIGINAL v5.5 */
+        /* CSS ORIGINAL DA v5.5 SEM ALTERAÇÃO */
         :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --purp: #8957e5; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); padding: 15px; margin: 0; }
         .container { max-width: 1100px; margin: auto; }
@@ -21,8 +21,8 @@
         .x7-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; }
         .highlight { color: var(--primary); font-weight: bold; }
 
-        /* NOVOS ESTILOS APENAS PARA A TAREFA DE ATRASADOS */
-        .atrasados-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        /* NOVOS ESTILOS APENAS PARA OS QUADROS DE BAIXO */
+        .atrasados-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
         .lista-atraso { background: #010409; border-radius: 8px; max-height: 400px; overflow-y: auto; border: 1px solid #333; }
         .item-bicho { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #222; font-size: 0.9rem; }
         .look-color { color: #00d4ff; }
@@ -35,11 +35,10 @@
     <div class="menu-topo">
         <div>
             <b style="color:var(--primary); font-size: 1.4rem;">S.A.I <span style="font-weight:200">v5.5</span></b><br>
-            <small style="color:var(--accent)">RESTAURAÇÃO DE EMERGÊNCIA</small>
+            <small style="color:var(--accent)">SISTEMA DE ANÁLISE INTEGRADO</small>
         </div>
         <div style="display:flex; gap:10px;">
             <button class="btn btn-backup" onclick="exportarBackup()">📥 SALVAR BACKUP</button>
-            <button class="btn" style="background:var(--purp)" onclick="document.getElementById('injecaoInput').focus()">💉 IR PARA LANÇAMENTO</button>
         </div>
     </div>
 
@@ -52,8 +51,8 @@
             </div>
 
             <div class="panel">
-                <h3>📥 Lançar Resultados (Extração Inteligente)</h3>
-                <textarea id="injecaoInput" placeholder="Cole o texto do resultado aqui..."></textarea>
+                <h3>📥 Lançar Resultados (Rio ou Look)</h3>
+                <textarea id="injecaoInput" placeholder="Cole o texto aqui..."></textarea>
                 <div style="display: flex; gap: 10px; margin-top: 10px;">
                     <button class="btn btn-save" onclick="processarGeral('RIO')">GRAVAR RIO</button>
                     <button class="btn" style="background:#00d4ff; color:#000; width:100%; font-weight:bold;" onclick="processarGeral('LOOK')">GRAVAR LOOK</button>
@@ -70,17 +69,22 @@
         </div>
 
         <div class="panel">
-            <h3 style="color:var(--primary)">🎯 HISTÓRICO GERAL (ATRASADOS)</h3>
+            <h3 style="color:var(--primary)">🎯 HISTÓRICO GERAL</h3>
             <div id="pGrupos" style="font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;">---</div>
-            <hr border="0" style="border-top:1px solid #333; margin: 15px 0;">
             
-            <h4 style="color:var(--accent); margin-bottom:5px;">⚙️ Gerenciar Atrasados</h4>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
-                <input type="number" id="inpG" placeholder="Grp" style="width:100%">
-                <input type="number" id="inpD" placeholder="Dias" style="width:100%">
+            <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
+            
+            <h3 style="color:var(--accent)">⚙️ INSERIR ATRASADOS</h3>
+            <div style="margin-bottom: 10px;">
+                <label style="font-size: 0.8rem;">Grupo (1 a 25):</label><br>
+                <input type="number" id="manualG" style="width:100%; margin-bottom:10px;">
+                <label style="font-size: 0.8rem;">Dias de Atraso:</label><br>
+                <input type="number" id="manualD" style="width:100%;">
             </div>
-            <button class="btn btn-calc" style="background:var(--primary)" onclick="addAtraso('RIO')">Definir Rio</button>
-            <button class="btn btn-calc" style="background:#00d4ff" onclick="addAtraso('LOOK')">Definir Look</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button class="btn" style="background:var(--primary); color:#000" onclick="inserirAtrasado('RIO')">ADD RIO</button>
+                <button class="btn" style="background:#00d4ff; color:#000" onclick="inserirAtrasado('LOOK')">ADD LOOK</button>
+            </div>
         </div>
     </div>
 
@@ -97,69 +101,69 @@
 </div>
 
 <script>
-    // LÓGICA ORIGINAL v5.5 PRESERVADA
+    // BANCO DE DADOS
     let db = JSON.parse(localStorage.getItem('banco_sai_v4_5')) || [];
-    let rankRio = JSON.parse(localStorage.getItem('rankRio_fix')) || [];
-    let rankLook = JSON.parse(localStorage.getItem('rankLook_fix')) || [];
+    let rRio = JSON.parse(localStorage.getItem('rank_rio_manual')) || [];
+    let rLook = JSON.parse(localStorage.getItem('rank_look_manual')) || [];
+
+    // Função para inserir manualmente bicho e dia na Look ou no Rio
+    function inserirAtrasado(praca) {
+        let g = parseInt(document.getElementById('manualG').value);
+        let d = parseInt(document.getElementById('manualD').value);
+        
+        if(!g || g < 1 || g > 25) return alert("Grupo deve ser de 1 a 25");
+        
+        let lista = (praca === 'RIO') ? rRio : rLook;
+        let bichoExistente = lista.find(x => x.g === g);
+        
+        if(bichoExistente) {
+            bichoExistente.d = d;
+        } else {
+            lista.push({g: g, d: d});
+        }
+        
+        salvar();
+        renderListas();
+        alert("Bicho " + g + " inserido nos atrasados da " + praca);
+    }
 
     function processarGeral(praca) {
         const txt = document.getElementById('injecaoInput').value;
         const matches = txt.match(/\d{3,4}/g);
-        if(!matches) return alert("Nenhum prêmio encontrado.");
+        if(!matches) return alert("Nenhum número encontrado.");
 
-        matches.slice(0, 7).forEach((m, i) => {
+        matches.slice(0, 7).forEach((m) => {
             let milhar = m.padStart(4, '0');
             let grupo = (milhar.slice(-2) === "00") ? 25 : Math.ceil(parseInt(milhar.slice(-2))/4);
             db.unshift({ m: milhar, g: grupo, p: praca, dt: new Date().toLocaleString() });
-            
-            if(i === 0) { // Se for o primeiro prêmio, zera o atraso automático na lista
-                let lista = praca === 'RIO' ? rankRio : rankLook;
-                let item = lista.find(x => x.g === grupo);
-                if(item) { item.d = 0; item.m = milhar; }
-            }
         });
         
-        salvarETudo();
+        salvar();
         document.getElementById('injecaoInput').value = "";
-        alert("Lançado com sucesso na praça " + praca);
     }
 
-    function addAtraso(praca) {
-        let g = parseInt(document.getElementById('inpG').value);
-        let d = parseInt(document.getElementById('inpD').value);
-        if(!g || g < 1 || g > 25) return alert("Grupo Inválido");
-        
-        let lista = praca === 'RIO' ? rankRio : rankLook;
-        let item = lista.find(x => x.g === g);
-        if(item) { item.d = d; } else { lista.push({g:g, d:d, m:"---"}); }
-        
-        lista.sort((a,b) => b.d - a.d);
-        salvarETudo();
-    }
-
-    function salvarETudo() {
+    function salvar() {
         localStorage.setItem('banco_sai_v4_5', JSON.stringify(db));
-        localStorage.setItem('rankRio_fix', JSON.stringify(rankRio));
-        localStorage.setItem('rankLook_fix', JSON.stringify(rankLook));
+        localStorage.setItem('rank_rio_manual', JSON.stringify(rRio));
+        localStorage.setItem('rank_look_manual', JSON.stringify(rLook));
         analisar();
         renderListas();
     }
 
     function renderListas() {
-        const bxs = (id, lista) => {
-            if(lista.length === 0) { for(let i=1; i<=25; i++) lista.push({g:i, d:i, m:"---"}); }
-            document.getElementById(id).innerHTML = lista.sort((a,b)=>b.d-a.d).map((x, i) => `
+        const draw = (id, lista) => {
+            document.getElementById(id).innerHTML = lista.sort((a,b) => b.d - a.d).map((x, i) => `
                 <div class="item-bicho">
-                    <span><b>${i+1}º</b> - Grp ${x.g}</span>
+                    <span><b>${i+1}º</b> - Grupo ${x.g}</span>
                     <span class="highlight">${x.d} dias</span>
                 </div>
             `).join('');
         }
-        bxs('listaRio', rankRio);
-        bxs('listaLook', rankLook);
+        draw('listaRio', rRio);
+        draw('listaLook', rLook);
     }
 
-    // FUNÇÕES ORIGINAIS v5.5
+    // CALCULADORA E ANÁLISE ORIGINAIS
     function calcularX7() {
         ['p1', 'p3', 'p5'].forEach((id, i) => {
             let v = document.getElementById(id).value;
@@ -183,10 +187,10 @@
     }
 
     function exportarBackup() {
-        const blob = new Blob([JSON.stringify({db, rankRio, rankLook})], { type: 'text/plain' });
+        const blob = new Blob([JSON.stringify({db, rRio, rLook})], { type: 'text/plain' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `backup_sai_v55_completo.txt`;
+        a.download = `backup_sai_v55.txt`;
         a.click();
     }
 
