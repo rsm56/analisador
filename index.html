@@ -2,35 +2,37 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>S.A.I v7.0 - Gestão Total</title>
+    <title>S.A.I v4.5.1 - RESTAURADO + LISTA ATRASADOS</title>
     <style>
         :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --purp: #8957e5; --look: #00d4ff; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 15px; margin: 0; }
         .container { max-width: 1400px; margin: auto; }
         .menu-topo { display: flex; justify-content: space-between; background: #010409; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--primary); align-items: center; }
         
+        /* Layout: Coluna da Esquerda (Original) e Colunas da Direita (Novas Listas) */
         .grid-main { display: grid; grid-template-columns: 380px 1fr 1fr; gap: 15px; }
         .panel { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 15px; }
         
         .btn { padding: 10px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; color: #fff; transition: 0.3s; width: 100%; margin-top: 5px; }
         .btn-save { background: var(--primary); color: #000; }
         .btn-look { background: var(--look); color: #000; }
-        .btn-gestor { background: #30363d; color: #fff; }
+        .btn-gestor { background: #30363d; color: #fff; font-size: 0.8rem; }
 
-        textarea { width: 100%; height: 100px; background: #000; color: var(--primary); border: 1px solid #333; padding: 10px; box-sizing: border-box; border-radius: 5px; font-family: monospace; }
+        textarea { width: 100%; height: 80px; background: #000; color: var(--primary); border: 1px solid #333; padding: 10px; box-sizing: border-box; border-radius: 5px; font-family: monospace; }
         
-        /* Rankings */
-        .atrasados-list { background: #010409; border-radius: 8px; max-height: 450px; overflow-y: auto; border: 1px solid #333; }
-        .bicho-item { display: flex; align-items: center; padding: 8px; border-bottom: 1px solid #222; }
+        .atrasados-list { background: #010409; border-radius: 8px; max-height: 500px; overflow-y: auto; border: 1px solid #333; }
+        .bicho-item { display: flex; align-items: center; padding: 8px; border-bottom: 1px solid #222; font-size: 0.85rem; }
         .rank { width: 25px; font-weight: bold; color: var(--accent); }
         .info { flex-grow: 1; margin-left: 10px; }
-        .destaque-atraso { color: var(--danger); font-weight: bold; font-size: 0.8rem; }
+        .destaque-atraso { color: var(--danger); font-weight: bold; }
 
-        /* Modal Gestor */
+        .strong-number { font-size: 3rem; color: #fff; text-align: center; display: block; font-weight: bold; text-shadow: 0 0 10px var(--primary); }
+        
+        /* Modal do Gestor */
         .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; }
         .modal-content { background: var(--bg); margin: 2% auto; padding: 20px; width: 80%; border: 1px solid var(--primary); border-radius: 15px; max-height: 80vh; overflow-y: auto; }
-        table { width: 100%; border-collapse: collapse; color: #fff; }
-        th, td { padding: 10px; border-bottom: 1px solid #333; text-align: left; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px; border-bottom: 1px solid #333; text-align: left; }
     </style>
 </head>
 <body>
@@ -38,45 +40,50 @@
 <div class="container">
     <div class="menu-topo">
         <div>
-            <b style="color:var(--primary); font-size: 1.4rem;">S.A.I <span style="font-weight:200">v7.0</span></b>
-            <button class="btn-gestor" style="width:auto; margin-left:20px; padding:5px 15px;" onclick="abrirGestor()">📂 GESTOR DE DADOS</button>
+            <b style="color:var(--primary); font-size: 1.4rem;">S.A.I <span style="font-weight:200">v4.5.1 + LISTAS</span></b><br>
+            <button class="btn-gestor" onclick="abrirGestor()">📂 VER/EDITAR TUDO ARMAZENADO</button>
         </div>
         <div style="display:flex; gap:10px;">
-            <button class="btn btn-backup" style="background:#238636; width:auto" onclick="exportarBackup()">📥 SALVAR TXT</button>
-            <button class="btn" style="background:var(--purp); width:auto" onclick="document.getElementById('modalInj').style.display='block'">💉 INJETAR</button>
+            <button class="btn" style="background:#238636; width:auto" onclick="exportarBackup()">📥 SALVAR TXT</button>
+            <button class="btn" style="background:var(--purp); width:auto" onclick="document.getElementById('modalInj').style.display='block'">💉 INJETAR BACKUP</button>
         </div>
     </div>
 
     <div class="grid-main">
         <div>
             <div class="panel">
-                <h3 style="color:var(--primary)">📥 Extração Inteligente (v4.5)</h3>
-                <textarea id="injecaoInput" placeholder="Cole o resultado aqui (Rio ou Look)..."></textarea>
+                <h3 style="color:var(--primary); margin:0 0 10px 0;">📥 Extração (1º ao 7º)</h3>
+                <textarea id="injecaoInput" placeholder="Cole o resultado aqui..."></textarea>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                     <button class="btn btn-save" onclick="processar('RIO')">LANÇAR RIO</button>
                     <button class="btn btn-look" onclick="processar('LOOK')">LANÇAR LOOK</button>
                 </div>
             </div>
 
+            <div class="panel" style="text-align:center">
+                <span style="color:var(--primary);">🔥 MAIS ATRASADO GERAL</span>
+                <span class="strong-number" id="grupoRei">--</span>
+                <small id="progressoCiclo">Aguardando dados...</small>
+            </div>
+
             <div class="panel">
-                <h3 style="color:var(--accent)">🎯 Lançar Atrasado Manual</h3>
-                <small>Caso queira forçar um bicho no topo do atraso:</small>
-                <input type="number" id="manualG" placeholder="Grupo" style="width:60px; padding:5px;">
-                <input type="number" id="manualD" placeholder="Dias" style="width:60px; padding:5px;">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:5px;">
-                    <button class="btn" style="background:#444" onclick="forcarAtraso('RIO')">RIO</button>
-                    <button class="btn" style="background:#444" onclick="forcarAtraso('LOOK')">LOOK</button>
+                <h3 style="color:var(--accent); margin:0 0 10px 0;">🎯 Ajuste Manual de Atraso</h3>
+                <div style="display:flex; gap:5px;">
+                    <input type="number" id="manG" placeholder="Grp" style="width:50px; background:#000; color:#fff; border:1px solid #444;">
+                    <input type="number" id="manD" placeholder="Dias" style="width:60px; background:#000; color:#fff; border:1px solid #444;">
+                    <button class="btn" style="background:#444; margin:0;" onclick="ajusteManual('RIO')">RIO</button>
+                    <button class="btn" style="background:#444; margin:0;" onclick="ajusteManual('LOOK')">LOOK</button>
                 </div>
             </div>
         </div>
 
         <div class="panel">
-            <h3 style="color:var(--primary)">🏇 RANKING RIO</h3>
+            <h3 style="color:var(--primary); margin:0 0 10px 0;">🏇 ATRASADOS RIO</h3>
             <div id="listaRio" class="atrasados-list"></div>
         </div>
 
         <div class="panel">
-            <h3 style="color:var(--look)">🎯 RANKING LOOK</h3>
+            <h3 style="color:var(--look); margin:0 0 10px 0;">🎯 ATRASADOS LOOK</h3>
             <div id="listaLook" class="atrasados-list"></div>
         </div>
     </div>
@@ -84,9 +91,9 @@
 
 <div id="modalGestor" class="modal">
     <div class="modal-content">
-        <h2 style="color:var(--primary)">📂 Gestor de Armazenamento <button onclick="fecharGestor()" style="float:right; cursor:pointer">X</button></h2>
+        <h2 style="color:var(--primary)">📂 Registros Armazenados <button onclick="fecharModal('modalGestor')" style="float:right;">X</button></h2>
         <table>
-            <thead><tr><th>Data/Hora</th><th>Praça</th><th>Milhar</th><th>Grp</th><th>Ação</th></tr></thead>
+            <thead><tr><th>Data</th><th>Praça</th><th>Milhar</th><th>Grp</th><th>Ação</th></tr></thead>
             <tbody id="corpoGestor"></tbody>
         </table>
     </div>
@@ -95,68 +102,87 @@
 <div id="modalInj" class="modal">
     <div class="modal-content">
         <h2>💉 Injetar Backup</h2>
-        <textarea id="inputInj" style="height:200px"></textarea>
+        <textarea id="inputInj" style="height:200px" placeholder="Cole o JSON aqui..."></textarea>
         <button class="btn btn-save" onclick="injetar()">RESTAURAR AGORA</button>
-        <button class="btn" style="background:#333" onclick="this.parentElement.parentElement.style.display='none'">CANCELAR</button>
+        <button class="btn" style="background:#333" onclick="fecharModal('modalInj')">CANCELAR</button>
     </div>
 </div>
 
 <script>
     const bichos = {1:"Avestruz", 2:"Águia", 3:"Burro", 4:"Borboleta", 5:"Cachorro", 6:"Cabra", 7:"Carneiro", 8:"Camelo", 9:"Cobra", 10:"Coelho", 11:"Cavalo", 12:"Elefante", 13:"Galo", 14:"Gato", 15:"Jacaré", 16:"Leão", 17:"Macaco", 18:"Porco", 19:"Pavão", 20:"Peru", 21:"Touro", 22:"Tigre", 23:"Urso", 24:"Veado", 25:"Vaca"};
     
-    let db = JSON.parse(localStorage.getItem('db_v7')) || [];
-    let rRio = JSON.parse(localStorage.getItem('rankRio_v7')) || [];
-    let rLook = JSON.parse(localStorage.getItem('rankLook_v7')) || [];
+    let db = JSON.parse(localStorage.getItem('db_sai_v4')) || [];
+    let rRio = JSON.parse(localStorage.getItem('rankRio_v4')) || [];
+    let rLook = JSON.parse(localStorage.getItem('rankLook_v4')) || [];
 
-    // Garante que as listas tenham 25 bichos independentes
-    function resetRank(lista) {
+    // Garante que as listas comecem com todos os bichos
+    function inicializarLista(lista) {
         if(lista.length === 0) {
-            for(let i=1; i<=25; i++) lista.push({g:i, m:"----", d: i, dt: "--/--"});
+            for(let i=1; i<=25; i++) lista.push({g:i, m:"----", d: 0, dt: "--/--"});
         }
-        return lista.sort((a,b) => b.d - a.d);
+        return lista;
     }
 
-    rRio = resetRank(rRio);
-    rLook = resetRank(rLook);
+    rRio = inicializarLista(rRio);
+    rLook = inicializarLista(rLook);
 
     function processar(praca) {
         const txt = document.getElementById('injecaoInput').value;
         const matches = txt.match(/\d{3,4}/g);
-        if(!matches) return alert("Nenhum número encontrado!");
+        if(!matches) return alert("Nenhum prêmio encontrado!");
 
         let lista = (praca === 'RIO') ? rRio : rLook;
         
+        // Processa os 7 prêmios
         matches.slice(0, 7).forEach((milhar, i) => {
             milhar = milhar.padStart(4, '0');
             let g = (milhar.slice(-2) === "00") ? 25 : Math.ceil(parseInt(milhar.slice(-2))/4);
             
             db.unshift({ m: milhar, g: g, p: praca, dt: new Date().toLocaleString() });
 
-            if(i === 0) { // O 1º Prêmio reseta o atraso no ranking
-                let idx = lista.findIndex(x => x.g === g);
-                if(idx !== -1) lista.splice(idx, 1);
-                lista.forEach(item => item.d++);
-                lista.push({ g: g, m: milhar, d: 0, dt: new Date().toLocaleDateString() });
+            // No 1º prêmio, a gente reseta o atraso na lista específica
+            if(i === 0) {
+                let item = lista.find(x => x.g === g);
+                if(item) {
+                    item.d = 0; 
+                    item.m = milhar;
+                    item.dt = new Date().toLocaleDateString();
+                }
             }
         });
+
+        // Aumenta 1 dia de atraso para quem NÃO saiu (opcional, ou manual)
+        lista.forEach(item => { if(item.m !== "----") item.d++; });
 
         lista.sort((a,b) => b.d - a.d);
         salvar();
         render();
+        analisarGeral();
         document.getElementById('injecaoInput').value = "";
     }
 
-    function forcarAtraso(praca) {
-        let g = parseInt(document.getElementById('manualG').value);
-        let d = parseInt(document.getElementById('manualD').value);
+    function ajusteManual(praca) {
+        let g = parseInt(document.getElementById('manG').value);
+        let d = parseInt(document.getElementById('manD').value);
         if(!g || g < 1 || g > 25) return alert("Grupo inválido!");
         
         let lista = (praca === 'RIO') ? rRio : rLook;
         let item = lista.find(x => x.g === g);
-        if(item) item.d = d;
-        lista.sort((a,b) => b.d - a.d);
-        salvar();
-        render();
+        if(item) {
+            item.d = d;
+            lista.sort((a,b) => b.d - a.d);
+            salvar();
+            render();
+            alert("Atraso atualizado na " + praca);
+        }
+    }
+
+    function analisarGeral() {
+        if (db.length === 0) return;
+        let freq = {}; for(let i=1; i<=25; i++) freq[i] = 0;
+        db.forEach(item => freq[item.g]++);
+        let ord = Object.keys(freq).sort((a,b) => freq[a] - freq[b]);
+        document.getElementById('grupoRei').innerText = ord[0].padStart(2, '0');
     }
 
     function abrirGestor() {
@@ -167,24 +193,22 @@
                 <td style="color:${item.p === 'RIO' ? 'var(--primary)' : 'var(--look)'}">${item.p}</td>
                 <td>${item.m}</td>
                 <td>${item.g}</td>
-                <td><button onclick="excluir(${i})" style="color:red; background:none; border:none; cursor:pointer;">EXCLUIR</button></td>
+                <td><button onclick="excluirRegistro(${i})" style="color:red; background:none; border:none; cursor:pointer;">Apagar</button></td>
             </tr>
         `).join('');
         document.getElementById('modalGestor').style.display = 'block';
     }
 
-    function excluir(i) {
-        if(confirm("Excluir este registro permanentemente?")) {
-            db.splice(i, 1);
-            salvar();
-            abrirGestor();
-        }
+    function excluirRegistro(i) {
+        db.splice(i, 1);
+        salvar();
+        abrirGestor();
     }
 
     function salvar() {
-        localStorage.setItem('db_v7', JSON.stringify(db));
-        localStorage.setItem('rankRio_v7', JSON.stringify(rRio));
-        localStorage.setItem('rankLook_v7', JSON.stringify(rLook));
+        localStorage.setItem('db_sai_v4', JSON.stringify(db));
+        localStorage.setItem('rankRio_v4', JSON.stringify(rRio));
+        localStorage.setItem('rankLook_v4', JSON.stringify(rLook));
     }
 
     function render() {
@@ -204,13 +228,13 @@
         draw('listaLook', rLook);
     }
 
-    function fecharGestor() { document.getElementById('modalGestor').style.display = 'none'; }
+    function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
 
     function exportarBackup() {
         const blob = new Blob([JSON.stringify({db, rRio, rLook})], {type:'text/plain'});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = "sai_v7_backup.txt";
+        a.download = "backup_sai_completo.txt";
         a.click();
     }
 
@@ -219,10 +243,11 @@
             const data = JSON.parse(document.getElementById('inputInj').value);
             db = data.db || []; rRio = data.rRio || []; rLook = data.rLook || [];
             salvar(); location.reload();
-        } catch(e) { alert("Erro no formato!"); }
+        } catch(e) { alert("Erro no formato do backup!"); }
     }
 
     render();
+    analisarGeral();
 </script>
 </body>
 </html>
