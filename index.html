@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>S.A.I v5.5.2 - INTELIGENTE</title>
+    <title>S.A.I v5.5.5 - RESTAURADO</title>
     <style>
         :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --look: #00d4ff; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 15px; margin: 0; }
@@ -10,152 +10,123 @@
         .panel { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 15px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         
-        /* Lista de Atrasados - Formato Solicitado */
+        /* LISTA FORMATO EXATO: 🐄 25 - Vaca atrasado há 12 dias... */
         .lista-box { background: #010409; border-radius: 8px; max-height: 500px; overflow-y: auto; border: 1px solid #333; padding: 10px; }
-        .bicho-linha { padding: 10px; border-bottom: 1px solid #222; font-size: 0.95rem; line-height: 1.5; cursor: pointer; transition: 0.2s; }
-        .bicho-linha:hover { background: #1a1a1a; }
+        .bicho-linha { padding: 10px; border-bottom: 1px solid #222; font-size: 0.95rem; line-height: 1.5; }
         .bicho-linha b { color: var(--accent); }
         .txt-dias { color: var(--danger); font-weight: bold; }
         .txt-milhar { color: var(--primary); font-family: monospace; font-weight: bold; }
 
-        textarea { width: 100%; height: 120px; background: #000; color: var(--primary); border: 2px solid #333; padding: 10px; border-radius: 5px; box-sizing: border-box; font-family: monospace; }
-        textarea:focus { border-color: var(--primary); outline: none; }
-        .btn { padding: 12px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; text-transform: uppercase; }
-        
-        .header-sai { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--primary); padding-bottom: 10px; }
+        textarea { width: 100%; height: 100px; background: #000; color: var(--primary); border: 2px solid #333; padding: 10px; border-radius: 5px; box-sizing: border-box; font-family: monospace; }
+        .btn { padding: 12px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header-sai">
-        <div>
-            <h1 style="margin:0; color:var(--primary);">S.A.I v5.5.2</h1>
-            <small>Extração Inteligente + Atualização por Clique/Texto</small>
-        </div>
-        <div id="reiBox" style="text-align: right;">
-            <small>MAIS FORTE GERAL:</small><br>
-            <b id="grupoRei" style="font-size: 2rem; color: #fff;">--</b>
+    <div class="header">
+        <h1 style="margin:0; color:var(--primary);">S.A.I v5.5.5</h1>
+        <div style="text-align:right">
+            <small>RESTAURAÇÃO COMPLETA</small><br>
+            <button onclick="baixarBackup()" style="background:#238636; color:#fff; border:none; padding:5px 10px; border-radius:4px; cursor:pointer">📥 SALVAR TUDO</button>
         </div>
     </div>
 
     <div class="panel">
-        <h3 style="color:var(--accent); margin-top:0;">📥 LANÇAMENTO ÚNICO (Resultados ou Atualização Manual)</h3>
-        <p style="font-size: 0.8rem; color: #888; margin-bottom: 5px;">
-            Cole aqui: O resultado bruto <b>OU</b> a linha do bicho (ex: 🐄 25 - Vaca atrasado há 12 dias...)
-        </p>
-        <textarea id="campoInteligente" placeholder="Cole aqui qualquer dado e clique na praça correspondente..."></textarea>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <button class="btn" style="background:var(--primary); color:#000;" onclick="processarTudo('RIO')">ATUALIZAR RIO</button>
-            <button class="btn" style="background:var(--look); color:#000;" onclick="processarTudo('LOOK')">ATUALIZAR LOOK</button>
+        <h3 style="color:var(--accent); margin-top:0;">📥 LANÇAMENTO (RESULTADOS OU LINHA DE ATRASO)</h3>
+        <textarea id="campoInput" placeholder="Cole o resultado bruto OU a linha: 🐄 25 - Vaca atrasado há 12 dias, 04/03/26, no milhar 8100"></textarea>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button class="btn" style="background:var(--primary); color:#000;" onclick="processar('RIO')">GRAVAR NO RIO</button>
+            <button class="btn" style="background:var(--look); color:#000;" onclick="processar('LOOK')">GRAVAR NA LOOK</button>
         </div>
     </div>
 
     <div class="grid">
         <div class="panel">
-            <h3 style="color:var(--primary); margin-top:0;">🏇 RIO (Atrasados)</h3>
+            <h3 style="color:var(--primary); margin-top:0;">🏇 RIO DE JANEIRO</h3>
             <div id="listaRio" class="lista-box"></div>
         </div>
         <div class="panel">
-            <h3 style="color:var(--look); margin-top:0;">🎯 LOOK (Atrasados)</h3>
+            <h3 style="color:var(--look); margin-top:0;">🎯 LOOK LOTERIAS</h3>
             <div id="listaLook" class="lista-box"></div>
         </div>
     </div>
 </div>
 
 <script>
-    const bichosInfo = {1:["Avestruz","🦅"],2:["Águia","🦅"],3:["Burro","🐴"],4:["Borboleta","🦋"],5:["Cachorro","🐶"],6:["Cabra","🐐"],7:["Carneiro","🐏"],8:["Camelo","🐪"],9:["Cobra","🐍"],10:["Coelho","🐰"],11:["Cavalo","🐎"],12:["Elefante","🐘"],13:["Galo","🐓"],14:["Gato","🐈"],15:["Jacaré","🐊"],16:["Leão","🦁"],17:["Macaco","🐒"],18:["Porco","🐷"],19:["Pavão","🦚"],20:["Peru","🦃"],21:["Touro","🐂"],22:["Tigre","🐅"],23:["Urso","🐻"],24:["Veado","🦌"],25:["Vaca","🐄"]};
+    const bichosDicio = {1:["Avestruz","🦅"],2:["Águia","🦅"],3:["Burro","🐴"],4:["Borboleta","🦋"],5:["Cachorro","🐶"],6:["Cabra","🐐"],7:["Carneiro","🐏"],8:["Camelo","🐪"],9:["Cobra","🐍"],10:["Coelho","🐰"],11:["Cavalo","🐎"],12:["Elefante","🐘"],13:["Galo","🐓"],14:["Gato","🐈"],15:["Jacaré","🐊"],16:["Leão","🦁"],17:["Macaco","🐒"],18:["Porco","🐷"],19:["Pavão","🦚"],20:["Peru","🦃"],21:["Touro","🐂"],22:["Tigre","🐅"],23:["Urso","🐻"],24:["Veado","🦌"],25:["Vaca","🐄"]};
 
-    let dbRio = JSON.parse(localStorage.getItem('db_rio_v552')) || [];
-    let dbLook = JSON.parse(localStorage.getItem('db_look_v552')) || [];
+    let rRio = JSON.parse(localStorage.getItem('rankRio_final')) || [];
+    let rLook = JSON.parse(localStorage.getItem('rankLook_final')) || [];
 
-    function inicializar(lista) {
-        if(lista.length === 0) {
-            for(let i=1; i<=25; i++) lista.push({g:i, d:0, m:"----", dt:"--/--/--"});
-        }
-        return lista;
+    function inicializar(l) {
+        if(l.length === 0) for(let i=1; i<=25; i++) l.push({g:i, d:0, m:"----", dt:"--/--/--"});
+        return l;
     }
+    rRio = inicializar(rRio); rLook = inicializar(rLook);
 
-    dbRio = inicializar(dbRio);
-    dbLook = inicializar(dbLook);
+    function processar(praca) {
+        const input = document.getElementById('campoInput').value;
+        if(!input) return;
 
-    function processarTudo(praca) {
-        const entrada = document.getElementById('campoInteligente').value;
-        if(!entrada) return;
+        let lista = (praca === 'RIO') ? rRio : rLook;
 
-        let lista = (praca === 'RIO') ? dbRio : dbLook;
-
-        // TENTA IDENTIFICAR SE É UMA LINHA DE ATUALIZAÇÃO MANUAL (🐄 25 - Vaca atrasado há 12 dias...)
+        // 1. TENTA IDENTIFICAR SE É COPIA E COLA DA LINHA (FORMATO QUE VOCÊ DEU)
         const regexManual = /(\d{1,2})\s*-\s*[a-zA-Záàâãéèêíïóôõöúç]+.*?(\d+)\s*dias.*?(\d{2}\/\d{2}\/\d{2}).*?(\d{4})/i;
-        const manualMatch = entrada.match(regexManual);
+        const manualMatch = input.match(regexManual);
 
         if(manualMatch) {
-            // Se encontrou o padrão, atualiza o bicho específico
             let g = parseInt(manualMatch[1]);
             let d = parseInt(manualMatch[2]);
             let dt = manualMatch[3];
             let m = manualMatch[4];
-
             let item = lista.find(x => x.g === g);
-            if(item) {
-                item.d = d; item.dt = dt; item.m = m;
-                alert(`Sucesso! Grupo ${g} atualizado na ${praca}.`);
-            }
+            if(item) { item.d = d; item.dt = dt; item.m = m; }
         } else {
-            // SE NÃO É MANUAL, TRATA COMO RESULTADO NORMAL (EXTRAÇÃO DE MILHARES)
-            const milhares = entrada.match(/\d{3,4}/g);
-            if(milhares) {
-                let m1 = milhares[0].padStart(4, '0');
+            // 2. SE NÃO FOR LINHA, PROCESSA COMO RESULTADO BRUTO
+            const ms = input.match(/\d{3,4}/g);
+            if(ms) {
+                let m1 = ms[0].padStart(4, '0');
                 let g1 = (m1.slice(-2) === "00") ? 25 : Math.ceil(parseInt(m1.slice(-2))/4);
-                let hoje = new Date().toLocaleDateString('pt-BR', {year:'2-digit', month:'2-digit', day:'2-digit'});
-
+                let hoje = new Date().toLocaleDateString('pt-BR');
                 lista.forEach(x => {
                     if(x.g === g1) { x.d = 0; x.m = m1; x.dt = hoje; }
                     else { x.d++; }
                 });
-                alert(`${praca}: 1º prêmio (${m1}) processado. Atrasos somados.`);
             }
         }
-
         salvar();
-        document.getElementById('campoInteligente').value = "";
+        document.getElementById('campoInput').value = "";
     }
 
     function salvar() {
-        localStorage.setItem('db_rio_v552', JSON.stringify(dbRio));
-        localStorage.setItem('db_look_v552', JSON.stringify(dbLook));
+        localStorage.setItem('rankRio_final', JSON.stringify(rRio));
+        localStorage.setItem('rankLook_final', JSON.stringify(rLook));
         render();
     }
 
     function render() {
-        const desenhar = (id, lista) => {
-            document.getElementById(id).innerHTML = lista.sort((a,b) => b.d - a.d).map(x => `
-                <div class="bicho-linha" title="Clique para editar este bicho" onclick="prepararEdicao('${bichosInfo[x.g][1]} ${x.g} - ${bichosInfo[x.g][0]} atrasado há ${x.d} dias, ${x.dt}, no milhar ${x.m}')">
-                    ${bichosInfo[x.g][1]} <b>${x.g.toString().padStart(2,'0')} - ${bichosInfo[x.g][0]}</b> 
+        const draw = (id, lista) => {
+            document.getElementById(id).innerHTML = lista.sort((a,b)=>b.d - a.d).map(x => `
+                <div class="bicho-linha">
+                    ${bichosDicio[x.g][1]} <b>${x.g.toString().padStart(2,'0')} - ${bichosDicio[x.g][0]}</b> 
                     atrasado há <span class="txt-dias">${x.d} dias</span>, 
                     ${x.dt}, no milhar <span class="txt-milhar">${x.m}</span>
                 </div>
             `).join('');
         };
-        desenhar('listaRio', dbRio);
-        desenhar('listaLook', dbLook);
-        
-        // Atualiza Grupo Rei (Simples análise de quem tem mais dias de atraso somado)
-        let totalAtraso = {};
-        for(let i=1; i<=25; i++) {
-            let r = dbRio.find(x=>x.g===i);
-            let l = dbLook.find(x=>x.g===i);
-            totalAtraso[i] = (r ? r.d : 0) + (l ? l.d : 0);
-        }
-        let rei = Object.keys(totalAtraso).sort((a,b) => totalAtraso[b] - totalAtraso[a])[0];
-        document.getElementById('grupoRei').innerText = rei.padStart(2, '0');
+        draw('listaRio', rRio);
+        draw('listaLook', rLook);
     }
 
-    // FACILITADOR: Se clicar na linha, ela vai pro campo de texto pra você só mudar o número e salvar
-    function prepararEdicao(texto) {
-        document.getElementById('campoInteligente').value = texto;
-        document.getElementById('campoInteligente').focus();
+    function baixarBackup() {
+        const data = { rio: rRio, look: rLook };
+        const blob = new Blob([JSON.stringify(data)], {type:'text/plain'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = "meu_sistema_sai_backup.txt";
+        a.click();
     }
 
     render();
