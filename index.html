@@ -2,70 +2,87 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>S.A.I v6.8 - Sistema Completo</title>
+    <title>S.A.I v4.5.1 - FIX BACKUP + RANKING</title>
     <style>
-        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --look: #00d4ff; --danger: #ff4444; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 20px; }
-        .container { max-width: 1200px; margin: auto; }
-        .panel { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; }
+        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --purp: #8957e5; --look: #00d4ff; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 15px; margin: 0; }
+        .container { max-width: 1300px; margin: auto; }
+        .menu-topo { display: flex; justify-content: space-between; background: #010409; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--primary); align-items: center; }
         
-        /* GRID LANÇAMENTO ORIGINAL */
-        .grid-inputs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 15px; }
-        .input-box { background: #0d1117; padding: 10px; border-radius: 8px; border: 1px solid #333; text-align: center; }
-        .input-box span { display: block; color: var(--accent); font-size: 0.8rem; margin-bottom: 5px; }
-        .input-box input { width: 80%; background: transparent; border: none; border-bottom: 2px solid var(--primary); color: #fff; text-align: center; font-size: 1.2rem; font-weight: bold; outline: none; }
+        /* Layout em 3 colunas para caber os novos quadros */
+        .grid-main { display: grid; grid-template-columns: 350px 1fr 1fr; gap: 15px; }
         
-        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; flex: 1; color: #000; transition: 0.3s; }
-        .btn-rio { background: var(--primary); }
-        .btn-look { background: var(--look); }
-
-        /* NOVOS QUADROS DE ATRASADOS (ANEXADOS) */
-        .atrasados-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .atrasados-box { background: #010409; border-radius: 8px; max-height: 450px; overflow-y: auto; border: 1px solid #333; }
+        .panel { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 15px; }
+        .btn { padding: 10px 15px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; color: #fff; transition: 0.3s; width: 100%; margin-top: 5px; }
+        .btn-backup { background: #238636; }
+        .btn-save { background: var(--primary); color: #000; font-size: 1.1rem; }
+        
+        input[type="number"] { width: 80px; background: #000; color: var(--primary); border: 1px solid #444; padding: 8px; border-radius: 4px; text-align: center; }
+        textarea { width: 100%; height: 120px; background: #000; color: var(--primary); border: 1px solid #333; padding: 10px; box-sizing: border-box; border-radius: 5px; resize: none; font-family: monospace; }
+        
+        .strong-number { font-size: 3.5rem; color: #fff; text-align: center; display: block; font-weight: bold; text-shadow: 0 0 15px var(--primary); }
+        
+        /* Estilo dos Novos Quadros de Ranking */
+        .atrasados-list { background: #010409; border-radius: 8px; max-height: 500px; overflow-y: auto; border: 1px solid #333; }
         .bicho-item { display: flex; align-items: center; padding: 8px; border-bottom: 1px solid #222; font-size: 0.85rem; }
         .rank { width: 25px; font-weight: bold; color: var(--accent); }
         .emoji { font-size: 1.1rem; margin: 0 10px; }
         .info { flex-grow: 1; }
-        .destaque-atraso { color: var(--danger); font-weight: bold; }
-
-        h2 { color: var(--primary); font-size: 1.2rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .destaque-atraso { color: var(--danger); font-weight: bold; font-size: 0.8rem; }
+        
+        .highlight { color: var(--primary); font-weight: bold; }
+        h3 { margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 1rem; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="color: var(--primary); margin-bottom: 20px;">S.A.I v6.8</h1>
-
-    <div class="panel">
-        <h2>📥 Lançar Sorteio</h2>
-        <div class="grid-inputs">
-            <div class="input-box"><span>1º Prêmio</span><input type="number" id="m1"></div>
-            <div class="input-box"><span>2º Prêmio</span><input type="number" id="m2"></div>
-            <div class="input-box"><span>3º Prêmio</span><input type="number" id="m3"></div>
-            <div class="input-box"><span>4º Prêmio</span><input type="number" id="m4"></div>
-            <div class="input-box"><span>5º Prêmio</span><input type="number" id="m5"></div>
+    <div class="menu-topo">
+        <div>
+            <b style="color:var(--primary); font-size: 1.4rem;">S.A.I <span style="font-weight:200">v4.5.1 + RANK</span></b><br>
+            <small style="color:var(--accent)">SISTEMA DE EXTRAÇÃO INTELIGENTE</small>
         </div>
-        <div class="grid-inputs" style="grid-template-columns: 1fr 1fr; width: 40%; margin: auto;">
-            <div class="input-box"><span>6º Prêmio</span><input type="number" id="m6"></div>
-            <div class="input-box"><span>7º Prêmio</span><input type="number" id="m7"></div>
-        </div>
-        
-        <div class="btn-group">
-            <button class="btn btn-rio" onclick="processar('RIO')">GRAVAR NO RIO</button>
-            <button class="btn btn-look" onclick="processar('LOOK')">GRAVAR NA LOOK</button>
-            <button class="btn" style="background:#333; color:#fff;" onclick="limpar()">LIMPAR TUDO</button>
+        <div style="display:flex; gap:10px;">
+            <button class="btn btn-backup" style="width:auto" onclick="exportarBackup()">📥 SALVAR BACKUP</button>
+            <button class="btn" style="background:var(--danger); width:auto" onclick="limparTudo()">🗑️ LIMPAR TUDO</button>
         </div>
     </div>
 
-    <div class="atrasados-grid">
-        <div class="panel">
-            <h2 style="color: var(--primary);">Atrasados - PT Rio de Janeiro</h2>
-            <div id="listaRio" class="atrasados-box"></div>
+    <div class="grid-main">
+        <div>
+            <div class="panel">
+                <h3 style="color:var(--primary)">📥 Lançar Resultado (1º ao 7º)</h3>
+                <small style="color:#888">Cole o texto do site aqui, ele extrai sozinho:</small>
+                <textarea id="injecaoInput" placeholder="Cole qualquer texto com resultados aqui..."></textarea>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                    <button class="btn btn-save" onclick="processarInjecao('RIO')">GRAVAR RIO</button>
+                    <button class="btn" style="background:var(--look); color:#000" onclick="processarInjecao('LOOK')">GRAVAR LOOK</button>
+                </div>
+            </div>
+
+            <div class="panel" style="text-align:center">
+                <span style="color:var(--primary); letter-spacing: 2px;">🔥 MAIS ATRASADO GERAL</span>
+                <span class="strong-number" id="grupoRei">--</span>
+                <small id="progressoCiclo">Aguardando dados...</small>
+            </div>
+
+            <div class="panel">
+                <h3 style="color:var(--accent)">🧮 CALCULADORA X7</h3>
+                <input type="number" id="p1" placeholder="1º Prêmio" style="width: 100%; margin-bottom: 5px;">
+                <button class="btn" style="background:var(--accent); color:#000" onclick="calcularX7()">CALCULAR</button>
+                <div id="res1" class="highlight" style="margin-top:10px; text-align:center">---</div>
+            </div>
         </div>
+
         <div class="panel">
-            <h2 style="color: var(--look);">Atrasados - Look Loterias</h2>
-            <div id="listaLook" class="atrasados-box"></div>
+            <h3 style="color:var(--primary)">🏇 ATRASADOS RIO</h3>
+            <div id="listaRio" class="atrasados-list"></div>
+        </div>
+
+        <div class="panel">
+            <h3 style="color:var(--look)">🎯 ATRASADOS LOOK</h3>
+            <div id="listaLook" class="atrasados-list"></div>
         </div>
     </div>
 </div>
@@ -74,63 +91,110 @@
     const bichos = {1:"Avestruz", 2:"Águia", 3:"Burro", 4:"Borboleta", 5:"Cachorro", 6:"Cabra", 7:"Carneiro", 8:"Camelo", 9:"Cobra", 10:"Coelho", 11:"Cavalo", 12:"Elefante", 13:"Galo", 14:"Gato", 15:"Jacaré", 16:"Leão", 17:"Macaco", 18:"Porco", 19:"Pavão", 20:"Peru", 21:"Touro", 22:"Tigre", 23:"Urso", 24:"Veado", 25:"Vaca"};
     const emojis = {1:"🦩", 2:"🦅", 3:"🦙", 4:"🦋", 5:"🐕", 6:"🐐", 7:"🐑", 8:"🐪", 9:"🐍", 10:"🐇", 11:"🐎", 12:"🐘", 13:"🐓", 14:"🐈", 15:"🐊", 16:"🦁", 17:"🐒", 18:"🐖", 19:"🦚", 20:"🦃", 21:"🐂", 22:"🐅", 23:"🐻", 24:"🦌", 25:"🐄"};
 
-    // Recuperar rankings ou usar os dados iniciais exatos que você passou
-    let rankRio = JSON.parse(localStorage.getItem('rankRio_v68')) || [];
-    let rankLook = JSON.parse(localStorage.getItem('rankLook_v68')) || [];
+    let db = JSON.parse(localStorage.getItem('banco_sai_v4_5')) || [];
+    let rankRio = JSON.parse(localStorage.getItem('rankRio_v4_5')) || [];
+    let rankLook = JSON.parse(localStorage.getItem('rankLook_v4_5')) || [];
 
-    // Inicialização caso esteja vazio
-    function init() {
-        if(rankRio.length === 0) { for(let i=1; i<=25; i++) rankRio.push({g:i, m:"----", d:1, dt:"--/--"}); }
-        if(rankLook.length === 0) { for(let i=1; i<=25; i++) rankLook.push({g:i, m:"----", d:1, dt:"--/--"}); }
-        render();
+    // Inicializa os rankings se estiverem vazios
+    if(rankRio.length === 0) for(let i=1; i<=25; i++) rankRio.push({g:i, m:"----", d:1, dt:"--/--"});
+    if(rankLook.length === 0) for(let i=1; i<=25; i++) rankLook.push({g:i, m:"----", d:1, dt:"--/--"});
+
+    function processarInjecao(praca) {
+        const txt = document.getElementById('injecaoInput').value;
+        const regex = /\b\d{3,4}\b/g; // A mágica que extrai apenas 3 ou 4 dígitos
+        const encontrados = txt.match(regex);
+
+        if (!encontrados) {
+            alert("Nenhum prêmio encontrado no texto.");
+            return;
+        }
+
+        // Pega os primeiros 7 encontrados (1º ao 7º prêmio)
+        const premios = encontrados.slice(0, 7);
+        let lista = (praca === 'RIO') ? rankRio : rankLook;
+
+        premios.forEach((milharOriginal, index) => {
+            let m = milharOriginal.padStart(4, '0');
+            let g = (m.slice(-2) === "00") ? 25 : Math.ceil(parseInt(m.slice(-2))/4);
+            
+            // Salva no banco geral
+            db.unshift({ m: m, g: g, p: praca, dt: new Date().toLocaleString() });
+
+            // Se for o 1º prêmio (index 0), atualiza o ranking de atraso
+            if(index === 0) {
+                let idxRank = lista.findIndex(item => item.g === g);
+                if(idxRank !== -1) lista.splice(idxRank, 1);
+                lista.forEach(item => item.d++); // Aumenta atraso de todos
+                lista.push({ g: g, m: m, d: 0, dt: new Date().toLocaleDateString() }); // Zera o que saiu
+            }
+        });
+
+        lista.sort((a, b) => b.d - a.d); // Reorganiza o ranking
+        salvar();
+        analisar();
+        renderRankings();
+        document.getElementById('injecaoInput').value = "";
+        alert(`Sucesso! Foram extraídos ${premios.length} prêmios para o ${praca}.`);
     }
 
-    function processar(praca) {
-        // Pega o 1º prêmio para atualizar o ranking de atrasos
-        let m1 = document.getElementById('m1').value;
-        if(m1.length >= 3) {
-            let milhar = m1.padStart(4, '0');
-            let grupo = (milhar.slice(-2) === "00") ? 25 : Math.ceil(parseInt(milhar.slice(-2))/4);
-            let lista = (praca === 'RIO') ? rankRio : rankLook;
+    function salvar() {
+        localStorage.setItem('banco_sai_v4_5', JSON.stringify(db));
+        localStorage.setItem('rankRio_v4_5', JSON.stringify(rankRio));
+        localStorage.setItem('rankLook_v4_5', JSON.stringify(rankLook));
+    }
 
-            // Lógica de Saída: Vai para o final e todos sobem 1 dia
-            let idx = lista.findIndex(x => x.g === grupo);
-            if(idx !== -1) lista.splice(idx, 1);
-            lista.forEach(item => item.d++);
-            lista.push({ g: grupo, m: milhar, d: 0, dt: new Date().toLocaleDateString() });
-            lista.sort((a, b) => b.d - a.d);
-            
-            localStorage.setItem(praca === 'RIO' ? 'rankRio_v68' : 'rankLook_v68', JSON.stringify(lista));
-            render();
-            alert("Sorteio Gravado e Atrasos Atualizados!");
-        } else {
-            alert("Pelo menos o 1º prêmio deve ser preenchido!");
+    function renderRankings() {
+        const template = (item, index) => `
+            <div class="bicho-item">
+                <div class="rank">${index + 1}º</div>
+                <div class="emoji">${emojis[item.g]}</div>
+                <div class="info">
+                    <strong>${item.g.toString().padStart(2,'0')} - ${bichos[item.g]}</strong><br>
+                    <small>Milhar: ${item.m} | ${item.dt}</small>
+                </div>
+                <div class="destaque-atraso">${item.d > 0 ? item.d + ' dias' : 'SAIU HOJE'}</div>
+            </div>`;
+        
+        document.getElementById('listaRio').innerHTML = rankRio.map((x,i) => template(x,i)).join('');
+        document.getElementById('listaLook').innerHTML = rankLook.map((x,i) => template(x,i)).join('');
+    }
+
+    function analisar() {
+        if (db.length === 0) return;
+        let freq = {}; for(let i=1; i<=25; i++) freq[i] = 0;
+        db.forEach(item => freq[item.g]++);
+        let ord = Object.keys(freq).sort((a,b) => freq[a] - freq[b]);
+        document.getElementById('grupoRei').innerText = ord[0].padStart(2, '0');
+        let mapeados = Object.values(freq).filter(f => f > 0).length;
+        document.getElementById('progressoCiclo').innerText = `Ciclo: ${mapeados} de 25 mapeados no histórico.`;
+    }
+
+    function calcularX7() {
+        let v = document.getElementById('p1').value;
+        if(v) {
+            let r = (parseInt(v) * 7).toString();
+            let centena = r.slice(-3).padStart(3, '0');
+            document.getElementById('res1').innerHTML = `Centena: ${centena} | Dezena: ${centena.slice(-2)}`;
         }
     }
 
-    function render() {
-        const build = (id, lista) => {
-            document.getElementById(id).innerHTML = lista.map((item, index) => `
-                <div class="bicho-item">
-                    <div class="rank">${index + 1}º</div>
-                    <div class="emoji">${emojis[item.g]}</div>
-                    <div class="info">
-                        <strong>${item.g.toString().padStart(2,'0')} - ${bichos[item.g]}</strong><br>
-                        <small>Milhar: ${item.m} | ${item.dt}</small>
-                    </div>
-                    <div class="destaque-atraso">${item.d > 0 ? item.d + ' dias' : 'SAIU HOJE'}</div>
-                </div>
-            `).join('');
-        };
-        build('listaRio', rankRio);
-        build('listaLook', rankLook);
+    function exportarBackup() {
+        const blob = new Blob([JSON.stringify({db, rankRio, rankLook})], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `backup_completo_sai.txt`;
+        a.click();
     }
 
-    function limpar() {
-        for(let i=1; i<=7; i++) document.getElementById('m'+i).value = "";
+    function limparTudo() {
+        if(confirm("Deseja apagar todos os dados e rankings?")) {
+            localStorage.clear();
+            location.reload();
+        }
     }
 
-    init();
+    analisar();
+    renderRankings();
 </script>
 </body>
 </html>
