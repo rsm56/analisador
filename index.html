@@ -2,200 +2,153 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>S.A.I v5.5 - OFICIAL</title>
+    <title>S.A.I v5.6 - Visual Detalhado</title>
     <style>
-        /* CSS ORIGINAL DA v5.5 SEM ALTERAÇÃO */
-        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --danger: #ff4d4d; --purp: #8957e5; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); padding: 15px; margin: 0; }
-        .container { max-width: 1100px; margin: auto; }
-        .menu-topo { display: flex; justify-content: space-between; background: #010409; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--primary); align-items: center; }
-        .grid { display: grid; grid-template-columns: 1fr 380px; gap: 15px; }
+        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --look: #00d4ff; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 15px; margin: 0; }
+        .container { max-width: 1200px; margin: auto; }
         .panel { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 15px; }
-        .btn { padding: 10px 15px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; color: #fff; transition: 0.3s; }
-        .btn-backup { background: #238636; }
-        .btn-calc { background: var(--accent); color: #000; width: 100%; margin-top: 5px; }
-        .btn-save { background: var(--primary); color: #000; width: 100%; font-size: 1.1rem; }
-        input[type="number"] { width: 80px; background: #000; color: var(--primary); border: 1px solid #444; padding: 8px; border-radius: 4px; text-align: center; font-size: 1.1rem; }
-        textarea { width: 100%; height: 70px; background: #000; color: var(--primary); border: 1px solid #333; padding: 10px; box-sizing: border-box; border-radius: 5px; resize: none; font-family: monospace; }
-        .strong-number { font-size: 3.5rem; color: #fff; text-align: center; display: block; font-weight: bold; text-shadow: 0 0 15px var(--primary); }
-        .x7-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; }
-        .highlight { color: var(--primary); font-weight: bold; }
-
-        /* NOVOS ESTILOS APENAS PARA OS QUADROS DE BAIXO */
-        .atrasados-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
-        .lista-atraso { background: #010409; border-radius: 8px; max-height: 400px; overflow-y: auto; border: 1px solid #333; }
-        .item-bicho { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #222; font-size: 0.9rem; }
-        .look-color { color: #00d4ff; }
-        .rio-color { color: var(--primary); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        /* Estilo da Lista de Atrasados Estilo Exemplo */
+        .atrasados-list { background: #010409; border-radius: 8px; padding: 10px; border: 1px solid #333; }
+        .item-bicho { 
+            padding: 10px; 
+            border-bottom: 1px solid #222; 
+            font-size: 0.95rem; 
+            line-height: 1.4;
+        }
+        .item-bicho b { color: var(--accent); }
+        .dias-count { color: #ff4d4d; font-weight: bold; }
+        .milhar-ref { color: var(--primary); font-family: monospace; font-weight: bold; }
+        
+        textarea { width: 100%; height: 80px; background: #000; color: var(--primary); border: 1px solid #333; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
+        .btn { padding: 10px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        input { background: #000; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 4px; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="menu-topo">
-        <div>
-            <b style="color:var(--primary); font-size: 1.4rem;">S.A.I <span style="font-weight:200">v5.5</span></b><br>
-            <small style="color:var(--accent)">SISTEMA DE ANÁLISE INTEGRADO</small>
+    <div class="panel">
+        <h2 style="color:var(--primary); margin-top:0;">📥 Lançamento de Resultados</h2>
+        <textarea id="inputTxt" placeholder="Cole o resultado aqui..."></textarea>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button class="btn" style="background:var(--primary); color:#000" onclick="lancar('RIO')">GRAVAR NO RIO</button>
+            <button class="btn" style="background:var(--look); color:#000" onclick="lancar('LOOK')">GRAVAR NA LOOK</button>
         </div>
-        <div style="display:flex; gap:10px;">
-            <button class="btn btn-backup" onclick="exportarBackup()">📥 SALVAR BACKUP</button>
+    </div>
+
+    <div class="panel">
+        <h3 style="color:var(--accent)">⚙️ AJUSTE MANUAL (Caso precise corrigir)</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; align-items: end;">
+            <div><small>Grupo:</small><input type="number" id="mG"></div>
+            <div><small>Dias:</small><input type="number" id="mD"></div>
+            <div><small>Milhar:</small><input type="text" id="mM"></div>
+            <div><small>Data:</small><input type="text" id="mDt" placeholder="04/03/26"></div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button class="btn" style="background:#444; color:#fff" onclick="ajusteManual('RIO')">AJUSTAR RIO</button>
+            <button class="btn" style="background:#444; color:#fff" onclick="ajusteManual('LOOK')">AJUSTAR LOOK</button>
         </div>
     </div>
 
     <div class="grid">
-        <div>
-            <div class="panel" style="text-align:center">
-                <span style="color:var(--primary); letter-spacing: 2px;">🔥 GRUPO MAIS FORTE</span>
-                <span class="strong-number" id="grupoRei">--</span>
-                <small id="progressoCiclo">Carregue os dados...</small>
-            </div>
-
-            <div class="panel">
-                <h3>📥 Lançar Resultados (Rio ou Look)</h3>
-                <textarea id="injecaoInput" placeholder="Cole o texto aqui..."></textarea>
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <button class="btn btn-save" onclick="processarGeral('RIO')">GRAVAR RIO</button>
-                    <button class="btn" style="background:#00d4ff; color:#000; width:100%; font-weight:bold;" onclick="processarGeral('LOOK')">GRAVAR LOOK</button>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h3 style="color:var(--accent)">🧮 CALCULADORA X7</h3>
-                <div class="x7-row"><span>1º Prêmio:</span> <input type="number" id="p1"> <span id="res1" class="highlight">---</span></div>
-                <div class="x7-row"><span>3º Prêmio:</span> <input type="number" id="p3"> <span id="res3" class="highlight">---</span></div>
-                <div class="x7-row"><span>5º Prêmio:</span> <input type="number" id="p5"> <span id="res5" class="highlight">---</span></div>
-                <button class="btn btn-calc" onclick="calcularX7()">CALCULAR</button>
-            </div>
-        </div>
-
         <div class="panel">
-            <h3 style="color:var(--primary)">🎯 HISTÓRICO GERAL</h3>
-            <div id="pGrupos" style="font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;">---</div>
-            
-            <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
-            
-            <h3 style="color:var(--accent)">⚙️ INSERIR ATRASADOS</h3>
-            <div style="margin-bottom: 10px;">
-                <label style="font-size: 0.8rem;">Grupo (1 a 25):</label><br>
-                <input type="number" id="manualG" style="width:100%; margin-bottom:10px;">
-                <label style="font-size: 0.8rem;">Dias de Atraso:</label><br>
-                <input type="number" id="manualD" style="width:100%;">
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <button class="btn" style="background:var(--primary); color:#000" onclick="inserirAtrasado('RIO')">ADD RIO</button>
-                <button class="btn" style="background:#00d4ff; color:#000" onclick="inserirAtrasado('LOOK')">ADD LOOK</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="atrasados-grid">
-        <div class="panel">
-            <h3 class="rio-color">🏇 ATRASADOS RIO</h3>
-            <div id="listaRio" class="lista-atraso"></div>
+            <h3 style="color:var(--primary)">🏇 RANKING RIO</h3>
+            <div id="listaRio" class="atrasados-list"></div>
         </div>
         <div class="panel">
-            <h3 class="look-color">🎯 ATRASADOS LOOK</h3>
-            <div id="listaLook" class="lista-atraso"></div>
+            <h3 style="color:var(--look)">🎯 RANKING LOOK</h3>
+            <div id="listaLook" class="atrasados-list"></div>
         </div>
     </div>
 </div>
 
 <script>
-    // BANCO DE DADOS
-    let db = JSON.parse(localStorage.getItem('banco_sai_v4_5')) || [];
-    let rRio = JSON.parse(localStorage.getItem('rank_rio_manual')) || [];
-    let rLook = JSON.parse(localStorage.getItem('rank_look_manual')) || [];
+    const infoBichos = {
+        1: {n:"Avestruz", i:"🦅"}, 2: {n:"Águia", i:"🦅"}, 3: {n:"Burro", i:"🐴"}, 4: {n:"Borboleta", i:"🦋"}, 5: {n:"Cachorro", i:"🐶"},
+        6: {n:"Cabra", i:"🐐"}, 7: {n:"Carneiro", i:"🐏"}, 8: {n:"Camelo", i:"🐪"}, 9: {n:"Cobra", i:"🐍"}, 10: {n:"Coelho", i:"🐰"},
+        11: {n:"Cavalo", i:"🐎"}, 12: {n:"Elefante", i:"🐘"}, 13: {n:"Galo", i:"🐓"}, 14: {n:"Gato", i:"🐈"}, 15: {n:"Jacaré", i:"🐊"},
+        16: {n:"Leão", i:"🦁"}, 17: {n:"Macaco", i:"🐒"}, 18: {n:"Porco", i:"🐷"}, 19: {n:"Pavão", i:"🦚"}, 20: {n:"Peru", i:"🦃"},
+        21: {n:"Touro", i:"🐂"}, 22: {n:"Tigre", i:"🐅"}, 23: {n:"Urso", i:"🐻"}, 24: {n:"Veado", i:"🦌"}, 25: {n:"Vaca", i:"🐄"}
+    };
 
-    // Função para inserir manualmente bicho e dia na Look ou no Rio
-    function inserirAtrasado(praca) {
-        let g = parseInt(document.getElementById('manualG').value);
-        let d = parseInt(document.getElementById('manualD').value);
-        
-        if(!g || g < 1 || g > 25) return alert("Grupo deve ser de 1 a 25");
-        
-        let lista = (praca === 'RIO') ? rRio : rLook;
-        let bichoExistente = lista.find(x => x.g === g);
-        
-        if(bichoExistente) {
-            bichoExistente.d = d;
-        } else {
-            lista.push({g: g, d: d});
+    let rRio = JSON.parse(localStorage.getItem('rankRio_v56')) || [];
+    let rLook = JSON.parse(localStorage.getItem('rankLook_v56')) || [];
+
+    function init(lista) {
+        if(lista.length === 0) {
+            for(let i=1; i<=25; i++) lista.push({g:i, d:0, m:"0000", dt: "00/00/00"});
         }
-        
-        salvar();
-        renderListas();
-        alert("Bicho " + g + " inserido nos atrasados da " + praca);
+        return lista;
     }
 
-    function processarGeral(praca) {
-        const txt = document.getElementById('injecaoInput').value;
-        const matches = txt.match(/\d{3,4}/g);
-        if(!matches) return alert("Nenhum número encontrado.");
+    rRio = init(rRio);
+    rLook = init(rLook);
 
-        matches.slice(0, 7).forEach((m) => {
-            let milhar = m.padStart(4, '0');
-            let grupo = (milhar.slice(-2) === "00") ? 25 : Math.ceil(parseInt(milhar.slice(-2))/4);
-            db.unshift({ m: milhar, g: grupo, p: praca, dt: new Date().toLocaleString() });
-        });
+    function lancar(praca) {
+        const txt = document.getElementById('inputTxt').value;
+        const ms = txt.match(/\d{3,4}/g);
+        if(!ms) return alert("Nenhum milhar encontrado!");
+
+        let lista = (praca === 'RIO') ? rRio : rLook;
+        let hoje = new Date().toLocaleDateString('pt-BR', {year:'2-digit', month:'2-digit', day:'2-digit'});
+
+        // O primeiro prêmio reseta o atraso
+        let m1 = ms[0].padStart(4, '0');
+        let g1 = (m1.slice(-2) === "00") ? 25 : Math.ceil(parseInt(m1.slice(-2))/4);
         
+        lista.forEach(item => {
+            if(item.g === g1) {
+                item.d = 0;
+                item.m = m1;
+                item.dt = hoje;
+            } else {
+                item.d++; // Aumenta 1 dia para os outros
+            }
+        });
+
         salvar();
-        document.getElementById('injecaoInput').value = "";
+        document.getElementById('inputTxt').value = "";
+    }
+
+    function ajusteManual(praca) {
+        let g = parseInt(document.getElementById('mG').value);
+        let d = parseInt(document.getElementById('mD').value);
+        let m = document.getElementById('mM').value || "----";
+        let dt = document.getElementById('mDt').value || "--/--/--";
+
+        if(!g || g < 1 || g > 25) return alert("Grupo inválido");
+        let lista = (praca === 'RIO') ? rRio : rLook;
+        let item = lista.find(x => x.g === g);
+        if(item) {
+            item.d = d; item.m = m; item.dt = dt;
+        }
+        salvar();
     }
 
     function salvar() {
-        localStorage.setItem('banco_sai_v4_5', JSON.stringify(db));
-        localStorage.setItem('rank_rio_manual', JSON.stringify(rRio));
-        localStorage.setItem('rank_look_manual', JSON.stringify(rLook));
-        analisar();
-        renderListas();
+        localStorage.setItem('rankRio_v56', JSON.stringify(rRio));
+        localStorage.setItem('rankLook_v56', JSON.stringify(rLook));
+        render();
     }
 
-    function renderListas() {
-        const draw = (id, lista) => {
-            document.getElementById(id).innerHTML = lista.sort((a,b) => b.d - a.d).map((x, i) => `
+    function render() {
+        const fix = (id, lista) => {
+            document.getElementById(id).innerHTML = lista.sort((a,b) => b.d - a.d).map(x => `
                 <div class="item-bicho">
-                    <span><b>${i+1}º</b> - Grupo ${x.g}</span>
-                    <span class="highlight">${x.d} dias</span>
+                    ${infoBichos[x.g].i} <b>${x.g.toString().padStart(2,'0')} - ${infoBichos[x.g].n}</b> 
+                    atrasado há <span class="dias-count">${x.d} dias</span>, 
+                    em <i>${x.dt}</i>, no milhar <span class="milhar-ref">${x.m}</span>
                 </div>
             `).join('');
         }
-        draw('listaRio', rRio);
-        draw('listaLook', rLook);
+        fix('listaRio', rRio);
+        fix('listaLook', rLook);
     }
 
-    // CALCULADORA E ANÁLISE ORIGINAIS
-    function calcularX7() {
-        ['p1', 'p3', 'p5'].forEach((id, i) => {
-            let v = document.getElementById(id).value;
-            if(v) {
-                let r = (parseInt(v) * 7).toString();
-                let centena = r.slice(-3).padStart(3, '0');
-                document.getElementById('res' + (id === 'p1' ? 1 : id === 'p3' ? 3 : 5)).innerHTML = `C: ${centena} | Dz: ${centena.slice(-2)}`;
-            }
-        });
-    }
-
-    function analisar() {
-        if (db.length === 0) return;
-        let freq = {}; for(let i=1; i<=25; i++) freq[i] = 0;
-        db.forEach(item => { if(freq[item.g] !== undefined) freq[item.g]++; });
-        let ord = Object.keys(freq).sort((a,b) => freq[a] - freq[b]);
-        document.getElementById('grupoRei').innerText = ord[0];
-        document.getElementById('pGrupos').innerText = ord.slice(0, 5).join(" - ");
-        let sorteados = Object.values(freq).filter(f => f > 0).length;
-        document.getElementById('progressoCiclo').innerText = `Ciclo: ${sorteados} de 25 mapeados.`;
-    }
-
-    function exportarBackup() {
-        const blob = new Blob([JSON.stringify({db, rRio, rLook})], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `backup_sai_v55.txt`;
-        a.click();
-    }
-
-    analisar();
-    renderListas();
+    render();
 </script>
 </body>
 </html>
