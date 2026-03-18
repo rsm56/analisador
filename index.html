@@ -2,222 +2,346 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>S.A.I v5.5 - Identificação Precisa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisador Pro - Inteligência de Padrões</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff88; --bg: #0d1117; --card: #16213e; --text: #c9d1d9; --accent: #ffae00; --look: #00d4ff; --danger: #ff4444; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 20px; }
-        .container { max-width: 1100px; margin: auto; }
-        .grid-main { display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
-        .panel { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; }
-        .strong-box { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 15px; border: 2px solid #333; }
-        .number { font-size: 4rem; font-weight: 900; color: #fff; line-height: 1; }
-        textarea { width: 100%; height: 100px; background: #010409; color: var(--primary); border: 1px solid #30363d; border-radius: 8px; padding: 10px; box-sizing: border-box; }
-        .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; width: 100%; color: #fff; transition: 0.3s; }
-        .btn:hover { opacity: 0.8; }
-        .btn-rio { background: var(--primary); color: #000; margin-top: 10px; }
-        .btn-look { background: var(--look); color: #000; margin-top: 10px; }
-        .calc-x7 { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 15px; }
-        .calc-box { background: #0d1117; padding: 10px; border-radius: 8px; border: 1px solid var(--accent); text-align: center; }
-        .calc-box input { width: 80%; background: transparent; border: none; border-bottom: 1px solid var(--accent); color: #fff; text-align: center; font-size: 1.1rem; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; overflow-y: auto; }
-        .modal-content { background: var(--bg); margin: 2% auto; padding: 20px; width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid var(--primary); }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 10px; border-bottom: 1px solid #333; text-align: left; }
-        .badge { padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; color: #000; }
-        .badge-rio { background: var(--primary); }
-        .badge-look { background: var(--look); }
+        :root {
+            --primary: #2563eb;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: var(--primary); font-size: 1.8rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+
+        .card h2 { font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: var(--primary); }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            resize: none;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.9; }
+        .btn-secondary { background: #64748b; margin-top: 10px; }
+
+        .badge-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .badge {
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .remove-btn { color: var(--danger); cursor: pointer; font-weight: bold; margin-left: 5px; }
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat-box {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-val { font-size: 1.5rem; font-weight: 700; display: block; }
+
+        .alerta-forte {
+            background: #fef2f2;
+            border: 2px solid var(--danger);
+            color: var(--danger);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            animation: pulse 2s infinite;
+            font-weight: bold;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            .dashboard { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1 style="color: var(--primary); margin: 0;">S.A.I <span style="font-weight: 200;">v5.5</span></h1>
-        <div style="display:flex; gap:10px;">
-            <button class="btn" style="background:var(--accent); color:#000; width:auto" onclick="document.getElementById('modalInj').style.display='block'">💉 INJETAR BACKUP</button>
-            <button class="btn" style="background:#30363d; color:#fff; width:auto" onclick="abrirEditor()">📂 GESTOR</button>
-        </div>
-    </div>
-
-    <div class="grid-main">
-        <div>
-            <div class="strong-box" style="border-color: var(--primary);">
-                <span style="color: var(--primary); font-weight: bold;">🏇 MAIS ATRASADO RIO</span>
-                <div class="number" id="reiRio" style="text-shadow: 0 0 15px var(--primary);">--</div>
-                <div style="color: #888; margin-top: 10px;" id="topRio">Sem dados (Rio)</div>
-            </div>
-
-            <div class="strong-box" style="border-color: var(--look);">
-                <span style="color: var(--look); font-weight: bold;">🎯 MAIS ATRASADO LOOK</span>
-                <div class="number" id="reiLook" style="text-shadow: 0 0 15px var(--look);">--</div>
-                <div style="color: #888; margin-top: 10px;" id="topLook">Sem dados (Look)</div>
-            </div>
-
-            <div class="panel">
-                <h3>📥 Lançar Resultados</h3>
-                <textarea id="rawInput" placeholder="Cole o resultado aqui..."></textarea>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <button class="btn btn-rio" onclick="gravar('RIO')">GRAVAR NO RIO</button>
-                    <button class="btn btn-look" onclick="gravar('LOOK')">GRAVAR NA LOOK</button>
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="panel" style="border-color: var(--accent);">
-                <h3 style="color: var(--accent);">🧮 CALCULADORA X7</h3>
-                <div class="calc-x7">
-                    <div class="calc-box"><small>1º Prêmio</small><br><input type="number" id="m1" oninput="calcX7(1)"><div id="c1" style="color:var(--accent); font-weight:bold; margin-top:5px;">--</div></div>
-                    <div class="calc-box"><small>3º Prêmio</small><br><input type="number" id="m3" oninput="calcX7(3)"><div id="c3" style="color:var(--accent); font-weight:bold; margin-top:5px;">--</div></div>
-                    <div class="calc-box"><small>5º Prêmio</small><br><input type="number" id="m5" oninput="calcX7(5)"><div id="c5" style="color:var(--accent); font-weight:bold; margin-top:5px;">--</div></div>
-                </div>
-            </div>
-            <button class="btn" style="background:#238636; margin-bottom:10px" onclick="exportar()">📥 SALVAR BACKUP .TXT</button>
-            <button class="btn" style="background:var(--danger);" onclick="limparTudo()">REINICIAR TUDO</button>
-        </div>
-    </div>
+<div class="header">
+    <h1>Analisador Estratégico Pro</h1>
+    <p>Inteligência de Padrões e Cruzamento de Dados</p>
 </div>
 
-<div id="modalInj" class="modal">
-    <div class="modal-content">
-        <h2 style="color:var(--accent)">💉 Injetar Backup</h2>
-        <p>Atenção: Dados sem identificação de praça serão marcados como <b>RIO</b>.</p>
-        <textarea id="txtInj" style="height:200px" placeholder="Cole o JSON do backup aqui..."></textarea>
-        <button class="btn btn-rio" style="background:var(--accent)" onclick="injetar()">RESTAURAR BACKUP</button>
-        <button class="btn" style="background:#333; margin-top:10px;" onclick="document.getElementById('modalInj').style.display='none'">CANCELAR</button>
-    </div>
-</div>
-
-<div id="modalEditor" class="modal">
-    <div class="modal-content">
-        <h2 style="color:var(--primary)">📂 Banco de Dados <button style="float:right; background:red; color:#fff; border:none; padding:5px; cursor:pointer;" onclick="document.getElementById('modalEditor').style.display='none'">X</button></h2>
-        <div style="max-height: 400px; overflow-y: auto;">
-            <table>
-                <thead><tr><th>Data/Hora</th><th>Praça</th><th>Milhar</th><th>Grp</th><th>Ação</th></tr></thead>
-                <tbody id="fullDbBody"></tbody>
-            </table>
+<div class="dashboard">
+    <div class="card">
+        <h2>📥 Entrada de Resultados</h2>
+        <textarea id="inputResultados" placeholder="Cole aqui os milhares (Ex: 1234 5678...)"></textarea>
+        <div style="display: flex; gap: 10px;">
+            <button onclick="processarResultados('rio')">Lançar Rio</button>
+            <button onclick="processarResultados('look')" style="background: #7c3aed;">Lançar Look</button>
         </div>
+    </div>
+
+    <div class="card">
+        <h2>📊 Ciclo Automático</h2>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <span class="stat-val" id="fechados">0</span>
+                Saíram
+            </div>
+            <div class="stat-box">
+                <span class="stat-val" id="faltam">25</span>
+                Faltam
+            </div>
+        </div>
+        <div class="badge-list" id="listaFaltantes"></div>
+    </div>
+
+    <div class="card">
+        <h2>🏛️ Atrasados Rio</h2>
+        <textarea id="inputAtrasadosRio" placeholder="Cole a lista de atrasados do site..."></textarea>
+        <button class="btn-secondary" onclick="importarListaAtrasados('rio')">Importar Rio</button>
+        <div class="badge-list" id="badgesRio"></div>
+    </div>
+
+    <div class="card">
+        <h2>👁️ Atrasados Look</h2>
+        <textarea id="inputAtrasadosLook" placeholder="Cole a lista de atrasados da Look..."></textarea>
+        <button class="btn-secondary" onclick="importarListaAtrasados('look')">Importar Look</button>
+        <div class="badge-list" id="badgesLook"></div>
+    </div>
+
+    <div class="card">
+        <h2>💡 Sugestão Estratégica</h2>
+        <div id="painelSugestao">
+            <p>Aguardando dados suficientes...</p>
+        </div>
+        <div id="alertaGrave"></div>
+    </div>
+
+    <div class="card">
+        <h2>🕒 Últimos Grupos (Rio)</h2>
+        <div class="badge-list" id="historicoRio"></div>
+        
+        <h2 style="margin-top:20px">🕒 Últimos Grupos (Look)</h2>
+        <div class="badge-list" id="historicoLook"></div>
+
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border);">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button class="btn-secondary" onclick="exportarBackup()">💾 Exportar (.txt)</button>
+            
+            <button class="btn-secondary" style="background:#0ea5e9" onclick="document.getElementById('fileInput').click()">📂 Importar (.txt)</button>
+            <input type="file" id="fileInput" style="display:none" accept=".txt" onchange="lerArquivoBackup(event)">
+        </div>
+        
+        <button class="btn-secondary" onclick="limparTudo()" style="background:#fff; color:#ef4444; border:1px solid #ef4444; margin-top:10px">⚠️ Limpar Tudo</button>
     </div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('sai_v55_db')) || [];
-
-    function gravar(praca) {
-        const txt = document.getElementById('rawInput').value;
-        const linhas = txt.split('\n');
-        let cont = 0;
-        linhas.forEach(l => {
-            let m = l.match(/\d{3,4}/);
-            if(m) {
-                let milhar = m[0].padStart(4, '0');
-                let grp = (milhar.slice(-2) === "00") ? 25 : Math.ceil(parseInt(milhar.slice(-2))/4);
-                db.unshift({ m: milhar, g: grp, p: praca, dt: new Date().toLocaleString() });
-                cont++;
-            }
-        });
-        if(cont > 0) {
-            salvar();
-            document.getElementById('rawInput').value = "";
-            alert(`${cont} registros salvos no ${praca}!`);
-        }
-    }
-
-    function analisar() {
-        const processar = (praca) => {
-            let dadosFiltrados = db.filter(x => x.p === praca);
-            if(dadosFiltrados.length === 0) return null;
-            
-            let f = {}; for(let i=1; i<=25; i++) f[i]=0;
-            dadosFiltrados.forEach(x => f[x.g]++);
-            return Object.keys(f).sort((a,b) => f[a] - f[b]);
-        };
-
-        const rio = processar('RIO'); 
-        const look = processar('LOOK');
-        
-        // UI Rio
-        if(rio) {
-            document.getElementById('reiRio').innerText = rio[0].padStart(2,'0');
-            document.getElementById('topRio').innerText = "Atrasados: " + rio.slice(0,5).map(n => n.padStart(2,'0')).join("-");
-        } else {
-            document.getElementById('reiRio').innerText = "--";
-            document.getElementById('topRio').innerText = "Sem dados (Rio)";
-        }
-
-        // UI Look
-        if(look) {
-            document.getElementById('reiLook').innerText = look[0].padStart(2,'0');
-            document.getElementById('topLook').innerText = "Atrasados: " + look.slice(0,5).map(n => n.padStart(2,'0')).join("-");
-        } else {
-            document.getElementById('reiLook').innerText = "--";
-            document.getElementById('topLook').innerText = "Sem dados (Look)";
-        }
-    }
-
-    function salvar() { 
-        localStorage.setItem('sai_v55_db', JSON.stringify(db)); 
-        analisar(); 
-    }
-
-    function abrirEditor() {
-        document.getElementById('fullDbBody').innerHTML = db.map((x,i)=>`
-            <tr>
-                <td style="font-size:0.8rem">${x.dt}</td>
-                <td><span class="badge ${x.p === 'RIO' ? 'badge-rio' : 'badge-look'}">${x.p || 'RIO'}</span></td>
-                <td style="font-weight:bold; color:#fff">${x.m}</td>
-                <td>${x.g.toString().padStart(2,'0')}</td>
-                <td><button onclick="apagar(${i})" style="background:none; color:var(--danger); border:1px solid var(--danger); cursor:pointer; border-radius:4px;">Excluir</button></td>
-            </tr>`).join('');
-        document.getElementById('modalEditor').style.display='block';
-    }
-
-    function apagar(i) { 
-        if(confirm("Excluir este registro?")) {
-            db.splice(i,1); 
-            salvar(); 
-            abrirEditor(); 
-        }
-    }
+    const animais = ["Avestruz", "Águia", "Burro", "Borboleta", "Cachorro", "Cabra", "Carneiro", "Camelo", "Cobra", "Coelho", "Cavalo", "Elefante", "Galo", "Gato", "Jacaré", "Leão", "Macaco", "Porco", "Pavão", "Peru", "Touro", "Tigre", "Urso", "Veado", "Vaca"];
     
-    function injetar() { 
-        try { 
-            let tempDb = JSON.parse(document.getElementById('txtInj').value);
-            db = tempDb.map(item => {
-                if(!item.p) item.p = 'RIO'; // Se o backup for antigo e não tiver 'p', vira RIO
-                return item;
-            });
-            salvar(); 
-            alert("Backup Restaurado com sucesso!"); 
-            document.getElementById('modalInj').style.display='none'; 
-        } catch(e) { alert("Erro: Formato de backup inválido!"); } 
+    let dados = JSON.parse(localStorage.getItem('bicho_data_v2')) || {
+        rio: [],
+        look: [],
+        atrasadosRio: [],
+        atrasadosLook: [],
+        historicoGlobal: []
+    };
+
+    function salvar() {
+        localStorage.setItem('bicho_data_v2', JSON.stringify(dados));
+        atualizarInterface();
     }
 
-    function exportar() {
-        const blob = new Blob([JSON.stringify(db)], {type:'text/plain'});
+    function converterParaGrupo(milhar) {
+        let dezena = parseInt(milhar.toString().slice(-2));
+        if (isNaN(dezena)) return null;
+        let grupo = Math.ceil(dezena / 4);
+        if (dezena === 0) return 25;
+        return grupo === 0 ? 25 : grupo;
+    }
+
+    function processarResultados(tipo) {
+        const input = document.getElementById('inputResultados').value;
+        const numeros = input.match(/\d{4}/g);
+
+        if (numeros) {
+            numeros.slice(0, 7).forEach(m => {
+                const g = converterParaGrupo(m);
+                if (g) {
+                    dados[tipo].unshift(g);
+                    dados.historicoGlobal.push(g);
+                }
+            });
+            document.getElementById('inputResultados').value = '';
+            salvar();
+        }
+    }
+
+    function importarListaAtrasados(tipo) {
+        const idCampo = tipo === 'rio' ? 'inputAtrasadosRio' : 'inputAtrasadosLook';
+        const input = document.getElementById(idCampo).value;
+        const grupos = input.match(/\b(0?[1-9]|1[0-9]|2[0-5])\b/g);
+
+        if (grupos) {
+            const listaUnica = [...new Set(grupos.map(Number))];
+            if (tipo === 'rio') dados.atrasadosRio = listaUnica;
+            else dados.atrasadosLook = listaUnica;
+            document.getElementById(idCampo).value = '';
+            salvar();
+        }
+    }
+
+    function removerItem(tipo, index) {
+        dados[tipo].splice(index, 1);
+        salvar();
+    }
+
+    function atualizarInterface() {
+        renderLista('historicoRio', dados.rio, 'rio');
+        renderLista('historicoLook', dados.look, 'look');
+        renderLista('badgesRio', dados.atrasadosRio, 'atrasadosRio');
+        renderLista('badgesLook', dados.atrasadosLook, 'atrasadosLook');
+
+        const unicos = [...new Set(dados.historicoGlobal)];
+        const faltantes = [];
+        for(let i=1; i<=25; i++) if(!unicos.includes(i)) faltantes.push(i);
+        
+        document.getElementById('fechados').innerText = unicos.length;
+        document.getElementById('faltam').innerText = 25 - unicos.length;
+        
+        let htmlFaltam = '';
+        faltantes.forEach(g => htmlFaltam += `<span class="badge" style="color:var(--danger)">${g} - ${animais[g-1]}</span>`);
+        document.getElementById('listaFaltantes').innerHTML = htmlFaltam || 'Ciclo Completo!';
+
+        gerarSugestao(faltantes);
+    }
+
+    function renderLista(id, lista, tipo) {
+        const div = document.getElementById(id);
+        div.innerHTML = '';
+        lista.slice(0, 15).forEach((g, index) => {
+            div.innerHTML += `<span class="badge">${g} - ${animais[g-1]} <span class="remove-btn" onclick="removerItem('${tipo}', ${index})">×</span></span>`;
+        });
+    }
+
+    function gerarSugestao(faltantes) {
+        const painel = document.getElementById('painelSugestao');
+        const alerta = document.getElementById('alertaGrave');
+        
+        if (dados.atrasadosRio.length > 0 && dados.atrasadosLook.length > 0) {
+            const rioForte = dados.atrasadosRio[0];
+            const lookForte = dados.atrasadosLook[0];
+            const apoio = dados.historicoGlobal[dados.historicoGlobal.length - 1];
+
+            painel.innerHTML = `
+                <div class="stat-box" style="margin-bottom:10px; border-left: 5px solid var(--primary); text-align:left">
+                    <strong>Entrada Sugerida:</strong><br>
+                    <span style="font-size:1.1rem; font-weight:bold; color:var(--primary)">
+                        Rio: ${rioForte} (${animais[rioForte-1]})<br>
+                        Look: ${lookForte} (${animais[lookForte-1]})
+                    </span>
+                </div>
+                <p>Apoio (Último): ${apoio ? animais[apoio-1] : '---'}</p>
+            `;
+
+            if (faltantes.includes(rioForte)) {
+                alerta.innerHTML = `<div class="alerta-forte">🚨 ALERTA: Grupo ${rioForte} (${animais[rioForte-1]}) está muito atrasado no ciclo!</div>`;
+            } else { alerta.innerHTML = ''; }
+        } else {
+            painel.innerHTML = '<p>Importe as listas de atrasados para ver a sugestão.</p>';
+        }
+    }
+
+    function exportarBackup() {
+        const conteudo = `BACKUP ANALISADOR\nRIO: [${dados.rio}]\nLOOK: [${dados.look}]\nHISTORICO: [${dados.historicoGlobal}]`;
+        const blob = new Blob([conteudo], { type: 'text/plain' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `backup_sai_${new Date().toLocaleDateString().replace(/\//g,'_')}.txt`;
+        a.download = `backup_bicho_${new Date().toLocaleDateString()}.txt`;
         a.click();
     }
 
-    function calcX7(pos) {
-        let v = document.getElementById('m' + pos).value;
-        if(v) {
-            let res = (parseInt(v)*7).toString().slice(-3).padStart(3,'0');
-            document.getElementById('c' + pos).innerText = "C: " + res + " (Dz: " + res.slice(-2) + ")";
+    function lerArquivoBackup(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const txt = e.target.result;
+                const r = txt.match(/RIO: \[(.*?)\]/);
+                const l = txt.match(/LOOK: \[(.*?)\]/);
+                const h = txt.match(/HISTORICO: \[(.*?)\]/);
+                if (r && l && h) {
+                    dados.rio = r[1] ? r[1].split(',').map(Number) : [];
+                    dados.look = l[1] ? l[1].split(',').map(Number) : [];
+                    dados.historicoGlobal = h[1] ? h[1].split(',').map(Number) : [];
+                    salvar();
+                    alert("Dados importados com sucesso!");
+                } else { alert("Arquivo inválido."); }
+            } catch (err) { alert("Erro ao ler arquivo."); }
+        };
+        reader.readAsText(file);
+    }
+
+    function limparTudo() {
+        if(confirm("Deseja apagar todos os dados permanentemente?")) {
+            dados = { rio: [], look: [], atrasadosRio: [], atrasadosLook: [], historicoGlobal: [] };
+            salvar();
         }
     }
 
-    function limparTudo() { 
-        if(confirm("AVISO: Isso apagará TODOS os dados do Rio e da Look. Deseja continuar?")) { 
-            db=[]; 
-            salvar(); 
-            location.reload(); 
-        } 
-    }
-
-    analisar();
+    atualizarInterface();
 </script>
+
 </body>
 </html>
